@@ -135,11 +135,7 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 "REPLACE"                return 'REPLACE'
 "EXISTS"                 return 'EXISTS'
 "COUNT"                  return 'COUNT'
-"SUM"                    return 'SUM'
-"MIN"                    return 'MIN'
-"MAX"                    return 'MAX'
-"AVG"                    return 'AVG'
-"SAMPLE"                 return 'SAMPLE'
+"SUM"|"MIN"|"MAX"|"AVG"|"SAMPLE" return 'FUNC_AGGREGATE'
 "GROUP_CONCAT"           return 'GROUP_CONCAT'
 "SEPARATOR"              return 'SEPARATOR'
 "^^"                     return '^^'
@@ -613,7 +609,7 @@ BuiltInCall
     ;
 Aggregate
     : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
-    | ('SUM' | 'MIN' | 'MAX' | 'AVG' | 'SAMPLE' ) '(' 'DISTINCT'? Expression ')'
+    | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')'
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
     ;
 iriOrFunction
