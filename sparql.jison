@@ -520,9 +520,6 @@ PathOneInPropertySet
     | 'a'
     | '^' ( iri | 'a' )
     ;
-Integer
-    : INTEGER
-    ;
 TriplesNode
     : Collection
     | BlankNodePropertyList
@@ -592,10 +589,7 @@ MultiplicativeExpression
     : UnaryExpression ( '*' UnaryExpression | '/' UnaryExpression )*
     ;
 UnaryExpression
-    : '!' PrimaryExpression
-    | '+' PrimaryExpression
-    | '-' PrimaryExpression
-    | PrimaryExpression
+    : ( '!' | '+' | '-' | ) PrimaryExpression
     ;
 PrimaryExpression
     : BrackettedExpression
@@ -624,11 +618,7 @@ BuiltInCall
     ;
 Aggregate
     : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
-    | 'SUM' '(' 'DISTINCT'? Expression ')'
-    | 'MIN' '(' 'DISTINCT'? Expression ')'
-    | 'MAX' '(' 'DISTINCT'? Expression ')'
-    | 'AVG' '(' 'DISTINCT'? Expression ')'
-    | 'SAMPLE' '(' 'DISTINCT'? Expression ')'
+    | ('SUM' | 'MIN' | 'MAX' | 'AVG' | 'SAMPLE' ) '(' 'DISTINCT'? Expression ')'
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
     ;
 iriOrFunction
@@ -638,14 +628,11 @@ RDFLiteral
     : String ( LANGTAG | ( '^^' iri ) )?
     ;
 NumericLiteral
-    : NumericLiteralUnsigned
-    | NumericLiteralPositive
-    | NumericLiteralNegative
-    ;
-NumericLiteralUnsigned
     : INTEGER
     | DECIMAL
     | DOUBLE
+    | NumericLiteralPositive
+    | NumericLiteralNegative
     ;
 NumericLiteralPositive
     : INTEGER_POSITIVE
