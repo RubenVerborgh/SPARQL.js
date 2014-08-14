@@ -8,12 +8,15 @@ lines.forEach(function (line) {
   var parts = line.match(/^(\w+)\s*::=\s*(.*)$/);
   if (parts) {
     var name = parts[1], value = parts[2];
-    symbols[name] = value;
-    if (!/[a-z]/.test(name))
+    if (!/[a-z]/.test(name)) {
       classes[name] = value;
-    var terminalMatcher = /(?:^|\s)(?:'([^']+)'|"([^"]+)")/g, match;
-    while ((match = terminalMatcher.exec(value)) && (match = match[1] || match[2]))
-      terminals[match] = toDoubleQuoted(match).replace(/^"(\w+) (\w+)"$/, '"$1"\\s+"$2"');
+    }
+    else {
+      var terminalMatcher = /(?:^|\s)(?:'([^']+)'|"([^"]+)")/g, match;
+      while ((match = terminalMatcher.exec(value)) && (match = match[1] || match[2]))
+        terminals[match] = toDoubleQuoted(match).replace(/^"(\w+) (\w+)"$/, '"$1"\\s+"$2"');
+      symbols[name] = value;
+    }
   }
 });
 
@@ -64,11 +67,12 @@ for (var className in classes) {
   value = value.replace(/'"""'/, '"\\"\\"\\""');
   value = value.replace(/'([^'"]+?)'/g, '"$1"').replace(/\s+/g, '');
   value = value.replace('[\\u10000-\\uEFFFF]', '[\\uD800-\\uDB7F][\\uDC00-\\uDFFF]');
-  value = value.replace(/(\[\^?)([^-]+?)(\])/g, function (match, start, characters, end) {
+  value = value.replace(/(\[\^?)([^-]+?)(\])(?!")/g, function (match, start, characters, end) {
     return start + escapeForRegex(characters) + end;
   });
   value = value.replace(/\[(.+?)\]-\[(.+?)\]/g, '[$1$2]');
   println(pad(className, maxLength), value);
+  terminals[className] = '{' + className + '}';
 }
 println();
 
