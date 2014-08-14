@@ -1,3 +1,9 @@
+%{
+  function toIRI(iri) {
+    return iri.substring(1, iri.length - 1);
+  }
+%}
+
 %lex
 
 IRIREF                "<"([^<>\"\{\}\|\^`\\\u0000-\u0020])*">"
@@ -184,10 +190,10 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 %%
 
 QueryUnit
-    : Query EOF
+    : Query EOF { return $1 }
     ;
 Query
-    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause
+    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause -> { prologue: $1 }
     ;
 UpdateUnit
     : Update
@@ -196,10 +202,10 @@ Prologue
     : ( BaseDecl | PrefixDecl )*
     ;
 BaseDecl
-    : 'BASE' IRIREF
+    : 'BASE' IRIREF -> { type: 'base', iri: toIRI($2) }
     ;
 PrefixDecl
-    : 'PREFIX' PNAME_NS IRIREF
+    : 'PREFIX' PNAME_NS IRIREF -> { type: 'prefix', prefix: $2, iri: toIRI($3) }
     ;
 SelectQuery
     : SelectClause DatasetClause* WhereClause SolutionModifier
