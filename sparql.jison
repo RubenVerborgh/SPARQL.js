@@ -116,55 +116,14 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 "IN"                     return 'IN'
 "NOT"                    return 'NOT'
 "-"                      return '-'
-"STR"                    return 'STR'
-"LANG"                   return 'LANG'
-"LANGMATCHES"            return 'LANGMATCHES'
-"DATATYPE"               return 'DATATYPE'
 "BOUND"                  return 'BOUND'
-"IRI"                    return 'IRI'
-"URI"                    return 'URI'
 "BNODE"                  return 'BNODE'
-"RAND"                   return 'RAND'
-"ABS"                    return 'ABS'
-"CEIL"                   return 'CEIL'
-"FLOOR"                  return 'FLOOR'
-"ROUND"                  return 'ROUND'
+("RAND"|"NOW"|"UUID"|"STUUID") return 'FUNC_ARITY0'
+("STR"|"LANG"|"DATATYPE"|"IRI"|"URI"|"ABS"|"CEIL"|"FLOOR"|"ROUND"|"STRLEN"|"UCASE"|"LCASE"|"ENCODE_FOR_URI"|"YEAR"|"MONTH"|"DAY"|"HOURS"|"MINUTES"|"SECONDS"|"TIMEZONE"|"TZ"|"MD5"|"SHA1"|"SHA256"|"SHA384"|"SHA512"|"isIRI"|"isURI"|"isBLANK"|"isLITERAL"|"isNUMERIC") return 'FUNC_ARITY1'
+("LANGMATCHES"|"CONTAINS"|"STRSTARTS"|"STRENDS"|"STRBEFORE"|"STRAFTER"|"STRLANG"|"STRDT"|"sameTerm") return 'FUNC_ARITY2'
 "CONCAT"                 return 'CONCAT'
-"STRLEN"                 return 'STRLEN'
-"UCASE"                  return 'UCASE'
-"LCASE"                  return 'LCASE'
-"ENCODE_FOR_URI"         return 'ENCODE_FOR_URI'
-"CONTAINS"               return 'CONTAINS'
-"STRSTARTS"              return 'STRSTARTS'
-"STRENDS"                return 'STRENDS'
-"STRBEFORE"              return 'STRBEFORE'
-"STRAFTER"               return 'STRAFTER'
-"YEAR"                   return 'YEAR'
-"MONTH"                  return 'MONTH'
-"DAY"                    return 'DAY'
-"HOURS"                  return 'HOURS'
-"MINUTES"                return 'MINUTES'
-"SECONDS"                return 'SECONDS'
-"TIMEZONE"               return 'TIMEZONE'
-"TZ"                     return 'TZ'
-"NOW"                    return 'NOW'
-"UUID"                   return 'UUID'
-"STRUUID"                return 'STRUUID'
-"MD5"                    return 'MD5'
-"SHA1"                   return 'SHA1'
-"SHA256"                 return 'SHA256'
-"SHA384"                 return 'SHA384'
-"SHA512"                 return 'SHA512'
 "COALESCE"               return 'COALESCE'
 "IF"                     return 'IF'
-"STRLANG"                return 'STRLANG'
-"STRDT"                  return 'STRDT'
-"sameTerm"               return 'sameTerm'
-"isIRI"                  return 'isIRI'
-"isURI"                  return 'isURI'
-"isBLANK"                return 'isBLANK'
-"isLITERAL"              return 'isLITERAL'
-"isNUMERIC"              return 'isNUMERIC'
 "REGEX"                  return 'REGEX'
 "SUBSTR"                 return 'SUBSTR'
 "REPLACE"                return 'REPLACE'
@@ -652,33 +611,16 @@ BrackettedExpression
     ;
 BuiltInCall
     : Aggregate
-    | ( 'RAND' | 'NOW' | 'UUID' | 'STRUUID' ) NIL
-    | ( 'STR' | 'LANG' | 'DATATYPE' | 'IRI' | 'URI' | 'ABS' | 'CEIL' | 'FLOOR' | 'ROUND' | 'STRLEN' | 'UCASE' | 'LCASE' | 'ENCODE_FOR_URI' | 'YEAR' | 'MONTH' | 'DAY' | 'HOURS' | 'MINUTES' | 'SECONDS' | 'TIMEZONE' | 'TZ' | 'MD5' | 'SHA1' | 'SHA256' | 'SHA384' | 'SHA512' | 'isIRI' | 'isURI' | 'isBLANK' | 'isLITERAL' | 'isNUMERIC' ) '(' Expression ')'
-    | ( 'LANGMATCHES' | 'CONTAINS' | 'STRSTARTS' | 'STRENDS' | 'STRBEFORE' | 'STRAFTER' | 'STRLANG' | 'STRDT' | 'sameTerm' ) '(' Expression ',' Expression ')'
+    | FUNC_ARITY0 NIL
+    | FUNC_ARITY1 '(' Expression ')'
+    | FUNC_ARITY2 '(' Expression ',' Expression ')'
     | 'IF' '(' Expression ',' Expression ',' Expression ')'
     | ( 'CONCAT' | 'COALESCE' ) ExpressionList
     | 'BOUND' '(' VAR ')'
     | 'BNODE' ( '(' Expression ')' | NIL )
-    | SubstringExpression
-    | StrReplaceExpression
-    | RegexExpression
-    | ExistsFunc
-    | NotExistsFunc
-    ;
-RegexExpression
-    : 'REGEX' '(' Expression ',' Expression ( ',' Expression )? ')'
-    ;
-SubstringExpression
-    : 'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'
-    ;
-StrReplaceExpression
-    : 'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
-    ;
-ExistsFunc
-    : 'EXISTS' GroupGraphPattern
-    ;
-NotExistsFunc
-    : 'NOT' 'EXISTS' GroupGraphPattern
+    | ('SUBSTR'|'REGEX') '(' Expression ',' Expression ( ',' Expression )? ')'
+    | 'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
+    | 'NOT'? 'EXISTS' GroupGraphPattern
     ;
 Aggregate
     : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
