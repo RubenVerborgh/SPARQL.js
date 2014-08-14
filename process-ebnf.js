@@ -98,5 +98,7 @@ println('%%\n');
 // Write production rules
 symbols.QueryUnit = 'Query EOF';
 for (var symbol in symbols) {
-  println(symbol, ':', symbols[symbol].replace(/\s+/g, ' '), ';');
+  var value = symbols[symbol].replace(/\s+/g, ' '),
+      parts = /\?/.test(value) ? [value] : value.split(/\s*\|(?![\|'])\s*/);
+  println(symbol + '\n    :', parts.join('\n    | ') + '\n    ;');
 }
