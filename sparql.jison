@@ -4,8 +4,7 @@ IRIREF                "<"([^<>\"\{\}\|\^`\\\u0000-\u0020])*">"
 PNAME_NS              {PN_PREFIX}?":"
 PNAME_LN              {PNAME_NS}{PN_LOCAL}
 BLANK_NODE_LABEL      "_:"({PN_CHARS_U}|[0-9])(({PN_CHARS}|".")*{PN_CHARS})?
-VAR1                  "?"{VARNAME}
-VAR2                  "$"{VARNAME}
+VAR                   [\?\$]{VARNAME}
 LANGTAG               "@"[a-zA-Z]+("-"[a-zA-Z0-9]+)*
 INTEGER               [0-9]+
 DECIMAL               [0-9]*"."[0-9]+
@@ -185,8 +184,7 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 {PNAME_NS}               return 'PNAME_NS'
 {PNAME_LN}               return 'PNAME_LN'
 {BLANK_NODE_LABEL}       return 'BLANK_NODE_LABEL'
-{VAR1}                   return 'VAR1'
-{VAR2}                   return 'VAR2'
+{VAR}                    return 'VAR'
 {LANGTAG}                return 'LANGTAG'
 {INTEGER}                return 'INTEGER'
 {DECIMAL}                return 'DECIMAL'
@@ -208,7 +206,6 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 {ANON}                   return 'ANON'
 {PN_CHARS_BASE}          return 'PN_CHARS_BASE'
 {PN_CHARS_U}             return 'PN_CHARS_U'
-{VARNAME}                return 'VARNAME'
 {PN_CHARS}               return 'PN_CHARS'
 {PN_PREFIX}              return 'PN_PREFIX'
 {PN_LOCAL}               return 'PN_LOCAL'
@@ -252,7 +249,7 @@ SubSelect
     : SelectClause WhereClause SolutionModifier ValuesClause
     ;
 SelectClause
-    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( ( Var | ( '(' Expression 'AS' Var ')' ) )+ | '*' )
+    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( ( VAR | ( '(' Expression 'AS' VAR ')' ) )+ | '*' )
     ;
 ConstructQuery
     : 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
@@ -288,8 +285,8 @@ GroupClause
 GroupCondition
     : BuiltInCall
     | FunctionCall
-    | '(' Expression ( 'AS' Var )? ')'
-    | Var
+    | '(' Expression ( 'AS' VAR )? ')'
+    | VAR
     ;
 HavingClause
     : 'HAVING' HavingCondition+
@@ -304,7 +301,7 @@ OrderCondition
     : ( ( 'ASC'
     | 'DESC' ) BrackettedExpression )
     | ( Constraint
-    | Var )
+    | VAR )
     ;
 LimitOffsetClauses
     : LimitClause OffsetClause? | OffsetClause LimitClause?
@@ -434,7 +431,7 @@ ServiceGraphPattern
     : 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern
     ;
 Bind
-    : 'BIND' '(' Expression 'AS' Var ')'
+    : 'BIND' '(' Expression 'AS' VAR ')'
     ;
 InlineData
     : 'VALUES' DataBlock
@@ -444,10 +441,10 @@ DataBlock
     | InlineDataFull
     ;
 InlineDataOneVar
-    : Var '{' DataBlockValue* '}'
+    : VAR '{' DataBlockValue* '}'
     ;
 InlineDataFull
-    : ( NIL | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
+    : ( NIL | '(' VAR* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
     ;
 DataBlockValue
     : iri
@@ -520,7 +517,7 @@ VerbPath
     : Path
     ;
 VerbSimple
-    : Var
+    : VAR
     ;
 ObjectListPath
     : ObjectPath ( ',' ObjectPath )*
@@ -596,16 +593,12 @@ GraphNodePath
     | TriplesNodePath
     ;
 VarOrTerm
-    : Var
+    : VAR
     | GraphTerm
     ;
 VarOrIri
-    : Var
+    : VAR
     | iri
-    ;
-Var
-    : VAR1
-    | VAR2
     ;
 GraphTerm
     : iri
@@ -652,7 +645,7 @@ PrimaryExpression
     | RDFLiteral
     | NumericLiteral
     | BooleanLiteral
-    | Var
+    | VAR
     ;
 BrackettedExpression
     : '(' Expression ')'
@@ -663,7 +656,7 @@ BuiltInCall
     | 'LANG' '(' Expression ')'
     | 'LANGMATCHES' '(' Expression ',' Expression ')'
     | 'DATATYPE' '(' Expression ')'
-    | 'BOUND' '(' Var ')'
+    | 'BOUND' '(' VAR ')'
     | 'IRI' '(' Expression ')'
     | 'URI' '(' Expression ')'
     | 'BNODE' ( '(' Expression ')' | NIL )
