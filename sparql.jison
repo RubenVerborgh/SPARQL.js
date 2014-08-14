@@ -231,17 +231,13 @@ QueryUnit
     : Query EOF
     ;
 Query
-    : Prologue ( SelectQuery
-    | ConstructQuery
-    | DescribeQuery
-    | AskQuery ) ValuesClause
+    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause
     ;
 UpdateUnit
     : Update
     ;
 Prologue
-    : ( BaseDecl
-    | PrefixDecl )*
+    : ( BaseDecl | PrefixDecl )*
     ;
 BaseDecl
     : 'BASE' IRIREF
@@ -290,7 +286,10 @@ GroupClause
     : 'GROUP' 'BY' GroupCondition+
     ;
 GroupCondition
-    : BuiltInCall | FunctionCall | '(' Expression ( 'AS' Var )? ')' | Var
+    : BuiltInCall
+    | FunctionCall
+    | '(' Expression ( 'AS' Var )? ')'
+    | Var
     ;
 HavingClause
     : 'HAVING' HavingCondition+
@@ -379,7 +378,8 @@ UsingClause
     | 'NAMED' iri )
     ;
 GraphOrDefault
-    : 'DEFAULT' | 'GRAPH'? iri
+    : 'DEFAULT'
+    | 'GRAPH'? iri
     ;
 GraphRef
     : 'GRAPH' iri
@@ -406,8 +406,7 @@ TriplesTemplate
     : TriplesSameSubject ( '.' TriplesTemplate? )?
     ;
 GroupGraphPattern
-    : '{' ( SubSelect
-    | GroupGraphPatternSub ) '}'
+    : '{' ( SubSelect | GroupGraphPatternSub ) '}'
     ;
 GroupGraphPatternSub
     : TriplesBlock? ( GraphPatternNotTriples '.'? TriplesBlock? )*
@@ -448,9 +447,7 @@ InlineDataOneVar
     : Var '{' DataBlockValue* '}'
     ;
 InlineDataFull
-    : ( NIL
-    | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')'
-    | NIL )* '}'
+    : ( NIL | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
     ;
 DataBlockValue
     : iri
@@ -548,7 +545,9 @@ PathEltOrInverse
     | '^' PathElt
     ;
 PathMod
-    : '?' | '*' | '+'
+    : '?'
+    | '*'
+    | '+'
     ;
 PathPrimary
     : iri
@@ -557,13 +556,13 @@ PathPrimary
     | '(' Path ')'
     ;
 PathNegatedPropertySet
-    : PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')'
+    : PathOneInPropertySet
+    | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')'
     ;
 PathOneInPropertySet
     : iri
     | 'a'
-    | '^' ( iri
-    | 'a' )
+    | '^' ( iri | 'a' )
     ;
 Integer
     : INTEGER
@@ -635,15 +634,10 @@ NumericExpression
     : AdditiveExpression
     ;
 AdditiveExpression
-    : MultiplicativeExpression ( '+' MultiplicativeExpression
-    | '-' MultiplicativeExpression
-    | ( NumericLiteralPositive
-    | NumericLiteralNegative ) ( ( '*' UnaryExpression )
-    | ( '/' UnaryExpression ) )* )*
+    : MultiplicativeExpression ( '+' MultiplicativeExpression | '-' MultiplicativeExpression | ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )* )*
     ;
 MultiplicativeExpression
-    : UnaryExpression ( '*' UnaryExpression
-    | '/' UnaryExpression )*
+    : UnaryExpression ( '*' UnaryExpression | '/' UnaryExpression )*
     ;
 UnaryExpression
     : '!' PrimaryExpression
@@ -672,8 +666,7 @@ BuiltInCall
     | 'BOUND' '(' Var ')'
     | 'IRI' '(' Expression ')'
     | 'URI' '(' Expression ')'
-    | 'BNODE' ( '(' Expression ')'
-    | NIL )
+    | 'BNODE' ( '(' Expression ')' | NIL )
     | 'RAND' NIL
     | 'ABS' '(' Expression ')'
     | 'CEIL' '(' Expression ')'
@@ -737,7 +730,13 @@ NotExistsFunc
     : 'NOT' 'EXISTS' GroupGraphPattern
     ;
 Aggregate
-    : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')' | 'SUM' '(' 'DISTINCT'? Expression ')' | 'MIN' '(' 'DISTINCT'? Expression ')' | 'MAX' '(' 'DISTINCT'? Expression ')' | 'AVG' '(' 'DISTINCT'? Expression ')' | 'SAMPLE' '(' 'DISTINCT'? Expression ')' | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
+    : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
+    | 'SUM' '(' 'DISTINCT'? Expression ')'
+    | 'MIN' '(' 'DISTINCT'? Expression ')'
+    | 'MAX' '(' 'DISTINCT'? Expression ')'
+    | 'AVG' '(' 'DISTINCT'? Expression ')'
+    | 'SAMPLE' '(' 'DISTINCT'? Expression ')'
+    | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
     ;
 iriOrFunction
     : iri ArgList?
