@@ -57,19 +57,19 @@ println('%lex\n');
 var maxLength = Math.max.apply(null, Object.keys(classes).map(getLength)) + 1;
 for (var className in classes) {
   var value = classes[className];
-  value = value.replace(/#x([0-9A-F]{4})/g, '\\u$1');
-  value = value.replace(/#x([0-9A-F]{3})/g, '\\u0$1');
-  value = value.replace(/#x([0-9A-F]{2})/g, '\\u00$1');
-  value = value.replace(/#x([0-9A-F]{1})/g, '\\u000$1');
   value = value.replace(/(^|\s|\()([A-Z_]+)/g, '$1{$2}');
   value = value.replace(/'\\'/g, '"\\\\"');
   value = value.replace(/'"'/, '"\\""');
   value = value.replace(/'"""'/, '"\\"\\"\\""');
   value = value.replace(/'([^'"]+?)'/g, '"$1"').replace(/\s+/g, '');
-  value = value.replace('[\\u10000-\\uEFFFF]', '[\\uD800-\\uDB7F][\\uDC00-\\uDFFF]');
   value = value.replace(/(\[\^?)([^-]+?)(\])(?!")/g, function (match, start, characters, end) {
     return start + escapeForRegex(characters) + end;
   });
+  value = value.replace(/#x([0-9A-F]{4})/g, '\\u$1');
+  value = value.replace(/#x([0-9A-F]{3})/g, '\\u0$1');
+  value = value.replace(/#x([0-9A-F]{2})/g, '\\u00$1');
+  value = value.replace(/#x([0-9A-F]{1})/g, '\\u000$1');
+  value = value.replace('[\\u10000-\\uEFFFF]', '[\\uD800-\\uDB7F][\\uDC00-\\uDFFF]');
   value = value.replace(/\[(.+?)\]-\[(.+?)\]/g, '[$1$2]');
   println(pad(className, maxLength), value);
   terminals[className] = '{' + className + '}';

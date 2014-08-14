@@ -17,8 +17,8 @@ INTEGER_NEGATIVE      "-"{INTEGER}
 DECIMAL_NEGATIVE      "-"{DECIMAL}
 DOUBLE_NEGATIVE       "-"{DOUBLE}
 EXPONENT              [eE][+-]?[0-9]+
-STRING_LITERAL1       "'"(([^\\u0027\\u005C\\u000A\\u000D])|{ECHAR})*"'"
-STRING_LITERAL2       "\""(([^\\u0022\\u005C\\u000A\\u000D])|{ECHAR})*'"'
+STRING_LITERAL1       "'"(([^\u0027\u005C\u000A\u000D])|{ECHAR})*"'"
+STRING_LITERAL2       "\""(([^\u0022\u005C\u000A\u000D])|{ECHAR})*'"'
 STRING_LITERAL_LONG1  "'''"(("'"|"''")?([^'\\]|{ECHAR}))*"'''"
 STRING_LITERAL_LONG2  "\"\"\""(("\""|'""')?([^\"\\]|{ECHAR}))*'"""'
 ECHAR                 "\\"[tbnrf\\\"']
