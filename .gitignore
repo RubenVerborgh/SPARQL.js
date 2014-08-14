@@ -1,2 +1,2 @@
 *.log
-sparql.js
+lib/sparql.js
