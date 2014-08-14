@@ -86,7 +86,9 @@ println(pad('\\s+', maxLength), '/* ignore */');
 for (var terminal in terminals) {
   println(pad(terminals[terminal], maxLength), "return", toTerminalId(terminal));
 };
-println(pad("<<EOF>>", maxLength), "return 'EOF'\n");
+println(pad("<<EOF>>", maxLength), "return 'EOF'");
+println(pad(".", maxLength), "return 'INVALID'");
+println();
 
 println('/lex\n');
 println('%ebnf\n');

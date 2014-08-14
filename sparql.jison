@@ -217,6 +217,7 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 {HEX}                    return 'HEX'
 {PN_LOCAL_ESC}           return 'PN_LOCAL_ESC'
 <<EOF>>                  return 'EOF'
+.                        return 'INVALID'
 
 /lex
 
