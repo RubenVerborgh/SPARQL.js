@@ -92,8 +92,11 @@ println();
 
 println('/lex\n');
 println('%ebnf\n');
+println('%start QueryUnit\n');
 println('%%\n');
 
 // Write production rules
-println('query');
-println('  : (' + Object.keys(terminals).map(toTerminalId).join(' | ') + ') EOF;');
+symbols.QueryUnit = 'Query EOF';
+for (var symbol in symbols) {
+  println(symbol, ':', symbols[symbol].replace(/\s+/g, ' '), ';');
+}
