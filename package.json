@@ -8,9 +8,12 @@
   "main": "lib/sparql",
   "bin": "bin/sparql-to-json",
   "scripts": {
+    "test": "./node_modules/mocha/bin/mocha",
     "postinstall": "./node_modules/jison/lib/cli.js ./lib/sparql.jison -p slr -o ./lib/sparql.js"
   },
   "devDependencies": {
-    "jison": "0.4.x"
+    "jison": "0.4.x",
+    "mocha": "1.21.x",
+    "chai": "1.9.x"
   }
 }

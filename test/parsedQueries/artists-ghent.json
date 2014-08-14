@@ -1,0 +1,19 @@
+{
+  "prologue": [
+    {
+      "type": "prefix",
+      "prefix": "rdfs:",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    {
+      "type": "prefix",
+      "prefix": "dbpedia:",
+      "iri": "http://dbpedia.org/resource/"
+    },
+    {
+      "type": "prefix",
+      "prefix": "dbpedia-owl:",
+      "iri": "http://dbpedia.org/ontology/"
+    }
+  ]
+}
