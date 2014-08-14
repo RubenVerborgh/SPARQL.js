@@ -1,0 +1,16 @@
+{
+  "name": "sparqljs",
+  "description": "A parser for the SPARQL query language",
+  "author": [
+    "Ruben Verborgh <ruben.verborgh@gmail.com>"
+  ],
+  "license": "MIT",
+  "main": "lib/sparql",
+  "bin": "bin/sparql-to-json",
+  "scripts": {
+    "postinstall": "./node_modules/jison/lib/cli.js ./lib/sparql.jison -p slr -o ./lib/sparql.js"
+  },
+  "devDependencies": {
+    "jison": "0.4.x"
+  }
+}
