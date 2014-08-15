@@ -1,6 +1,8 @@
 %{
   var RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
 
+  var prefixes;
+
   function toIRI(iri) {
     return iri.substring(1, iri.length - 1);
   }
@@ -190,10 +192,14 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 %%
 
 QueryUnit
-    : Query EOF { return $1 }
+    : Query EOF
+    {
+      prefixes = null;
+      return $1;
+    }
     ;
 Query
-    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause -> extend({ type: 'query', prologue: $1 }, $2)
+    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause -> extend({ type: 'query', prefixes: prefixes }, $2)
     ;
 UpdateUnit
     : Update
@@ -205,7 +211,13 @@ BaseDecl
     : 'BASE' IRIREF -> { type: 'base', iri: toIRI($2) }
     ;
 PrefixDecl
-    : 'PREFIX' PNAME_NS IRIREF -> { type: 'prefix', prefix: $2, iri: toIRI($3) }
+    : 'PREFIX' PNAME_NS IRIREF
+    {
+      if (!prefixes) prefixes = {};
+      $2 = $2.substr(0, $2.length - 1);
+      $3 = toIRI($3);
+      prefixes[$2] = $3;
+    }
     ;
 SelectQuery
     : SelectClause DatasetClause* WhereClause SolutionModifier -> { queryType: 'SELECT', where: $3 }
@@ -550,19 +562,16 @@ GraphNodePath
     ;
 VarOrTerm
     : VAR
-    | GraphTerm
-    ;
-VarOrIri
-    : VAR
     | iri
-    ;
-GraphTerm
-    : iri
     | RDFLiteral
     | NumericLiteral
     | BooleanLiteral
     | BlankNode
     | NIL
+    ;
+VarOrIri
+    : VAR
+    | iri
     ;
 Expression
     : ConditionalOrExpression
@@ -658,11 +667,20 @@ String
     ;
 iri
     : IRIREF
-    | PrefixedName
-    ;
-PrefixedName
-    : PNAME_LN
+    | PNAME_LN
+    {
+      var namePos = $1.indexOf(':'),
+          prefix = $1.substr(0, namePos),
+          expansion = prefixes[prefix];
+      if (!expansion) throw new Error('Unknown prefix: ' + prefix);
+      $$ = expansion + $1.substr(namePos + 1);
+    }
     | PNAME_NS
+    {
+      $1 = $1.substr(0, $1.length - 1);
+      $$ = prefixes[$1];
+      if (!$$) throw new Error('Unknown prefix: ' + $1);
+    }
     ;
 BlankNode
     : BLANK_NODE_LABEL

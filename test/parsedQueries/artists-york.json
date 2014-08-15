@@ -1,12 +1,8 @@
 {
   "type": "query",
-  "prologue": [
-    {
-      "type": "prefix",
-      "prefix": "dbpedia-owl:",
-      "iri": "http://dbpedia.org/ontology/"
-    }
-  ],
+  "prefixes": {
+    "dbpedia-owl": "http://dbpedia.org/ontology/"
+  },
   "queryType": "SELECT",
   "where": {
     "type": "group",
@@ -14,11 +10,11 @@
       {
         "subject": "?p",
         "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "object": "dbpedia-owl:Artist"
+        "object": "http://dbpedia.org/ontology/Artist"
       },
       {
         "subject": "?p",
-        "predicate": "dbpedia-owl:birthPlace",
+        "predicate": "http://dbpedia.org/ontology/birthPlace",
         "object": "?c"
       },
       {

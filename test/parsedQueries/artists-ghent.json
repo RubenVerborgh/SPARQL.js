@@ -1,37 +1,25 @@
 {
   "type": "query",
-  "prologue": [
-    {
-      "type": "prefix",
-      "prefix": "rdfs:",
-      "iri": "http://www.w3.org/2000/01/rdf-schema#"
-    },
-    {
-      "type": "prefix",
-      "prefix": "dbpedia:",
-      "iri": "http://dbpedia.org/resource/"
-    },
-    {
-      "type": "prefix",
-      "prefix": "dbpedia-owl:",
-      "iri": "http://dbpedia.org/ontology/"
-    }
-  ],
+  "prefixes": {
+    "dbpedia": "http://dbpedia.org/resource/",
+    "dbpedia-owl": "http://dbpedia.org/ontology/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  },
   "queryType": "CONSTRUCT",
   "template": [
     {
       "subject": "?person",
       "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-      "object": "dbpedia-owl:Artist"
+      "object": "http://dbpedia.org/ontology/Artist"
     },
     {
       "subject": "?person",
-      "predicate": "rdfs:label",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
       "object": "?name"
     },
     {
       "subject": "?person",
-      "predicate": "dbpedia-owl:birthPlace",
+      "predicate": "http://dbpedia.org/ontology/birthPlace",
       "object": "?city"
     }
   ],
@@ -41,36 +29,36 @@
       {
         "subject": "?person",
         "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "object": "dbpedia-owl:Artist"
+        "object": "http://dbpedia.org/ontology/Artist"
       },
       {
         "subject": "?person",
-        "predicate": "rdfs:label",
+        "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
         "object": "?name"
       },
       {
         "subject": "?person",
-        "predicate": "dbpedia-owl:birthPlace",
+        "predicate": "http://dbpedia.org/ontology/birthPlace",
         "object": "?city"
       },
       {
         "subject": "?city",
-        "predicate": "rdfs:label",
+        "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
         "object": "?cityName"
       },
       {
         "subject": "?city",
-        "predicate": "rdfs:label",
+        "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
         "object": "\"Ghent\"@en"
       },
       {
         "subject": "?city",
-        "predicate": "dbpedia-owl:country",
+        "predicate": "http://dbpedia.org/ontology/country",
         "object": "?country"
       },
       {
         "subject": "?country",
-        "predicate": "rdfs:label",
+        "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
         "object": "\"Belgium\"@en"
       }
     ]
