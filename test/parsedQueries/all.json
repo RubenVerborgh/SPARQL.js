@@ -1,16 +1,18 @@
 {
   "type": "query",
-  "queryType": "SELECT",
   "prefixes": {},
+  "queryType": "SELECT",
   "variables": [ "*" ],
-  "where": {
-    "type": "group",
-    "triples": [
-      {
-        "subject": "?s",
-        "predicate": "?p",
-        "object": "?o"
-      }
-    ]
-  }
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?s",
+          "predicate": "?p",
+          "object": "?o"
+        }
+      ]
+    }
+  ]
 }

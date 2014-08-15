@@ -1,9 +1,9 @@
 {
   "type": "query",
   "prefixes": {
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
     "dbpedia": "http://dbpedia.org/resource/",
-    "dbpedia-owl": "http://dbpedia.org/ontology/",
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    "dbpedia-owl": "http://dbpedia.org/ontology/"
   },
   "queryType": "CONSTRUCT",
   "template": [
@@ -23,44 +23,46 @@
       "object": "?city"
     }
   ],
-  "where": {
-    "type": "group",
-    "triples": [
-      {
-        "subject": "?person",
-        "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        "object": "http://dbpedia.org/ontology/Artist"
-      },
-      {
-        "subject": "?person",
-        "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-        "object": "?name"
-      },
-      {
-        "subject": "?person",
-        "predicate": "http://dbpedia.org/ontology/birthPlace",
-        "object": "?city"
-      },
-      {
-        "subject": "?city",
-        "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-        "object": "?cityName"
-      },
-      {
-        "subject": "?city",
-        "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-        "object": "\"Ghent\"@en"
-      },
-      {
-        "subject": "?city",
-        "predicate": "http://dbpedia.org/ontology/country",
-        "object": "?country"
-      },
-      {
-        "subject": "?country",
-        "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-        "object": "\"Belgium\"@en"
-      }
-    ]
-  }
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?person",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+          "object": "http://dbpedia.org/ontology/Artist"
+        },
+        {
+          "subject": "?person",
+          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+          "object": "?name"
+        },
+        {
+          "subject": "?person",
+          "predicate": "http://dbpedia.org/ontology/birthPlace",
+          "object": "?city"
+        },
+        {
+          "subject": "?city",
+          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+          "object": "?cityName"
+        },
+        {
+          "subject": "?city",
+          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+          "object": "\"Ghent\"@en"
+        },
+        {
+          "subject": "?city",
+          "predicate": "http://dbpedia.org/ontology/country",
+          "object": "?country"
+        },
+        {
+          "subject": "?country",
+          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+          "object": "\"Belgium\"@en"
+        }
+      ]
+    }
+  ]
 }

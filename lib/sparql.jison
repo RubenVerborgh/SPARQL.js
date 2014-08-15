@@ -19,6 +19,10 @@
       union = union.concat.apply(union, arguments[i]);
     return union;
   }
+
+  function operation(operatorName, args) {
+    return { type: 'operation', operator: operatorName, args: args };
+  }
 %}
 
 %lex
@@ -388,7 +392,10 @@ GroupGraphPattern
     : '{' ( SubSelect | GroupGraphPatternSub ) '}' -> $2
     ;
 GroupGraphPatternSub
-    : (TriplesBlock? GraphPatternNotTriples '.'?)* TriplesBlock? -> { type: 'group', triples: $1.concat($2) }
+    : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? [{ type: 'bgp', triples: $1 }].concat($2) : $2
+    ;
+GroupGraphPatternSubTail
+    : GraphPatternNotTriples '.'? TriplesBlock?
     ;
 TriplesBlock
     : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> unionAll($1, [$2])
@@ -442,7 +449,7 @@ GroupOrUnionGraphPattern
     : GroupGraphPattern ( 'UNION' GroupGraphPattern )*
     ;
 Filter
-    : 'FILTER' Constraint
+    : 'FILTER' Constraint -> { type: 'filter', expression: $2 }
     ;
 Constraint
     : BrackettedExpression
@@ -578,31 +585,33 @@ VarOrIri
     | iri
     ;
 Expression
-    : ConditionalOrExpression
-    ;
-ConditionalOrExpression
-    : ConditionalAndExpression ( '||' ConditionalAndExpression )*
+    : ( ConditionalAndExpression '||' )* ConditionalAndExpression -> $1.length ? operation('OR', $1.concat([$2])) : $2
     ;
 ConditionalAndExpression
-    : ValueLogical ( '&&' ValueLogical )*
-    ;
-ValueLogical
-    : RelationalExpression
+    : ( RelationalExpression '&&' )* RelationalExpression -> $1.length ? operation('AND', $1.concat([$2])) : $2
     ;
 RelationalExpression
-    : NumericExpression ( '=' NumericExpression | '!=' NumericExpression | '<' NumericExpression | '>' NumericExpression | '<=' NumericExpression | '>=' NumericExpression | 'IN' ExpressionList | 'NOT' 'IN' ExpressionList )?
-    ;
-NumericExpression
     : AdditiveExpression
+    | AdditiveExpression ( '=' | '!=' | '<' | '>' | '<=' | '>=' ) AdditiveExpression -> operation($2, [$1, $3])
+    | AdditiveExpression 'NOT'? 'IN' ExpressionList
     ;
 AdditiveExpression
-    : MultiplicativeExpression ( '+' MultiplicativeExpression | '-' MultiplicativeExpression | ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )* )*
+    : MultiplicativeExpression AdditiveExpressionTail*
+    ;
+AdditiveExpressionTail
+    : '+' MultiplicativeExpression
+    | '-' MultiplicativeExpression
+    | ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )*
     ;
 MultiplicativeExpression
-    : UnaryExpression ( '*' UnaryExpression | '/' UnaryExpression )*
+    : UnaryExpression MultiplicativeExpressionTail*
+    ;
+MultiplicativeExpressionTail
+    : ( '*' | '/' ) UnaryExpression
     ;
 UnaryExpression
-    : ( '!' | '+' | '-' | ) PrimaryExpression
+    : '+'? PrimaryExpression -> $2
+    | ( '!' | '-' ) PrimaryExpression -> operation($1 === '!' ? 'NOT' : 'NEGATE', [$2])
     ;
 PrimaryExpression
     : BrackettedExpression
@@ -614,7 +623,7 @@ PrimaryExpression
     | VAR
     ;
 BrackettedExpression
-    : '(' Expression ')'
+    : '(' Expression ')' -> $2
     ;
 BuiltInCall
     : Aggregate
