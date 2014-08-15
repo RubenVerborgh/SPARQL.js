@@ -1,0 +1,16 @@
+{
+  "type": "query",
+  "queryType": "SELECT",
+  "prefixes": {},
+  "variables": [ "*" ],
+  "where": {
+    "type": "group",
+    "items": [
+      {
+        "subject": "?s",
+        "predicate": "?p",
+        "object": "?o"
+      }
+    ]
+  }
+}

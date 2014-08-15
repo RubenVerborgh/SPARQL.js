@@ -199,7 +199,7 @@ QueryUnit
     }
     ;
 Query
-    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause -> extend({ type: 'query', prefixes: prefixes }, $2)
+    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause -> extend({ type: 'query', prefixes: prefixes || {} }, $2)
     ;
 UpdateUnit
     : Update
@@ -220,13 +220,17 @@ PrefixDecl
     }
     ;
 SelectQuery
-    : SelectClause DatasetClause* WhereClause SolutionModifier -> { queryType: 'SELECT', where: $3 }
+    : SelectClause DatasetClause* WhereClause SolutionModifier -> extend($1, { where: $3 })
     ;
 SubSelect
     : SelectClause WhereClause SolutionModifier ValuesClause
     ;
 SelectClause
-    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( ( VAR | ( '(' Expression 'AS' VAR ')' ) )+ | '*' )
+    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> { queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }
+    ;
+SelectClauseItem
+    : VAR
+    | '(' Expression 'AS' VAR ')'
     ;
 ConstructQuery
     : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> { queryType: 'CONSTRUCT', template: $2, where: $4 }

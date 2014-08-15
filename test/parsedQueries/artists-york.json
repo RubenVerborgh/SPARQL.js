@@ -4,6 +4,7 @@
     "dbpedia-owl": "http://dbpedia.org/ontology/"
   },
   "queryType": "SELECT",
+  "variables": [ "?p", "?c" ],
   "where": {
     "type": "group",
     "items": [
