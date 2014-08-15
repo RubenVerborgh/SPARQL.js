@@ -5,7 +5,7 @@
   "variables": [ "*" ],
   "where": {
     "type": "group",
-    "items": [
+    "triples": [
       {
         "subject": "?s",
         "predicate": "?p",

@@ -388,7 +388,7 @@ GroupGraphPattern
     : '{' ( SubSelect | GroupGraphPatternSub ) '}' -> $2
     ;
 GroupGraphPatternSub
-    : (TriplesBlock? GraphPatternNotTriples '.'?)* TriplesBlock? -> { type: 'group', items: $1.concat($2) }
+    : (TriplesBlock? GraphPatternNotTriples '.'?)* TriplesBlock? -> { type: 'group', triples: $1.concat($2) }
     ;
 TriplesBlock
     : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> unionAll($1, [$2])
