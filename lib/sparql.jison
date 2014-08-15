@@ -1,6 +1,21 @@
 %{
+  var RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+
   function toIRI(iri) {
     return iri.substring(1, iri.length - 1);
+  }
+
+  function extend(objectA, objectB) {
+    for (var name in objectB)
+      objectA[name] = objectB[name];
+    return objectA;
+  }
+
+  function unionAll() {
+    var union = [];
+    for (var i = 0, l = arguments.length; i < l; i++)
+      union = union.concat.apply(union, arguments[i]);
+    return union;
   }
 %}
 
@@ -178,7 +193,7 @@ QueryUnit
     : Query EOF { return $1 }
     ;
 Query
-    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause -> { prologue: $1 }
+    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause -> extend({ type: 'query', prologue: $1 }, $2)
     ;
 UpdateUnit
     : Update
@@ -193,7 +208,7 @@ PrefixDecl
     : 'PREFIX' PNAME_NS IRIREF -> { type: 'prefix', prefix: $2, iri: toIRI($3) }
     ;
 SelectQuery
-    : SelectClause DatasetClause* WhereClause SolutionModifier
+    : SelectClause DatasetClause* WhereClause SolutionModifier -> { queryType: 'SELECT', where: $3 }
     ;
 SubSelect
     : SelectClause WhereClause SolutionModifier ValuesClause
@@ -202,7 +217,8 @@ SelectClause
     : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( ( VAR | ( '(' Expression 'AS' VAR ')' ) )+ | '*' )
     ;
 ConstructQuery
-    : 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
+    : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> { queryType: 'CONSTRUCT', template: $2, where: $4 }
+    | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier
     ;
 DescribeQuery
     : 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier
@@ -224,7 +240,7 @@ SourceSelector
     : iri
     ;
 WhereClause
-    : 'WHERE'? GroupGraphPattern
+    : 'WHERE'? GroupGraphPattern -> $2
     ;
 SolutionModifier
     : GroupClause? HavingClause? OrderClause? LimitOffsetClauses?
@@ -248,10 +264,10 @@ OrderClause
     : 'ORDER' 'BY' OrderCondition+
     ;
 OrderCondition
-    : ( ( 'ASC'
-    | 'DESC' ) BrackettedExpression )
-    | ( Constraint
-    | VAR )
+    : 'ASC' BrackettedExpression
+    | 'DESC' BrackettedExpression
+    | Constraint
+    | VAR
     ;
 LimitOffsetClauses
     : LimitClause OffsetClause? | OffsetClause LimitClause?
@@ -353,13 +369,13 @@ TriplesTemplate
     : TriplesSameSubject ( '.' TriplesTemplate? )?
     ;
 GroupGraphPattern
-    : '{' ( SubSelect | GroupGraphPatternSub ) '}'
+    : '{' ( SubSelect | GroupGraphPatternSub ) '}' -> $2
     ;
 GroupGraphPatternSub
-    : TriplesBlock? ( GraphPatternNotTriples '.'? TriplesBlock? )*
+    : (TriplesBlock? GraphPatternNotTriples '.'?)* TriplesBlock? -> { type: 'group', items: $1.concat($2) }
     ;
 TriplesBlock
-    : TriplesSameSubjectPath ( '.' TriplesBlock? )?
+    : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> unionAll($1, [$2])
     ;
 GraphPatternNotTriples
     : GroupOrUnionGraphPattern
@@ -428,61 +444,54 @@ ExpressionList
     | '(' Expression ( ',' Expression )* ')'
     ;
 ConstructTemplate
-    : '{' ConstructTriples? '}'
+    : '{' ConstructTriples? '}' -> $2
     ;
 ConstructTriples
-    : TriplesSameSubject ( '.' ConstructTriples? )?
+    : TriplesSameSubject
+    | TriplesSameSubject '.' ConstructTriples? -> $3 ? $1.join.apply($1, $3) : $1
     ;
 TriplesSameSubject
-    : VarOrTerm PropertyListNotEmpty
+    : VarOrTerm PropertyListNotEmpty -> $2.map(function (t) { return extend({ subject: $1 }, t); })
     | TriplesNode PropertyList
     ;
 PropertyList
     : PropertyListNotEmpty?
     ;
 PropertyListNotEmpty
-    : Verb ObjectList ( ';' ( Verb ObjectList )? )*
+    : ( VerbObjectList ';'+ )* VerbObjectList -> unionAll($1, [$2])
+    ;
+VerbObjectList
+    : Verb ObjectList -> $2.map(function (object) { return { predicate: $1, object: object }; })
     ;
 Verb
     : VarOrIri
-    | 'a'
+    | 'a' -> RDF_TYPE
     ;
 ObjectList
-    : Object ( ',' Object )*
-    ;
-Object
-    : GraphNode
+    : (GraphNode ',')* GraphNode -> $1.concat($2)
     ;
 TriplesSameSubjectPath
-    : VarOrTerm PropertyListPathNotEmpty
+    : VarOrTerm PropertyListPathNotEmpty -> $2.map(function (t) { return extend({ subject: $1 }, t); })
     | TriplesNodePath PropertyListPath
     ;
 PropertyListPath
     : PropertyListPathNotEmpty?
     ;
 PropertyListPathNotEmpty
-    : ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
+    : ( Path | VAR ) ObjectListPath PropertyListPathNotEmptyTail* -> unionAll([{ predicate: $1, object: $2}], $3)
     ;
-VerbPath
-    : Path
-    ;
-VerbSimple
-    : VAR
+PropertyListPathNotEmptyTail
+    : ';' -> []
+    | ';' ( Path | VAR ) ObjectList -> $3.map(function (object) { return { predicate: $2, object: object }; })
     ;
 ObjectListPath
-    : ObjectPath ( ',' ObjectPath )*
-    ;
-ObjectPath
-    : GraphNodePath
+    : ( GraphNodePath ',' )* GraphNodePath -> $2
     ;
 Path
-    : PathAlternative
-    ;
-PathAlternative
-    : PathSequence ( '|' PathSequence )*
+    : ( PathSequence '|' )* PathSequence -> $2
     ;
 PathSequence
-    : PathEltOrInverse ( '/' PathEltOrInverse )*
+    : ( PathEltOrInverse '/' )* PathEltOrInverse -> $2
     ;
 PathElt
     : PathPrimary PathMod?
@@ -498,7 +507,7 @@ PathMod
     ;
 PathPrimary
     : iri
-    | 'a'
+    | 'a' -> RDF_TYPE
     | '!' PathNegatedPropertySet
     | '(' Path ')'
     ;
@@ -508,7 +517,7 @@ PathNegatedPropertySet
     ;
 PathOneInPropertySet
     : iri
-    | 'a'
+    | 'a' -> RDF_type
     | '^' ( iri | 'a' )
     ;
 TriplesNode
@@ -616,7 +625,9 @@ iriOrFunction
     : iri ArgList?
     ;
 RDFLiteral
-    : String ( LANGTAG | ( '^^' iri ) )?
+    : String
+    | String LANGTAG -> $1 + $2
+    | String '^^' iri -> $1 + '^^' + $3
     ;
 NumericLiteral
     : INTEGER

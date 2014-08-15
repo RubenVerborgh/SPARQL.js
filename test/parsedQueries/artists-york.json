@@ -1,0 +1,31 @@
+{
+  "type": "query",
+  "prologue": [
+    {
+      "type": "prefix",
+      "prefix": "dbpedia-owl:",
+      "iri": "http://dbpedia.org/ontology/"
+    }
+  ],
+  "queryType": "SELECT",
+  "where": {
+    "type": "group",
+    "items": [
+      {
+        "subject": "?p",
+        "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "object": "dbpedia-owl:Artist"
+      },
+      {
+        "subject": "?p",
+        "predicate": "dbpedia-owl:birthPlace",
+        "object": "?c"
+      },
+      {
+        "subject": "?c",
+        "predicate": "<http://xmlns.com/foaf/0.1/name>",
+        "object": "\"York\"@en"
+      }
+    ]
+  }
+}

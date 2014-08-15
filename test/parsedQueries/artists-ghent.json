@@ -1,4 +1,5 @@
 {
+  "type": "query",
   "prologue": [
     {
       "type": "prefix",
@@ -15,5 +16,63 @@
       "prefix": "dbpedia-owl:",
       "iri": "http://dbpedia.org/ontology/"
     }
-  ]
+  ],
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "subject": "?person",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "object": "dbpedia-owl:Artist"
+    },
+    {
+      "subject": "?person",
+      "predicate": "rdfs:label",
+      "object": "?name"
+    },
+    {
+      "subject": "?person",
+      "predicate": "dbpedia-owl:birthPlace",
+      "object": "?city"
+    }
+  ],
+  "where": {
+    "type": "group",
+    "items": [
+      {
+        "subject": "?person",
+        "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+        "object": "dbpedia-owl:Artist"
+      },
+      {
+        "subject": "?person",
+        "predicate": "rdfs:label",
+        "object": "?name"
+      },
+      {
+        "subject": "?person",
+        "predicate": "dbpedia-owl:birthPlace",
+        "object": "?city"
+      },
+      {
+        "subject": "?city",
+        "predicate": "rdfs:label",
+        "object": "?cityName"
+      },
+      {
+        "subject": "?city",
+        "predicate": "rdfs:label",
+        "object": "\"Ghent\"@en"
+      },
+      {
+        "subject": "?city",
+        "predicate": "dbpedia-owl:country",
+        "object": "?country"
+      },
+      {
+        "subject": "?country",
+        "predicate": "rdfs:label",
+        "object": "\"Belgium\"@en"
+      }
+    ]
+  }
 }
