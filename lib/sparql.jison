@@ -632,12 +632,12 @@ BrackettedExpression
     ;
 BuiltInCall
     : Aggregate
-    | FUNC_ARITY0 NIL
-    | FUNC_ARITY1 '(' Expression ')'
-    | FUNC_ARITY2 '(' Expression ',' Expression ')'
-    | 'IF' '(' Expression ',' Expression ',' Expression ')'
-    | ( 'CONCAT' | 'COALESCE' ) ExpressionList
-    | 'BOUND' '(' VAR ')'
+    | FUNC_ARITY0 NIL -> operation($1.toLowerCase())
+    | FUNC_ARITY1 '(' Expression ')' -> operation($1.toLowerCase(), [$3])
+    | FUNC_ARITY2 '(' Expression ',' Expression ')' -> operation($1.toLowerCase(), [$3, $5])
+    | 'IF' '(' Expression ',' Expression ',' Expression ')' -> operation($1.toLowerCase(), [$3, $5, $7])
+    | ( 'CONCAT' | 'COALESCE' ) ExpressionList -> operation($1.toLowerCase(), $2)
+    | 'BOUND' '(' VAR ')' -> operation('bound', [$3])
     | 'BNODE' ( '(' Expression ')' | NIL )
     | ('SUBSTR'|'REGEX') '(' Expression ',' Expression ( ',' Expression )? ')'
     | 'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
