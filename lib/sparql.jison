@@ -244,7 +244,7 @@ SubSelect
     : SelectClause WhereClause SolutionModifier ValuesClause
     ;
 SelectClause
-    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> { queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }
+    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }, $2 && ($1 = $2.toLowerCase(), $2 = {}, $2[$1] = true, $2))
     ;
 SelectClauseItem
     : VAR

@@ -11,6 +11,7 @@
     "?product",
     "?label"
   ],
+  "distinct": true,
   "where": [
     {
       "type": "bgp",
