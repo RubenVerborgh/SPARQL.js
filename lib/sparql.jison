@@ -558,10 +558,10 @@ VarOrIri
     | iri
     ;
 Expression
-    : ( ConditionalAndExpression '||' )* ConditionalAndExpression -> $1.length ? operation('OR', $1.concat([$2])) : $2
+    : ( ConditionalAndExpression '||' )* ConditionalAndExpression -> $1.length ? operation('||', $1.concat([$2])) : $2
     ;
 ConditionalAndExpression
-    : ( RelationalExpression '&&' )* RelationalExpression -> $1.length ? operation('AND', $1.concat([$2])) : $2
+    : ( RelationalExpression '&&' )* RelationalExpression -> $1.length ? operation('&&', $1.concat([$2])) : $2
     ;
 RelationalExpression
     : AdditiveExpression
@@ -584,7 +584,8 @@ MultiplicativeExpressionTail
     ;
 UnaryExpression
     : '+'? PrimaryExpression -> $2
-    | ( '!' | '-' ) PrimaryExpression -> operation($1 === '!' ? 'NOT' : 'NEGATE', [$2])
+    | '!'  PrimaryExpression -> operation($1, [$2])
+    | '-'  PrimaryExpression -> operation('UMINUS', [$2])
     ;
 PrimaryExpression
     : BrackettedExpression

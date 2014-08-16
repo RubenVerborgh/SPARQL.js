@@ -46,7 +46,7 @@
       "type": "filter",
       "expression": {
         "type": "operation",
-        "operator": "NOT",
+        "operator": "!",
         "args": [
           {
             "type": "operation",
