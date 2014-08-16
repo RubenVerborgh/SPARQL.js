@@ -9,7 +9,7 @@
 
   function extend(base) {
     if (!base) base = {};
-    for (var i = 1, l = arguments.length; arg = arguments[i] || {}, i < l; i++)
+    for (var i = 1, l = arguments.length, arg; i < l && (arg = arguments[i] || {}); i++)
       for (var name in arg)
         base[name] = arg[name];
     return base;
@@ -32,6 +32,12 @@
       for (var a in attr)
         expression[a] = attr[a];
     return expression;
+  }
+
+  function flattenOperationList(initialExpression, operationList) {
+    for (var i = 0, l = operationList.length, item; i < l && (item = operationList[i]) ; i++)
+      initialExpression = operation(item[0], [initialExpression, item[1]]);
+    return initialExpression;
   }
 
   function toInt(string) {
@@ -391,13 +397,13 @@ GroupGraphPattern
     : '{' ( SubSelect | GroupGraphPatternSub ) '}' -> $2
     ;
 GroupGraphPatternSub
-    : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? [{ type: 'bgp', triples: $1 }].concat($2) : $2
+    : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? unionAll([$1], $2) : $2
     ;
 GroupGraphPatternSubTail
-    : GraphPatternNotTriples '.'? TriplesBlock?
+    : GraphPatternNotTriples '.'? TriplesBlock? -> $3 ? [$1, $3] : [$1]
     ;
 TriplesBlock
-    : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> unionAll($1, [$2])
+    : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
 GraphPatternNotTriples
     : GroupOrUnionGraphPattern
@@ -595,18 +601,18 @@ RelationalExpression
     | AdditiveExpression 'NOT'? 'IN' ExpressionList
     ;
 AdditiveExpression
-    : MultiplicativeExpression AdditiveExpressionTail*
+    : MultiplicativeExpression AdditiveExpressionTail* -> flattenOperationList($1, $2)
     ;
 AdditiveExpressionTail
-    : '+' MultiplicativeExpression
-    | '-' MultiplicativeExpression
-    | ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )*
+    : ( '+' | '-' ) MultiplicativeExpression -> [$1, $2]
+    | NumericLiteralPositive MultiplicativeExpressionTail* -> ['+', flattenOperationList($1.replace('+', ''), $2)]
+    | NumericLiteralNegative MultiplicativeExpressionTail* -> ['-', flattenOperationList($1.replace('-', ''), $2)]
     ;
 MultiplicativeExpression
-    : UnaryExpression MultiplicativeExpressionTail*
+    : UnaryExpression MultiplicativeExpressionTail* -> flattenOperationList($1, $2)
     ;
 MultiplicativeExpressionTail
-    : ( '*' | '/' ) UnaryExpression
+    : ( '*' | '/' ) UnaryExpression -> [$1, $2]
     ;
 UnaryExpression
     : '+'? PrimaryExpression -> $2
@@ -643,7 +649,7 @@ Aggregate
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
     ;
 iriOrFunction
-    : iri ArgList?
+    : iri ArgList? -> $2 ? { type: 'functionCall', function: $1, args: $2 } : $1
     ;
 RDFLiteral
     : String
@@ -678,7 +684,7 @@ String
     | STRING_LITERAL_LONG2
     ;
 iri
-    : IRIREF
+    : IRIREF -> toIRI($1)
     | PNAME_LN
     {
       var namePos = $1.indexOf(':'),

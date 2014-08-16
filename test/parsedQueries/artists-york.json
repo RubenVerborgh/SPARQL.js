@@ -21,7 +21,7 @@
         },
         {
           "subject": "?c",
-          "predicate": "<http://xmlns.com/foaf/0.1/name>",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
           "object": "\"York\"@en"
         }
       ]

@@ -1,0 +1,161 @@
+{
+  "type": "query",
+  "prefixes": {
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "bsbm": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?product",
+    "?productLabel"
+  ],
+  "distinct": true,
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?product",
+          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+          "object": "?productLabel"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "!=",
+        "args": [
+          "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
+          "?product"
+        ]
+      }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature",
+          "object": "?prodFeature"
+        },
+        {
+          "subject": "?product",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature",
+          "object": "?prodFeature"
+        },
+        {
+          "subject": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1",
+          "object": "?origProperty1"
+        },
+        {
+          "subject": "?product",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1",
+          "object": "?simProperty1"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "AND",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "<",
+            "args": [
+              "?simProperty1",
+              {
+                "type": "operation",
+                "operator": "+",
+                "args": [
+                  "?origProperty1",
+                  "120"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "operation",
+            "operator": ">",
+            "args": [
+              "?simProperty1",
+              {
+                "type": "operation",
+                "operator": "-",
+                "args": [
+                  "?origProperty1",
+                  "120"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2",
+          "object": "?origProperty2"
+        },
+        {
+          "subject": "?product",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2",
+          "object": "?simProperty2"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "AND",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "<",
+            "args": [
+              "?simProperty2",
+              {
+                "type": "operation",
+                "operator": "+",
+                "args": [
+                  "?origProperty2",
+                  "170"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "operation",
+            "operator": ">",
+            "args": [
+              "?simProperty2",
+              {
+                "type": "operation",
+                "operator": "-",
+                "args": [
+                  "?origProperty2",
+                  "170"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "order": [
+    {
+      "expression": "?productLabel"
+    }
+  ],
+  "limit": 5
+}
