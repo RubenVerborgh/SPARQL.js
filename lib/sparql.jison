@@ -432,14 +432,12 @@ Constraint
     | FunctionCall
     ;
 FunctionCall
-    : iri ArgList
-    ;
-ArgList
-    : NIL | '(' 'DISTINCT'? Expression ( ',' Expression )* ')'
+    : iri NIL -> { type: 'functionCall', function: $1, args: [] }
+    | iri '(' 'DISTINCT'? ( Expression ',' )* Expression ')' -> { type: 'functionCall', function: $1, args: $4.concat([$5]), distinct: !!$3 }
     ;
 ExpressionList
-    : NIL
-    | '(' Expression ( ',' Expression )* ')'
+    : NIL -> []
+    | '(' ( Expression ',' )* Expression ')' -> $2.concat($3)
     ;
 ConstructTemplate
     : '{' ConstructTriples? '}' -> $2
@@ -591,7 +589,8 @@ UnaryExpression
 PrimaryExpression
     : BrackettedExpression
     | BuiltInCall
-    | iriOrFunction
+    | iri
+    | FunctionCall
     | RDFLiteral
     | NumericLiteral
     | BooleanLiteral
@@ -617,9 +616,6 @@ Aggregate
     : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
     | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')'
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
-    ;
-iriOrFunction
-    : iri ArgList? -> $2 ? { type: 'functionCall', function: $1, args: $2 } : $1
     ;
 RDFLiteral
     : String

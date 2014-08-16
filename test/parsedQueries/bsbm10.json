@@ -1,0 +1,102 @@
+{
+  "type": "query",
+  "prefixes": {
+    "bsbm": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dc": "http://purl.org/dc/elements/1.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?offer",
+    "?price"
+  ],
+  "distinct": true,
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?offer",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/product",
+          "object": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product186"
+        },
+        {
+          "subject": "?offer",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/vendor",
+          "object": "?vendor"
+        },
+        {
+          "subject": "?offer",
+          "predicate": "http://purl.org/dc/elements/1.1/publisher",
+          "object": "?vendor"
+        },
+        {
+          "subject": "?vendor",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/country",
+          "object": "http://downlode.org/rdf/iso-3166/countries#US"
+        },
+        {
+          "subject": "?offer",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/deliveryDays",
+          "object": "?deliveryDays"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "<=",
+        "args": [
+          "?deliveryDays",
+          "3"
+        ]
+      }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?offer",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/price",
+          "object": "?price"
+        },
+        {
+          "subject": "?offer",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/validTo",
+          "object": "?date"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": ">",
+        "args": [
+          "?date",
+          "\"2008-06-20T00:00:00\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+        ]
+      }
+    }
+  ],
+  "order": [
+    {
+      "expression": {
+        "type": "functionCall",
+        "function": "http://www.w3.org/2001/XMLSchema#double",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "str",
+            "args": [
+              "?price"
+            ]
+          }
+        ],
+        "distinct": false
+      }
+    }
+  ],
+  "limit": 10
+}
