@@ -53,5 +53,9 @@
         ]
       }
     }
-  ]
+  ],
+  "order": [
+    { "expression": "?label" }
+  ],
+  "limit": 10
 }

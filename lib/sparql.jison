@@ -7,10 +7,12 @@
     return iri.substring(1, iri.length - 1);
   }
 
-  function extend(objectA, objectB) {
-    for (var name in objectB)
-      objectA[name] = objectB[name];
-    return objectA;
+  function extend(base) {
+    if (!base) base = {};
+    for (var i = 1, l = arguments.length; arg = arguments[i] || {}, i < l; i++)
+      for (var name in arg)
+        base[name] = arg[name];
+    return base;
   }
 
   function unionAll() {
@@ -22,6 +24,18 @@
 
   function operation(operatorName, args) {
     return { type: 'operation', operator: operatorName, args: args };
+  }
+
+  function expression(expr, attr) {
+    var expression = { expression: expr };
+    if (attr)
+      for (var a in attr)
+        expression[a] = attr[a];
+    return expression;
+  }
+
+  function toInt(string) {
+    return parseInt(string, 10);
   }
 %}
 
@@ -224,7 +238,7 @@ PrefixDecl
     }
     ;
 SelectQuery
-    : SelectClause DatasetClause* WhereClause SolutionModifier -> extend($1, { where: $3 })
+    : SelectClause DatasetClause* WhereClause SolutionModifier -> extend($1, $3, $4)
     ;
 SubSelect
     : SelectClause WhereClause SolutionModifier ValuesClause
@@ -237,7 +251,7 @@ SelectClauseItem
     | '(' Expression 'AS' VAR ')'
     ;
 ConstructQuery
-    : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> { queryType: 'CONSTRUCT', template: $2, where: $4 }
+    : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, $4, $5)
     | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier
     ;
 DescribeQuery
@@ -247,56 +261,41 @@ AskQuery
     : 'ASK' DatasetClause* WhereClause SolutionModifier
     ;
 DatasetClause
-    : 'FROM' ( DefaultGraphClause
-    | NamedGraphClause )
-    ;
-DefaultGraphClause
-    : SourceSelector
-    ;
-NamedGraphClause
-    : 'NAMED' SourceSelector
-    ;
-SourceSelector
-    : iri
+    : 'FROM' 'NAMED'? iri
     ;
 WhereClause
-    : 'WHERE'? GroupGraphPattern -> $2
+    : 'WHERE'? GroupGraphPattern -> { where: $2 }
     ;
 SolutionModifier
-    : GroupClause? HavingClause? OrderClause? LimitOffsetClauses?
+    : GroupClause? HavingClause? OrderClause? LimitOffsetClauses? -> extend($1, $2, $3, $4)
     ;
 GroupClause
-    : 'GROUP' 'BY' GroupCondition+
+    : 'GROUP' 'BY' GroupCondition+ -> { group: $3 }
     ;
 GroupCondition
-    : BuiltInCall
-    | FunctionCall
-    | '(' Expression ( 'AS' VAR )? ')'
-    | VAR
+    : BuiltInCall -> expression($1)
+    | FunctionCall -> expression($1)
+    | '(' Expression ')' -> expression($2)
+    | '(' Expression 'AS' VAR ')' -> expression($2, { variable: $4 })
+    | VAR -> expression($1)
     ;
 HavingClause
-    : 'HAVING' HavingCondition+
-    ;
-HavingCondition
-    : Constraint
+    : 'HAVING' Constraint+ -> { having: $2 }
     ;
 OrderClause
-    : 'ORDER' 'BY' OrderCondition+
+    : 'ORDER' 'BY' OrderCondition+ -> { order: $3 }
     ;
 OrderCondition
-    : 'ASC' BrackettedExpression
-    | 'DESC' BrackettedExpression
-    | Constraint
-    | VAR
+    : 'ASC'  BrackettedExpression -> expression($1)
+    | 'DESC' BrackettedExpression -> expression($1, { descending: true })
+    | Constraint -> expression($1)
+    | VAR -> expression($1)
     ;
 LimitOffsetClauses
-    : LimitClause OffsetClause? | OffsetClause LimitClause?
-    ;
-LimitClause
-    : 'LIMIT' INTEGER
-    ;
-OffsetClause
-    : 'OFFSET' INTEGER
+    : 'LIMIT'  INTEGER -> { limit:  toInt($2) }
+    | 'OFFSET' INTEGER -> { offset: toInt($2) }
+    | 'LIMIT'  INTEGER 'OFFSET' INTEGER -> { limit: toInt($2), offset: toInt($4) }
+    | 'OFFSET' INTEGER 'LIMIT'  INTEGER -> { limit: toInt($4), offset: toInt($2) }
     ;
 ValuesClause
     : ( 'VALUES' DataBlock )?
