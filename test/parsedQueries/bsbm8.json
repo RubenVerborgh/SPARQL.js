@@ -1,0 +1,147 @@
+{
+  "type": "query",
+  "prefixes": {
+    "bsbm": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "rev": "http://purl.org/stuff/rev#",
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?title",
+    "?text",
+    "?reviewDate",
+    "?reviewer",
+    "?reviewerName",
+    "?rating1",
+    "?rating2",
+    "?rating3",
+    "?rating4"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?review",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/reviewFor",
+          "object": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer16/Product783"
+        },
+        {
+          "subject": "?review",
+          "predicate": "http://purl.org/dc/elements/1.1/title",
+          "object": "?title"
+        },
+        {
+          "subject": "?review",
+          "predicate": "http://purl.org/stuff/rev#text",
+          "object": "?text"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "langmatches",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "lang",
+            "args": [
+              "?text"
+            ]
+          },
+          "\"EN\""
+        ]
+      }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?review",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/reviewDate",
+          "object": "?reviewDate"
+        },
+        {
+          "subject": "?review",
+          "predicate": "http://purl.org/stuff/rev#reviewer",
+          "object": "?reviewer"
+        },
+        {
+          "subject": "?reviewer",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?reviewerName"
+        }
+      ]
+    },
+    {
+      "type": "optional",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?review",
+              "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/rating1",
+              "object": "?rating1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "optional",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?review",
+              "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/rating2",
+              "object": "?rating2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "optional",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?review",
+              "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/rating3",
+              "object": "?rating3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "optional",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?review",
+              "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/rating4",
+              "object": "?rating4"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "order": [
+    {
+      "expression": "?reviewDate",
+      "descending": true
+    }
+  ],
+  "limit": 20
+}

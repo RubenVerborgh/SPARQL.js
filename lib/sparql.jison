@@ -23,7 +23,7 @@
   }
 
   function operation(operatorName, args) {
-    return { type: 'operation', operator: operatorName, args: args };
+    return { type: 'operation', operator: operatorName, args: args || [] };
   }
 
   function expression(expr, attr) {
@@ -223,7 +223,7 @@ QueryUnit
     }
     ;
 Query
-    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause -> extend({ type: 'query', prefixes: prefixes || {} }, $2)
+    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend({ type: 'query', prefixes: prefixes || {} }, $2)
     ;
 UpdateUnit
     : Update
@@ -247,7 +247,7 @@ SelectQuery
     : SelectClause DatasetClause* WhereClause SolutionModifier -> extend($1, $3, $4)
     ;
 SubSelect
-    : SelectClause WhereClause SolutionModifier ValuesClause
+    : SelectClause WhereClause SolutionModifier ValuesClause?
     ;
 SelectClause
     : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }, $2 && ($1 = $2.toLowerCase(), $2 = {}, $2[$1] = true, $2))
@@ -292,8 +292,8 @@ OrderClause
     : 'ORDER' 'BY' OrderCondition+ -> { order: $3 }
     ;
 OrderCondition
-    : 'ASC'  BrackettedExpression -> expression($1)
-    | 'DESC' BrackettedExpression -> expression($1, { descending: true })
+    : 'ASC'  BrackettedExpression -> expression($2)
+    | 'DESC' BrackettedExpression -> expression($2, { descending: true })
     | Constraint -> expression($1)
     | VAR -> expression($1)
     ;
@@ -304,7 +304,7 @@ LimitOffsetClauses
     | 'OFFSET' INTEGER 'LIMIT'  INTEGER -> { limit: toInt($4), offset: toInt($2) }
     ;
 ValuesClause
-    : ( 'VALUES' DataBlock )?
+    : 'VALUES' InlineData -> { type: 'values', values: $2 }
     ;
 Update
     : Prologue ( Update1 ( ';' Update )? )?
@@ -406,39 +406,18 @@ TriplesBlock
     : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
 GraphPatternNotTriples
-    : GroupOrUnionGraphPattern
-    | OptionalGraphPattern
-    | MinusGraphPattern
-    | GraphGraphPattern
-    | ServiceGraphPattern
-    | Filter
-    | Bind
-    | InlineData
-    ;
-OptionalGraphPattern
-    : 'OPTIONAL' GroupGraphPattern
-    ;
-GraphGraphPattern
-    : 'GRAPH' VarOrIri GroupGraphPattern
-    ;
-ServiceGraphPattern
-    : 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern
-    ;
-Bind
-    : 'BIND' '(' Expression 'AS' VAR ')'
+    : ( GroupGraphPattern 'UNION' )* GroupGraphPattern -> $1.length ? { type: 'union', patterns: $1.concat([$2]) } : $2
+    | 'OPTIONAL' GroupGraphPattern -> { type: 'optional', patterns: $2 }
+    | 'MINUS' GroupGraphPattern    -> { type: 'minus',    patterns: $2 }
+    | 'GRAPH' VarOrIri GroupGraphPattern -> { type: 'graph', name: $2, patterns: $3 }
+    | 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern -> { type: 'service', silent: !!$2, name: $3, patterns: $4 }
+    | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
+    | 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: $5, expression: $3 }
+    | ValuesClause
     ;
 InlineData
-    : 'VALUES' DataBlock
-    ;
-DataBlock
-    : InlineDataOneVar
-    | InlineDataFull
-    ;
-InlineDataOneVar
     : VAR '{' DataBlockValue* '}'
-    ;
-InlineDataFull
-    : ( NIL | '(' VAR* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
+    | ( NIL | '(' VAR* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
     ;
 DataBlockValue
     : iri
@@ -446,15 +425,6 @@ DataBlockValue
     | NumericLiteral
     | BooleanLiteral
     | 'UNDEF'
-    ;
-MinusGraphPattern
-    : 'MINUS' GroupGraphPattern
-    ;
-GroupOrUnionGraphPattern
-    : GroupGraphPattern ( 'UNION' GroupGraphPattern )*
-    ;
-Filter
-    : 'FILTER' Constraint -> { type: 'filter', expression: $2 }
     ;
 Constraint
     : BrackettedExpression
