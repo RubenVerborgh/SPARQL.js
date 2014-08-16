@@ -261,7 +261,7 @@ ConstructQuery
     | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier
     ;
 DescribeQuery
-    : 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier
+    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier
     ;
 AskQuery
     : 'ASK' DatasetClause* WhereClause SolutionModifier
@@ -310,50 +310,17 @@ Update
     : Prologue ( Update1 ( ';' Update )? )?
     ;
 Update1
-    : Load
-    | Clear
-    | Drop
-    | Add
-    | Move
-    | Copy
-    | Create
-    | InsertData
-    | DeleteData
-    | DeleteWhere
-    | Modify
-    ;
-Load
-    : 'LOAD' 'SILENT'? iri ( 'INTO' GraphRef )?
-    ;
-Clear
-    : 'CLEAR' 'SILENT'? GraphRefAll
-    ;
-Drop
-    : 'DROP' 'SILENT'? GraphRefAll
-    ;
-Create
-    : 'CREATE' 'SILENT'? GraphRef
-    ;
-Add
-    : 'ADD' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-    ;
-Move
-    : 'MOVE' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-    ;
-Copy
-    : 'COPY' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-    ;
-InsertData
-    : 'INSERT DATA' QuadData
-    ;
-DeleteData
-    : 'DELETE DATA' QuadData
-    ;
-DeleteWhere
-    : 'DELETE WHERE' QuadPattern
-    ;
-Modify
-    : ( 'WITH' iri )? ( DeleteClause InsertClause? | InsertClause ) UsingClause* 'WHERE' GroupGraphPattern
+    : 'LOAD' 'SILENT'? iri ( 'INTO' 'GRAPH' iri )?
+    | 'CLEAR' 'SILENT'? GraphRefAll
+    | 'DROP' 'SILENT'? GraphRefAll
+    | 'ADD' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+    | 'MOVE' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+    | 'COPY' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+    | 'CREATE' 'SILENT'? 'GRAPH' iri
+    | 'INSERT DATA' QuadPattern
+    | 'DELETE DATA' QuadPattern
+    | 'DELETE WHERE' QuadPattern
+    | ( 'WITH' iri )? ( DeleteClause InsertClause? | InsertClause ) UsingClause* 'WHERE' GroupGraphPattern
     ;
 DeleteClause
     : 'DELETE' QuadPattern
@@ -362,33 +329,23 @@ InsertClause
     : 'INSERT' QuadPattern
     ;
 UsingClause
-    : 'USING' ( iri
-    | 'NAMED' iri )
+    : 'USING' 'NAMED'? iri
     ;
 GraphOrDefault
     : 'DEFAULT'
     | 'GRAPH'? iri
     ;
-GraphRef
-    : 'GRAPH' iri
-    ;
 GraphRefAll
-    : GraphRef
+    : 'GRAPH' iri
     | 'DEFAULT'
     | 'NAMED'
     | 'ALL'
     ;
 QuadPattern
-    : '{' Quads '}'
-    ;
-QuadData
-    : '{' Quads '}'
-    ;
-Quads
-    : TriplesTemplate? ( QuadsNotTriples '.'? TriplesTemplate? )*
+    : '{' TriplesTemplate? ( QuadsNotTriples '.'? TriplesTemplate? )* '}'
     ;
 QuadsNotTriples
-    : 'GRAPH' VarOrIri '{' TriplesTemplate? '}'
+    : 'GRAPH' (VAR | iri) '{' TriplesTemplate? '}'
     ;
 TriplesTemplate
     : TriplesSameSubject ( '.' TriplesTemplate? )?
@@ -409,8 +366,8 @@ GraphPatternNotTriples
     : ( GroupGraphPattern 'UNION' )* GroupGraphPattern -> $1.length ? { type: 'union', patterns: $1.concat([$2]) } : $2
     | 'OPTIONAL' GroupGraphPattern -> { type: 'optional', patterns: $2 }
     | 'MINUS' GroupGraphPattern    -> { type: 'minus',    patterns: $2 }
-    | 'GRAPH' VarOrIri GroupGraphPattern -> { type: 'graph', name: $2, patterns: $3 }
-    | 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern -> { type: 'service', silent: !!$2, name: $3, patterns: $4 }
+    | 'GRAPH' (VAR | iri) GroupGraphPattern -> { type: 'graph', name: $2, patterns: $3 }
+    | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> { type: 'service', silent: !!$2, name: $3, patterns: $4 }
     | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
     | 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: $5, expression: $3 }
     | ValuesClause
@@ -460,7 +417,8 @@ VerbObjectList
     : Verb ObjectList -> $2.map(function (object) { return { predicate: $1, object: object }; })
     ;
 Verb
-    : VarOrIri
+    : VAR
+    | iri
     | 'a' -> RDF_TYPE
     ;
 ObjectList
@@ -468,10 +426,7 @@ ObjectList
     ;
 TriplesSameSubjectPath
     : VarOrTerm PropertyListPathNotEmpty -> $2.map(function (t) { return extend({ subject: $1 }, t); })
-    | TriplesNodePath PropertyListPath
-    ;
-PropertyListPath
-    : PropertyListPathNotEmpty?
+    | TriplesNodePath PropertyListPathNotEmpty?
     ;
 PropertyListPathNotEmpty
     : ( Path | VAR ) ObjectListPath PropertyListPathNotEmptyTail* -> unionAll([{ predicate: $1, object: $2}], $3)
@@ -490,16 +445,11 @@ PathSequence
     : ( PathEltOrInverse '/' )* PathEltOrInverse -> $2
     ;
 PathElt
-    : PathPrimary PathMod?
+    : PathPrimary ( '?' | '*' | '+' )?
     ;
 PathEltOrInverse
     : PathElt
     | '^' PathElt
-    ;
-PathMod
-    : '?'
-    | '*'
-    | '+'
     ;
 PathPrimary
     : iri
@@ -517,24 +467,15 @@ PathOneInPropertySet
     | '^' ( iri | 'a' )
     ;
 TriplesNode
-    : Collection
-    | BlankNodePropertyList
-    ;
-BlankNodePropertyList
-    : '[' PropertyListNotEmpty ']'
+    : '(' GraphNode+ ')'
+    | '[' PropertyListNotEmpty ']'
     ;
 TriplesNodePath
-    : CollectionPath
+    : '(' GraphNodePath+ ')'
     | BlankNodePropertyListPath
     ;
 BlankNodePropertyListPath
     : '[' PropertyListPathNotEmpty ']'
-    ;
-Collection
-    : '(' GraphNode+ ')'
-    ;
-CollectionPath
-    : '(' GraphNodePath+ ')'
     ;
 GraphNode
     : VarOrTerm
@@ -550,12 +491,9 @@ VarOrTerm
     | RDFLiteral
     | NumericLiteral
     | BooleanLiteral
-    | BlankNode
+    | BLANK_NODE_LABEL
+    | ANON
     | NIL
-    ;
-VarOrIri
-    : VAR
-    | iri
     ;
 Expression
     : ( ConditionalAndExpression '||' )* ConditionalAndExpression -> $1.length ? operation('||', $1.concat([$2])) : $2
@@ -666,8 +604,4 @@ iri
       $$ = prefixes[$1];
       if (!$$) throw new Error('Unknown prefix: ' + $1);
     }
-    ;
-BlankNode
-    : BLANK_NODE_LABEL
-    | ANON
     ;
