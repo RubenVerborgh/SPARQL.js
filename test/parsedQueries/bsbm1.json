@@ -50,7 +50,7 @@
         "operator": ">",
         "args": [
           "?value1",
-          "486"
+          "\"486\"^^http://www.w3.org/2001/XMLSchema#integer"
         ]
       }
     }

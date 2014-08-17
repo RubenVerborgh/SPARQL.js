@@ -49,7 +49,7 @@
         "operator": "<=",
         "args": [
           "?deliveryDays",
-          "3"
+          "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
         ]
       }
     },

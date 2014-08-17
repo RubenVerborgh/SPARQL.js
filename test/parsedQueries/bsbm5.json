@@ -74,7 +74,7 @@
                 "operator": "+",
                 "args": [
                   "?origProperty1",
-                  "120"
+                  "\"120\"^^http://www.w3.org/2001/XMLSchema#integer"
                 ]
               }
             ]
@@ -89,7 +89,7 @@
                 "operator": "-",
                 "args": [
                   "?origProperty1",
-                  "120"
+                  "\"120\"^^http://www.w3.org/2001/XMLSchema#integer"
                 ]
               }
             ]
@@ -128,7 +128,7 @@
                 "operator": "+",
                 "args": [
                   "?origProperty2",
-                  "170"
+                  "\"170\"^^http://www.w3.org/2001/XMLSchema#integer"
                 ]
               }
             ]
@@ -143,7 +143,7 @@
                 "operator": "-",
                 "args": [
                   "?origProperty2",
-                  "170"
+                  "\"170\"^^http://www.w3.org/2001/XMLSchema#integer"
                 ]
               }
             ]

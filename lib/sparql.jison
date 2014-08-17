@@ -1,5 +1,12 @@
 %{
-  var RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+  var RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+      XSD = 'http://www.w3.org/2001/XMLSchema#',
+      XSD_INTEGER  = XSD + 'integer',
+      XSD_DECIMAL  = XSD + 'decimal',
+      XSD_DOUBLE   = XSD + 'double',
+      XSD_BOOLEAN  = XSD + 'boolean',
+      XSD_TRUE =  '"true"^^'  + XSD_BOOLEAN,
+      XSD_FALSE = '"false"^^' + XSD_BOOLEAN;
 
   var prefixes;
 
@@ -47,6 +54,43 @@
   function degroupSingle(group) {
     return group.type === 'group' && group.patterns.length === 1 ? group.patterns[0] : group;
   }
+
+  function createLiteral(value, type) {
+    return '"' + value + '"^^' + type;
+  }
+
+  // Regular expression and replacement strings to escape strings
+  var escapeSequence = /\\u([a-fA-F0-9]{4})|\\U([a-fA-F0-9]{8})|\\(.)/g,
+      escapeReplacements = { '\\': '\\', "'": "'", '"': '"',
+                             't': '\t', 'b': '\b', 'n': '\n', 'r': '\r', 'f': '\f' },
+      fromCharCode = String.fromCharCode;
+
+  function unescapeString(string, trimLength) {
+    string = string.substring(trimLength, string.length - trimLength);
+    try {
+      string = string.replace(escapeSequence, function (sequence, unicode4, unicode8, escapedChar) {
+        var charCode;
+        if (unicode4) {
+          charCode = parseInt(unicode4, 16);
+          if (isNaN(charCode)) throw new Error(); // can never happen (regex), but helps performance
+          return fromCharCode(charCode);
+        }
+        else if (unicode8) {
+          charCode = parseInt(unicode8, 16);
+          if (isNaN(charCode)) throw new Error(); // can never happen (regex), but helps performance
+          if (charCode < 0xFFFF) return fromCharCode(charCode);
+          return fromCharCode(0xD800 + ((charCode -= 0x10000) >> 10), 0xDC00 + (charCode & 0x3FF));
+        }
+        else {
+          var replacement = escapeReplacements[escapedChar];
+          if (!replacement) throw new Error();
+          return replacement;
+        }
+      });
+    }
+    catch (error) { return ''; }
+    return '"' + string + '"';
+  }
 %}
 
 %lex
@@ -71,7 +115,7 @@ STRING_LITERAL1       "'"(([^\u0027\u005C\u000A\u000D])|{ECHAR})*"'"
 STRING_LITERAL2       "\""(([^\u0022\u005C\u000A\u000D])|{ECHAR})*'"'
 STRING_LITERAL_LONG1  "'''"(("'"|"''")?([^'\\]|{ECHAR}))*"'''"
 STRING_LITERAL_LONG2  "\"\"\""(("\""|'""')?([^\"\\]|{ECHAR}))*'"""'
-ECHAR                 "\\"[tbnrf\\\"']
+ECHAR                 "\\"[tbnrf\\\"']|"\\u"{HEX}{HEX}{HEX}{HEX}|"\\U"{HEX}{HEX}{HEX}{HEX}{HEX}{HEX}{HEX}{HEX}
 NIL                   "("{WS}*")"
 WS                    \u0020|\u0009|\u000D|\u000A
 ANON                  "["{WS}*"]"
@@ -382,9 +426,7 @@ InlineData
     ;
 DataBlockValue
     : iri
-    | RDFLiteral
-    | NumericLiteral
-    | BooleanLiteral
+    | Literal
     | 'UNDEF'
     ;
 Constraint
@@ -492,9 +534,7 @@ GraphNodePath
 VarOrTerm
     : VAR
     | iri
-    | RDFLiteral
-    | NumericLiteral
-    | BooleanLiteral
+    | Literal
     | BLANK_NODE_LABEL
     | ANON
     | NIL
@@ -515,7 +555,7 @@ AdditiveExpression
     ;
 AdditiveExpressionTail
     : ( '+' | '-' ) MultiplicativeExpression -> [$1, $2]
-    | NumericLiteralPositive MultiplicativeExpressionTail* -> ['+', flattenOperationList($1.replace('+', ''), $2)]
+    | NumericLiteralPositive MultiplicativeExpressionTail* -> ['+', flattenOperationList($1, $2)]
     | NumericLiteralNegative MultiplicativeExpressionTail* -> ['-', flattenOperationList($1.replace('-', ''), $2)]
     ;
 MultiplicativeExpression
@@ -534,9 +574,7 @@ PrimaryExpression
     | BuiltInCall
     | iri
     | FunctionCall
-    | RDFLiteral
-    | NumericLiteral
-    | BooleanLiteral
+    | Literal
     | VAR
     ;
 BrackettedExpression
@@ -560,37 +598,33 @@ Aggregate
     | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')'
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
     ;
-RDFLiteral
+Literal
     : String
-    | String LANGTAG -> $1 + $2
+    | String LANGTAG  -> $1 + $2.toLowerCase()
     | String '^^' iri -> $1 + '^^' + $3
-    ;
-NumericLiteral
-    : INTEGER
-    | DECIMAL
-    | DOUBLE
+    | INTEGER -> createLiteral($1, XSD_INTEGER)
+    | DECIMAL -> createLiteral($1, XSD_DECIMAL)
+    | DOUBLE  -> createLiteral($1.toLowerCase(), XSD_DOUBLE)
     | NumericLiteralPositive
     | NumericLiteralNegative
-    ;
-NumericLiteralPositive
-    : INTEGER_POSITIVE
-    | DECIMAL_POSITIVE
-    | DOUBLE_POSITIVE
-    ;
-NumericLiteralNegative
-    : INTEGER_NEGATIVE
-    | DECIMAL_NEGATIVE
-    | DOUBLE_NEGATIVE
-    ;
-BooleanLiteral
-    : 'true'
-    | 'false'
+    | 'true'  -> XSD_TRUE
+    | 'false' -> XSD_FALSE
     ;
 String
-    : STRING_LITERAL1
-    | STRING_LITERAL2
-    | STRING_LITERAL_LONG1
-    | STRING_LITERAL_LONG2
+    : STRING_LITERAL1 -> unescapeString($1, 1)
+    | STRING_LITERAL2 -> unescapeString($1, 1)
+    | STRING_LITERAL_LONG1 -> unescapeString($1, 3)
+    | STRING_LITERAL_LONG2 -> unescapeString($1, 3)
+    ;
+NumericLiteralPositive
+    : INTEGER_POSITIVE -> createLiteral($1.substr(1), XSD_INTEGER)
+    | DECIMAL_POSITIVE -> createLiteral($1.substr(1), XSD_DECIMAL)
+    | DOUBLE_POSITIVE  -> createLiteral($1.substr(1).toLowerCase(), XSD_DOUBLE)
+    ;
+NumericLiteralNegative
+    : INTEGER_NEGATIVE -> createLiteral($1, XSD_INTEGER)
+    | DECIMAL_NEGATIVE -> createLiteral($1, XSD_DECIMAL)
+    | DOUBLE_NEGATIVE  -> createLiteral($1.toLowerCase(), XSD_DOUBLE)
     ;
 iri
     : IRIREF -> toIRI($1)
