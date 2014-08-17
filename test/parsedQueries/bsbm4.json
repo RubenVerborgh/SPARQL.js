@@ -14,11 +14,12 @@
   ],
   "distinct": true,
   "where": [
-    [
-      {
-        "type": "union",
-        "patterns": [
-          [
+    {
+      "type": "union",
+      "patterns": [
+        {
+          "type": "group",
+          "patterns": [
             {
               "type": "bgp",
               "triples": [
@@ -65,8 +66,11 @@
                 ]
               }
             }
-          ],
-          [
+          ]
+        },
+        {
+          "type": "group",
+          "patterns": [
             {
               "type": "bgp",
               "triples": [
@@ -114,9 +118,9 @@
               }
             }
           ]
-        ]
-      }
-    ]
+        }
+      ]
+    }
   ],
   "order": [
     {

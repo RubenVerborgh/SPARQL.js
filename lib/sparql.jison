@@ -43,6 +43,10 @@
   function toInt(string) {
     return parseInt(string, 10);
   }
+
+  function degroupSingle(group) {
+    return group.type === 'group' && group.patterns.length === 1 ? group.patterns[0] : group;
+  }
 %}
 
 %lex
@@ -270,7 +274,7 @@ DatasetClause
     : 'FROM' 'NAMED'? iri
     ;
 WhereClause
-    : 'WHERE'? GroupGraphPattern -> { where: $2 }
+    : 'WHERE'? GroupGraphPattern -> { where: $2.patterns }
     ;
 SolutionModifier
     : GroupClause? HavingClause? OrderClause? LimitOffsetClauses? -> extend($1, $2, $3, $4)
@@ -351,23 +355,23 @@ TriplesTemplate
     : TriplesSameSubject ( '.' TriplesTemplate? )?
     ;
 GroupGraphPattern
-    : '{' ( SubSelect | GroupGraphPatternSub ) '}' -> $2
+    : '{' ( SubSelect | GroupGraphPatternSub ) '}' -> { type: 'group', patterns: $2 }
     ;
 GroupGraphPatternSub
     : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? unionAll([$1], $2) : $2
     ;
 GroupGraphPatternSubTail
-    : GraphPatternNotTriples '.'? TriplesBlock? -> $3 ? [$1, $3] : [$1]
+    : GraphPatternNotTriples '.'? TriplesBlock? -> $3 ? [$1, $3] : $1
     ;
 TriplesBlock
     : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
 GraphPatternNotTriples
-    : ( GroupGraphPattern 'UNION' )* GroupGraphPattern -> $1.length ? { type: 'union', patterns: $1.concat([$2]) } : $2
-    | 'OPTIONAL' GroupGraphPattern -> { type: 'optional', patterns: $2 }
-    | 'MINUS' GroupGraphPattern    -> { type: 'minus',    patterns: $2 }
-    | 'GRAPH' (VAR | iri) GroupGraphPattern -> { type: 'graph', name: $2, patterns: $3 }
-    | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> { type: 'service', silent: !!$2, name: $3, patterns: $4 }
+    : ( GroupGraphPattern 'UNION' )* GroupGraphPattern -> $1.length ? { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) } : degroupSingle($2)
+    | 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
+    | 'MINUS' GroupGraphPattern    -> extend($2, { type: 'minus' })
+    | 'GRAPH' (VAR | iri) GroupGraphPattern -> extend($3, { type: 'graph', name: $2 })
+    | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> extend($4, { type: 'service', silent: !!$2, name: $3 })
     | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
     | 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: $5, expression: $3 }
     | ValuesClause
