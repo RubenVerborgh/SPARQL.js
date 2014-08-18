@@ -1,0 +1,115 @@
+{
+  "type": "query",
+  "prefixes": {},
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?s1",
+          "predicate": "?p1",
+          "object": "_:b0"
+        },
+        {
+          "subject": "?s1",
+          "predicate": "?p1",
+          "object": "a1"
+        },
+        {
+          "subject": "?s1",
+          "predicate": "?q1",
+          "object": "b1"
+        },
+        {
+          "subject": "?s1",
+          "predicate": "?q1",
+          "object": "c1"
+        },
+        {
+          "subject": "_:b1",
+          "predicate": "?p2",
+          "object": "?o2"
+        },
+        {
+          "subject": "?s3",
+          "predicate": "?p3",
+          "object": "_:b2"
+        },
+        {
+          "subject": "_:b2",
+          "predicate": "a3",
+          "object": "b3"
+        },
+        {
+          "subject": "?s4",
+          "predicate": "?p4",
+          "object": "_:b3"
+        },
+        {
+          "subject": "_:b3",
+          "predicate": "a4",
+          "object": "b4"
+        },
+        {
+          "subject": "_:b3",
+          "predicate": "c4",
+          "object": "d4"
+        },
+        {
+          "subject": "_:b3",
+          "predicate": "c4",
+          "object": "e4"
+        },
+        {
+          "subject": "?s5",
+          "predicate": "?p5",
+          "object": "_:b5"
+        },
+        {
+          "subject": "_:b5",
+          "predicate": "a5",
+          "object": "_:b4"
+        },
+        {
+          "subject": "_:b4",
+          "predicate": "b5",
+          "object": "c5"
+        },
+        {
+          "subject": "_:b7",
+          "predicate": "?p6",
+          "object": "?o6"
+        },
+        {
+          "subject": "_:b7",
+          "predicate": "a6",
+          "object": "_:b6"
+        },
+        {
+          "subject": "_:b6",
+          "predicate": "b6",
+          "object": "c6"
+        },
+        {
+          "subject": "_:b8",
+          "predicate": "a7",
+          "object": "b7"
+        },
+        {
+          "subject": "_:b8",
+          "predicate": "c7",
+          "object": "d7"
+        },
+        {
+          "subject": "_:b8",
+          "predicate": "c7",
+          "object": "e7"
+        }
+      ]
+    }
+  ]
+}

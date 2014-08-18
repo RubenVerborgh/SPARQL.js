@@ -59,6 +59,11 @@
     return '"' + value + '"^^' + type;
   }
 
+  function blank() {
+    return '_:b' + blankId++;
+  };
+  var blankId = 0;
+
   // Regular expression and replacement strings to escape strings
   var escapeSequence = /\\u([a-fA-F0-9]{4})|\\U([a-fA-F0-9]{8})|\\(.)/g,
       escapeReplacements = { '\\': '\\', "'": "'", '"': '"',
@@ -472,17 +477,24 @@ ObjectList
     ;
 TriplesSameSubjectPath
     : VarOrTerm PropertyListPathNotEmpty -> $2.map(function (t) { return extend({ subject: $1 }, t); })
-    | TriplesNodePath PropertyListPathNotEmpty?
+    | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : $2.map(function (t) { return extend({ subject: $1.entity }, t); }).concat($1.triples) /* the subject is a blank node, possibly with more triples */
     ;
 PropertyListPathNotEmpty
-    : ( Path | VAR ) ObjectListPath PropertyListPathNotEmptyTail* -> unionAll([{ predicate: $1, object: $2}], $3)
+    : ( Path | VAR ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail*
+    {
+      // Collect all (possibly blank) objects, and triples that have them as subject
+      var objects = [], triples = [];
+      $2.concat([$3]).forEach(function (g) {
+        objects.push(g.entity);
+        triples = triples.concat(g.triples);
+      });
+      // Create partial triples for each collected entity, and return the remaining triples
+      $$ = unionAll(objects.map(function (object) { return { predicate: $1, object: object }; }), $4, triples);
+    }
     ;
 PropertyListPathNotEmptyTail
     : ';' -> []
     | ';' ( Path | VAR ) ObjectList -> $3.map(function (object) { return { predicate: $2, object: object }; })
-    ;
-ObjectListPath
-    : ( GraphNodePath ',' )* GraphNodePath -> $2
     ;
 Path
     : ( PathSequence '|' )* PathSequence -> $2
@@ -517,18 +529,23 @@ TriplesNode
     | '[' PropertyListNotEmpty ']'
     ;
 TriplesNodePath
-    : '(' GraphNodePath+ ')'
-    | BlankNodePropertyListPath
-    ;
-BlankNodePropertyListPath
-    : '[' PropertyListPathNotEmpty ']'
+    : '(' GraphNodePath+ ')' -> { entity: blank(), triples: $2 }
+    | '[' PropertyListPathNotEmpty ']'
+    {
+      // Create a blank node identifier, and pass the triples with the blank node as subject
+      var entity = blank();
+      $$ = {
+        entity: entity,
+        triples: $2.map(function (t) { return extend({ subject: entity }, t); })
+      };
+    }
     ;
 GraphNode
     : VarOrTerm
     | TriplesNode
     ;
 GraphNodePath
-    : VarOrTerm
+    : VarOrTerm -> { entity: $1, triples: [] } /* for consistency with TriplesNodePath */
     | TriplesNodePath
     ;
 VarOrTerm
@@ -536,7 +553,7 @@ VarOrTerm
     | iri
     | Literal
     | BLANK_NODE_LABEL
-    | ANON
+    | ANON -> blank()
     | NIL
     ;
 Expression
