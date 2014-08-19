@@ -1,4 +1,8 @@
-SELECT * WHERE {
+CONSTRUCT {
+  ?s0 ?p0 [ <a0> [ <b0> <c0> ] ].
+  [ <a0> [ <b0> <c0> ] ] ?p0 ?o0.
+}
+WHERE {
   ?s1 ?p1 [], <a1>; ?q1 <b1>, <c1>.
   []  ?p2 ?o2.
   ?s3 ?p3 [ <a3> <b3> ].

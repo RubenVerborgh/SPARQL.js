@@ -14,6 +14,10 @@
 
   var prefixes;
 
+  function appendAllTo(array, items) {
+    return array.push.apply(array, items), array;
+  }
+
   function toIRI(iri) {
     return iri.substring(1, iri.length - 1);
   }
@@ -108,6 +112,39 @@
     }
     catch (error) { return ''; }
     return '"' + string + '"';
+  }
+
+  // Creates a list, collecting its (possibly blank) items and triples associated with those items
+  function createList(objects) {
+    var list = blank(), head = list, listItems = [], listTriples, triples = [];
+    objects.forEach(function (o) { listItems.push(o.entity); appendAllTo(triples, o.triples); });
+
+    // Build an RDF list out of the items
+    for (var i = 0, j = 0, l = listItems.length, listTriples = Array(l * 2); i < l;)
+      listTriples[j++] = triple(head, RDF_FIRST, listItems[i]),
+      listTriples[j++] = triple(head, RDF_REST,  head = ++i < l ? blank() : RDF_NIL);
+
+    // Return the list's identifier, its triples, and the triples associated with its items
+    return { entity: list, triples: appendAllTo(listTriples, triples) };
+  }
+
+  // Creates a blank node identifier, collecting triples with that blank node as subject
+  function createAnonymousObject(propertyList) {
+    var entity = blank();
+    return {
+      entity: entity,
+      triples: propertyList.map(function (t) { return extend(triple(entity), t); })
+    };
+  }
+
+  // Collects all (possibly blank) objects, and triples that have them as subject
+  function objectListToTriples(predicate, objectList, otherTriples) {
+    var objects = [], triples = [];
+    objectList.forEach(function (l) {
+      objects.push(triple(null, predicate, l.entity));
+      appendAllTo(triples, l.triples);
+    });
+    return unionAll(objects, otherTriples || [], triples);
   }
 %}
 
@@ -464,12 +501,11 @@ ConstructTemplate
     : '{' ConstructTriples? '}' -> $2
     ;
 ConstructTriples
-    : TriplesSameSubject
-    | TriplesSameSubject '.' ConstructTriples? -> $3 ? $1.join.apply($1, $3) : $1
+    : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> unionAll($1, [$2])
     ;
 TriplesSameSubject
     : VarOrTerm PropertyListNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
-    | TriplesNode PropertyList
+    | TriplesNode PropertyList -> $2.map(function (t) { return extend(triple($1.entity), t); }).concat($1.triples) /* the subject is a blank node, possibly with more triples */
     ;
 PropertyList
     : PropertyListNotEmpty?
@@ -478,7 +514,7 @@ PropertyListNotEmpty
     : ( VerbObjectList ';'+ )* VerbObjectList -> unionAll($1, [$2])
     ;
 VerbObjectList
-    : Verb ObjectList -> $2.map(function (object) { return triple(null, $1, object); })
+    : Verb ObjectList -> objectListToTriples($1, $2)
     ;
 Verb
     : VAR
@@ -493,21 +529,11 @@ TriplesSameSubjectPath
     | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : $2.map(function (t) { return extend(triple($1.entity), t); }).concat($1.triples) /* the subject is a blank node, possibly with more triples */
     ;
 PropertyListPathNotEmpty
-    : ( Path | VAR ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail*
-    {
-      // Collect all (possibly blank) objects, and triples that have them as subject
-      var objects = [], triples = [];
-      $2.concat([$3]).forEach(function (g) {
-        objects.push(g.entity);
-        triples = triples.concat(g.triples);
-      });
-      // Create partial triples for each collected entity, and return the remaining triples
-      $$ = unionAll(objects.map(function (object) { return triple(null, $1, object); }), $4, triples);
-    }
+    : ( Path | VAR ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail* -> objectListToTriples($1, $2.concat([$3]), $4)
     ;
 PropertyListPathNotEmptyTail
     : ';' -> []
-    | ';' ( Path | VAR ) ObjectList -> $3.map(function (object) { return triple(null, $2, object); })
+    | ';' ( Path | VAR ) ObjectList -> objectListToTriples($2, $3)
     ;
 Path
     : ( PathSequence '|' )* PathSequence -> $2
@@ -538,36 +564,15 @@ PathOneInPropertySet
     | '^' ( iri | 'a' )
     ;
 TriplesNode
-    : '(' GraphNode+ ')'
-    | '[' PropertyListNotEmpty ']'
+    : '(' GraphNode+ ')' -> createList($2)
+    | '[' PropertyListNotEmpty ']' -> createAnonymousObject($2)
     ;
 TriplesNodePath
-    : '(' GraphNodePath+ ')'
-    {
-      // Create a list, collects its items and triples associated with those items
-      var list = blank(), head = list, listItems = [], listTriples, triples = [];
-      $2.forEach(function (g) { listItems.push(g.entity); triples = triples.concat(g.triples); });
-
-      // Build an RDF list out of the items
-      for (var i = 0, j = 0, l = listItems.length, listTriples = Array(l * 2); i < l;)
-        listTriples[j++] = triple(head, RDF_FIRST, listItems[i]),
-        listTriples[j++] = triple(head, RDF_REST,  head = ++i < l ? blank() : RDF_NIL);
-
-      // Return the list's identifier, its triples, and the triples associated with its items
-      $$ = { entity: list, triples: listTriples.concat(triples) };
-    }
-    | '[' PropertyListPathNotEmpty ']'
-    {
-      // Create a blank node identifier, and pass the triples with the blank node as subject
-      var entity = blank();
-      $$ = {
-        entity: entity,
-        triples: $2.map(function (t) { return extend(triple(entity), t); })
-      };
-    }
+    : '(' GraphNodePath+ ')' -> createList($2)
+    | '[' PropertyListPathNotEmpty ']' -> createAnonymousObject($2)
     ;
 GraphNode
-    : VarOrTerm
+    : VarOrTerm -> { entity: $1, triples: [] } /* for consistency with TriplesNode */
     | TriplesNode
     ;
 GraphNodePath

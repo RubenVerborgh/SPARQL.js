@@ -1,9 +1,98 @@
 {
   "type": "query",
   "prefixes": {},
-  "queryType": "SELECT",
-  "variables": [
-    "*"
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "subject": "?s0",
+      "predicate": "?p0",
+      "object": "_:b2"
+    },
+    {
+      "subject": "_:b2",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+      "object": "a0"
+    },
+    {
+      "subject": "_:b2",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+      "object": "_:b3"
+    },
+    {
+      "subject": "_:b3",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+      "object": "_:b0"
+    },
+    {
+      "subject": "_:b3",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+      "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+    },
+    {
+      "subject": "_:b0",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+      "object": "b0"
+    },
+    {
+      "subject": "_:b0",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+      "object": "_:b1"
+    },
+    {
+      "subject": "_:b1",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+      "object": "c0"
+    },
+    {
+      "subject": "_:b1",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+      "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+    },
+    {
+      "subject": "_:b6",
+      "predicate": "?p0",
+      "object": "?o0"
+    },
+    {
+      "subject": "_:b6",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+      "object": "a0"
+    },
+    {
+      "subject": "_:b6",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+      "object": "_:b7"
+    },
+    {
+      "subject": "_:b7",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+      "object": "_:b4"
+    },
+    {
+      "subject": "_:b7",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+      "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+    },
+    {
+      "subject": "_:b4",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+      "object": "b0"
+    },
+    {
+      "subject": "_:b4",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+      "object": "_:b5"
+    },
+    {
+      "subject": "_:b5",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+      "object": "c0"
+    },
+    {
+      "subject": "_:b5",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+      "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+    }
   ],
   "where": [
     {
@@ -27,107 +116,37 @@
         {
           "subject": "?s3",
           "predicate": "?p3",
-          "object": "_:b0"
+          "object": "_:b8"
         },
         {
-          "subject": "_:b0",
+          "subject": "_:b8",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
           "object": "a3"
         },
         {
-          "subject": "_:b0",
+          "subject": "_:b8",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
           "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
         },
         {
           "subject": "?s4",
           "predicate": "?p4",
-          "object": "_:b1"
+          "object": "_:b9"
         },
         {
-          "subject": "_:b1",
+          "subject": "_:b9",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
           "object": "a4"
         },
         {
-          "subject": "_:b1",
+          "subject": "_:b9",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
-          "object": "_:b2"
-        },
-        {
-          "subject": "_:b2",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "b4"
-        },
-        {
-          "subject": "_:b2",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
-          "object": "_:b3"
-        },
-        {
-          "subject": "_:b3",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "c4"
-        },
-        {
-          "subject": "_:b3",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
-          "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
-        },
-        {
-          "subject": "?s5",
-          "predicate": "?p5",
-          "object": "_:b6"
-        },
-        {
-          "subject": "_:b6",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "a4"
-        },
-        {
-          "subject": "_:b6",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
-          "object": "_:b7"
-        },
-        {
-          "subject": "_:b7",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "_:b4"
-        },
-        {
-          "subject": "_:b7",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
-          "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
-        },
-        {
-          "subject": "_:b4",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "b4"
-        },
-        {
-          "subject": "_:b4",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
-          "object": "_:b5"
-        },
-        {
-          "subject": "_:b5",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "c4"
-        },
-        {
-          "subject": "_:b5",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
-          "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
-        },
-        {
-          "subject": "_:b10",
-          "predicate": "?p6",
-          "object": "?o6"
+          "object": "_:b10"
         },
         {
           "subject": "_:b10",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "a6"
+          "object": "b4"
         },
         {
           "subject": "_:b10",
@@ -137,7 +156,7 @@
         {
           "subject": "_:b11",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "_:b8"
+          "object": "c4"
         },
         {
           "subject": "_:b11",
@@ -145,29 +164,34 @@
           "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
         },
         {
-          "subject": "_:b8",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "b6"
+          "subject": "?s5",
+          "predicate": "?p5",
+          "object": "_:b14"
         },
         {
-          "subject": "_:b8",
+          "subject": "_:b14",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+          "object": "a5"
+        },
+        {
+          "subject": "_:b14",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
-          "object": "_:b9"
+          "object": "_:b15"
         },
         {
-          "subject": "_:b9",
+          "subject": "_:b15",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "c6"
+          "object": "_:b12"
         },
         {
-          "subject": "_:b9",
+          "subject": "_:b15",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
           "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
         },
         {
           "subject": "_:b12",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "a7"
+          "object": "b5"
         },
         {
           "subject": "_:b12",
@@ -177,7 +201,7 @@
         {
           "subject": "_:b13",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "b7"
+          "object": "c5"
         },
         {
           "subject": "_:b13",
@@ -185,32 +209,97 @@
           "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
         },
         {
-          "subject": "?s8",
-          "predicate": "?p8",
-          "object": "_:b15"
+          "subject": "_:b18",
+          "predicate": "?p6",
+          "object": "?o6"
         },
         {
-          "subject": "_:b15",
+          "subject": "_:b18",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "_:b14"
+          "object": "a6"
         },
         {
-          "subject": "_:b15",
+          "subject": "_:b18",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+          "object": "_:b19"
+        },
+        {
+          "subject": "_:b19",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+          "object": "_:b16"
+        },
+        {
+          "subject": "_:b19",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
           "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
         },
         {
-          "subject": "_:b14",
+          "subject": "_:b16",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+          "object": "b6"
+        },
+        {
+          "subject": "_:b16",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+          "object": "_:b17"
+        },
+        {
+          "subject": "_:b17",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+          "object": "c6"
+        },
+        {
+          "subject": "_:b17",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+          "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+        },
+        {
+          "subject": "_:b20",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+          "object": "a7"
+        },
+        {
+          "subject": "_:b20",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+          "object": "_:b21"
+        },
+        {
+          "subject": "_:b21",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+          "object": "b7"
+        },
+        {
+          "subject": "_:b21",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+          "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+        },
+        {
+          "subject": "?s8",
+          "predicate": "?p8",
+          "object": "_:b23"
+        },
+        {
+          "subject": "_:b23",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
+          "object": "_:b22"
+        },
+        {
+          "subject": "_:b23",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest",
+          "object": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+        },
+        {
+          "subject": "_:b22",
           "predicate": "a8",
           "object": "b8"
         },
         {
-          "subject": "_:b14",
+          "subject": "_:b22",
           "predicate": "c8",
           "object": "d8"
         },
         {
-          "subject": "_:b14",
+          "subject": "_:b22",
           "predicate": "c8",
           "object": "e8"
         }
