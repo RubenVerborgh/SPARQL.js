@@ -26,6 +26,16 @@
     return iri.substring(1, iri.length - 1);
   }
 
+  // If the item is a variable, ensures it starts with a question mark
+  function toVar(variable) {
+    if (variable) {
+      var first = variable[0];
+      if (first === '?') return variable;
+      if (first === '$') return '?' + variable.substr(1);
+    }
+    return variable;
+  }
+
   function extend(base) {
     if (!base) base = {};
     for (var i = 1, l = arguments.length, arg; i < l && (arg = arguments[i] || {}); i++)
@@ -368,7 +378,7 @@ SelectClause
     : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }, $2 && ($1 = $2.toLowerCase(), $2 = {}, $2[$1] = true, $2))
     ;
 SelectClauseItem
-    : VAR
+    : VAR -> toVar($1)
     | '(' Expression 'AS' VAR ')'
     ;
 ConstructQuery
@@ -376,7 +386,7 @@ ConstructQuery
     | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $5 || [] }, groupDatasets($2), { where: { type: 'bgp', triples: appendAllTo([], $5 || []) } }, $7)
     ;
 DescribeQuery
-    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? ['*'] : $2 }, groupDatasets($3), $4, $5)
+    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? ['*'] : $2.map(toVar) }, groupDatasets($3), $4, $5)
     ;
 AskQuery
     : 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, groupDatasets($2), $3, $4)
@@ -397,8 +407,8 @@ GroupCondition
     : BuiltInCall -> expression($1)
     | FunctionCall -> expression($1)
     | '(' Expression ')' -> expression($2)
-    | '(' Expression 'AS' VAR ')' -> expression($2, { variable: $4 })
-    | VAR -> expression($1)
+    | '(' Expression 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
+    | VAR -> expression(toVar($1))
     ;
 HavingClause
     : 'HAVING' Constraint+ -> { having: $2 }
@@ -410,7 +420,7 @@ OrderCondition
     : 'ASC'  BrackettedExpression -> expression($2)
     | 'DESC' BrackettedExpression -> expression($2, { descending: true })
     | Constraint -> expression($1)
-    | VAR -> expression($1)
+    | VAR -> expression(toVar($1))
     ;
 LimitOffsetClauses
     : 'LIMIT'  INTEGER -> { limit:  toInt($2) }
@@ -481,14 +491,14 @@ GraphPatternNotTriples
     : ( GroupGraphPattern 'UNION' )* GroupGraphPattern -> $1.length ? { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) } : degroupSingle($2)
     | 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
     | 'MINUS' GroupGraphPattern    -> extend($2, { type: 'minus' })
-    | 'GRAPH' (VAR | iri) GroupGraphPattern -> extend($3, { type: 'graph', name: $2 })
-    | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> extend($4, { type: 'service', silent: !!$2, name: $3 })
+    | 'GRAPH' (VAR | iri) GroupGraphPattern -> extend($3, { type: 'graph', name: toVar($2) })
+    | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> extend($4, { type: 'service', silent: !!$2, name: toVar($3) })
     | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
-    | 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: $5, expression: $3 }
+    | 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
     | ValuesClause
     ;
 InlineData
-    : VAR '{' DataBlockValue* '}'
+    : VAR '{' DataBlockValue* '}' -> { variable: toVar($1), values: $3 }
     | ( NIL | '(' VAR* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
     ;
 DataBlockValue
@@ -529,7 +539,7 @@ VerbObjectList
     : Verb ObjectList -> objectListToTriples($1, $2)
     ;
 Verb
-    : VAR
+    : VAR -> toVar($1)
     | iri
     | 'a' -> RDF_TYPE
     ;
@@ -541,11 +551,11 @@ TriplesSameSubjectPath
     | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : appendAllTo($2.map(function (t) { return extend(triple($1.entity), t); }), $1.triples) /* the subject is a blank node, possibly with more triples */
     ;
 PropertyListPathNotEmpty
-    : ( Path | VAR ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail* -> objectListToTriples($1, appendTo($2, $3), $4)
+    : ( Path | VAR ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail* -> objectListToTriples(toVar($1), appendTo($2, $3), $4)
     ;
 PropertyListPathNotEmptyTail
     : ';' -> []
-    | ';' ( Path | VAR ) ObjectList -> objectListToTriples($2, $3)
+    | ';' ( Path | VAR ) ObjectList -> objectListToTriples(toVar($2), $3)
     ;
 Path
     : ( PathSequence '|' )* PathSequence -> $2
@@ -592,7 +602,7 @@ GraphNodePath
     | TriplesNodePath
     ;
 VarOrTerm
-    : VAR
+    : VAR -> toVar($1)
     | iri
     | Literal
     | BLANK_NODE_LABEL
@@ -635,7 +645,7 @@ PrimaryExpression
     | iri
     | FunctionCall
     | Literal
-    | VAR
+    | VAR -> toVar($1)
     ;
 BrackettedExpression
     : '(' Expression ')' -> $2
@@ -647,7 +657,7 @@ BuiltInCall
     | FUNC_ARITY2 '(' Expression ',' Expression ')' -> operation($1.toLowerCase(), [$3, $5])
     | 'IF' '(' Expression ',' Expression ',' Expression ')' -> operation($1.toLowerCase(), [$3, $5, $7])
     | ( 'CONCAT' | 'COALESCE' ) ExpressionList -> operation($1.toLowerCase(), $2)
-    | 'BOUND' '(' VAR ')' -> operation('bound', [$3])
+    | 'BOUND' '(' VAR ')' -> operation('bound', [toVar($3)])
     | 'BNODE' ( '(' Expression ')' | NIL )
     | ('SUBSTR'|'REGEX') '(' Expression ',' Expression ( ',' Expression )? ')'
     | 'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
