@@ -64,7 +64,11 @@
   }
 
   function triple(subject, predicate, object) {
-    return { subject: subject, predicate: predicate, object: object };
+    var triple = {};
+    if (typeof subject   === 'string') triple.subject   = subject;
+    if (typeof predicate === 'string') triple.predicate = predicate;
+    if (typeof object    === 'string') triple.object    = object;
+    return triple;
   }
 
   function blank() {
@@ -464,7 +468,7 @@ ConstructTriples
     | TriplesSameSubject '.' ConstructTriples? -> $3 ? $1.join.apply($1, $3) : $1
     ;
 TriplesSameSubject
-    : VarOrTerm PropertyListNotEmpty -> $2.map(function (t) { return extend({ subject: $1 }, t); })
+    : VarOrTerm PropertyListNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
     | TriplesNode PropertyList
     ;
 PropertyList
@@ -474,7 +478,7 @@ PropertyListNotEmpty
     : ( VerbObjectList ';'+ )* VerbObjectList -> unionAll($1, [$2])
     ;
 VerbObjectList
-    : Verb ObjectList -> $2.map(function (object) { return { predicate: $1, object: object }; })
+    : Verb ObjectList -> $2.map(function (object) { return triple(null, $1, object); })
     ;
 Verb
     : VAR
@@ -485,8 +489,8 @@ ObjectList
     : (GraphNode ',')* GraphNode -> $1.concat($2)
     ;
 TriplesSameSubjectPath
-    : VarOrTerm PropertyListPathNotEmpty -> $2.map(function (t) { return extend({ subject: $1 }, t); })
-    | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : $2.map(function (t) { return extend({ subject: $1.entity }, t); }).concat($1.triples) /* the subject is a blank node, possibly with more triples */
+    : VarOrTerm PropertyListPathNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
+    | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : $2.map(function (t) { return extend(triple($1.entity), t); }).concat($1.triples) /* the subject is a blank node, possibly with more triples */
     ;
 PropertyListPathNotEmpty
     : ( Path | VAR ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail*
@@ -498,12 +502,12 @@ PropertyListPathNotEmpty
         triples = triples.concat(g.triples);
       });
       // Create partial triples for each collected entity, and return the remaining triples
-      $$ = unionAll(objects.map(function (object) { return { predicate: $1, object: object }; }), $4, triples);
+      $$ = unionAll(objects.map(function (object) { return triple(null, $1, object); }), $4, triples);
     }
     ;
 PropertyListPathNotEmptyTail
     : ';' -> []
-    | ';' ( Path | VAR ) ObjectList -> $3.map(function (object) { return { predicate: $2, object: object }; })
+    | ';' ( Path | VAR ) ObjectList -> $3.map(function (object) { return triple(null, $2, object); })
     ;
 Path
     : ( PathSequence '|' )* PathSequence -> $2
@@ -558,7 +562,7 @@ TriplesNodePath
       var entity = blank();
       $$ = {
         entity: entity,
-        triples: $2.map(function (t) { return extend({ subject: entity }, t); })
+        triples: $2.map(function (t) { return extend(triple(entity), t); })
       };
     }
     ;
