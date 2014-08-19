@@ -7,6 +7,9 @@ var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 
 describe('The SPARQL parser', function () {
+  // Ensure the same blank node identifiers are used in every test
+  beforeEach(function () { SparqlParser.Parser._resetBlanks(); });
+
   fs.readdirSync(queriesPath).forEach(function (queryFile) {
     var parsedQueryFile = parsedQueriesPath + queryFile.replace('.sparql', '.json');
     if (!fs.existsSync(parsedQueryFile)) return;

@@ -1,5 +1,9 @@
 %{
-  var RDF_TYPE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+  var RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+      RDF_TYPE  = RDF + 'type',
+      RDF_FIRST = RDF + 'first',
+      RDF_REST  = RDF + 'rest',
+      RDF_NIL   = RDF + 'nil',
       XSD = 'http://www.w3.org/2001/XMLSchema#',
       XSD_INTEGER  = XSD + 'integer',
       XSD_DECIMAL  = XSD + 'decimal',
@@ -59,10 +63,15 @@
     return '"' + value + '"^^' + type;
   }
 
+  function triple(subject, predicate, object) {
+    return { subject: subject, predicate: predicate, object: object };
+  }
+
   function blank() {
     return '_:b' + blankId++;
   };
   var blankId = 0;
+  Parser._resetBlanks = function () { blankId = 0; }
 
   // Regular expression and replacement strings to escape strings
   var escapeSequence = /\\u([a-fA-F0-9]{4})|\\U([a-fA-F0-9]{8})|\\(.)/g,
@@ -529,7 +538,20 @@ TriplesNode
     | '[' PropertyListNotEmpty ']'
     ;
 TriplesNodePath
-    : '(' GraphNodePath+ ')' -> { entity: blank(), triples: $2 }
+    : '(' GraphNodePath+ ')'
+    {
+      // Create a list, collects its items and triples associated with those items
+      var list = blank(), head = list, listItems = [], listTriples, triples = [];
+      $2.forEach(function (g) { listItems.push(g.entity); triples = triples.concat(g.triples); });
+
+      // Build an RDF list out of the items
+      for (var i = 0, j = 0, l = listItems.length, listTriples = Array(l * 2); i < l;)
+        listTriples[j++] = triple(head, RDF_FIRST, listItems[i]),
+        listTriples[j++] = triple(head, RDF_REST,  head = ++i < l ? blank() : RDF_NIL);
+
+      // Return the list's identifier, its triples, and the triples associated with its items
+      $$ = { entity: list, triples: listTriples.concat(triples) };
+    }
     | '[' PropertyListPathNotEmpty ']'
     {
       // Create a blank node identifier, and pass the triples with the blank node as subject
@@ -554,7 +576,7 @@ VarOrTerm
     | Literal
     | BLANK_NODE_LABEL
     | ANON -> blank()
-    | NIL
+    | NIL  -> RDF_NIL
     ;
 Expression
     : ( ConditionalAndExpression '||' )* ConditionalAndExpression -> $1.length ? operation('||', $1.concat([$2])) : $2
