@@ -371,7 +371,7 @@ DescribeQuery
     : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? ['*'] : $2 }, $4, $5)
     ;
 AskQuery
-    : 'ASK' DatasetClause* WhereClause SolutionModifier
+    : 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, $3, $4)
     ;
 DatasetClause
     : 'FROM' 'NAMED'? iri
