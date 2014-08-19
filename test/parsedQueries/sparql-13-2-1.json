@@ -1,0 +1,28 @@
+{
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?name"
+  ],
+  "from": {
+    "default": [
+      "http://example.org/foaf/aliceFoaf"
+    ],
+    "named": []
+  },
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?name"
+        }
+      ]
+    }
+  ]
+}

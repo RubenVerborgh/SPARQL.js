@@ -54,9 +54,17 @@
   }
 
   function flattenOperationList(initialExpression, operationList) {
-    for (var i = 0, l = operationList.length, item; i < l && (item = operationList[i]) ; i++)
+    for (var i = 0, l = operationList.length, item; i < l && (item = operationList[i]); i++)
       initialExpression = operation(item[0], [initialExpression, item[1]]);
     return initialExpression;
+  }
+
+  // Group datasets by default and named
+  function groupDatasets(fromClauses) {
+    var defaults = [], named = [], l = fromClauses.length, fromClause;
+    for (var i = 0; i < l && (fromClause = fromClauses[i]); i++)
+      (fromClause.named ? named : defaults).push(fromClause.iri);
+    return l ? { from: { default: defaults, named: named } } : null;
   }
 
   function toInt(string) {
@@ -351,7 +359,7 @@ PrefixDecl
     }
     ;
 SelectQuery
-    : SelectClause DatasetClause* WhereClause SolutionModifier -> extend($1, $3, $4)
+    : SelectClause DatasetClause* WhereClause SolutionModifier -> extend($1, groupDatasets($2), $3, $4)
     ;
 SubSelect
     : SelectClause WhereClause SolutionModifier ValuesClause?
@@ -364,17 +372,17 @@ SelectClauseItem
     | '(' Expression 'AS' VAR ')'
     ;
 ConstructQuery
-    : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, $4, $5)
+    : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, groupDatasets($3), $4, $5)
     | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier
     ;
 DescribeQuery
-    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? ['*'] : $2 }, $4, $5)
+    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? ['*'] : $2 }, groupDatasets($3), $4, $5)
     ;
 AskQuery
-    : 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, $3, $4)
+    : 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, groupDatasets($2), $3, $4)
     ;
 DatasetClause
-    : 'FROM' 'NAMED'? iri
+    : 'FROM' 'NAMED'? iri -> { iri: $3, named: !!$2 }
     ;
 WhereClause
     : 'WHERE'? GroupGraphPattern -> { where: $2.patterns }
