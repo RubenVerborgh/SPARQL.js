@@ -1,0 +1,22 @@
+{
+  "type": "query",
+  "prefixes": {
+    "rev": "http://purl.org/stuff/rev#"
+  },
+  "queryType": "DESCRIBE",
+  "variables": [
+    "?x"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromRatingSite1/Review7958",
+          "predicate": "http://purl.org/stuff/rev#reviewer",
+          "object": "?x"
+        }
+      ]
+    }
+  ]
+}

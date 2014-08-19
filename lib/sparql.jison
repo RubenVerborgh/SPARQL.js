@@ -368,7 +368,7 @@ ConstructQuery
     | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier
     ;
 DescribeQuery
-    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier
+    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? ['*'] : $2 }, $4, $5)
     ;
 AskQuery
     : 'ASK' DatasetClause* WhereClause SolutionModifier
