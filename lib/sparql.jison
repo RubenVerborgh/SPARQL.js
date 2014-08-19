@@ -14,6 +14,10 @@
 
   var prefixes;
 
+  function appendTo(array, item) {
+    return array.push(item), array;
+  }
+
   function appendAllTo(array, items) {
     return array.push.apply(array, items), array;
   }
@@ -491,11 +495,11 @@ Constraint
     ;
 FunctionCall
     : iri NIL -> { type: 'functionCall', function: $1, args: [] }
-    | iri '(' 'DISTINCT'? ( Expression ',' )* Expression ')' -> { type: 'functionCall', function: $1, args: $4.concat([$5]), distinct: !!$3 }
+    | iri '(' 'DISTINCT'? ( Expression ',' )* Expression ')' -> { type: 'functionCall', function: $1, args: appendTo($4, $5), distinct: !!$3 }
     ;
 ExpressionList
     : NIL -> []
-    | '(' ( Expression ',' )* Expression ')' -> $2.concat($3)
+    | '(' ( Expression ',' )* Expression ')' -> appendAllTo($2, $3)
     ;
 ConstructTemplate
     : '{' ConstructTriples? '}' -> $2
@@ -505,7 +509,7 @@ ConstructTriples
     ;
 TriplesSameSubject
     : VarOrTerm PropertyListNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
-    | TriplesNode PropertyList -> $2.map(function (t) { return extend(triple($1.entity), t); }).concat($1.triples) /* the subject is a blank node, possibly with more triples */
+    | TriplesNode PropertyList -> appendAllTo($2.map(function (t) { return extend(triple($1.entity), t); }), $1.triples) /* the subject is a blank node, possibly with more triples */
     ;
 PropertyList
     : PropertyListNotEmpty?
@@ -522,14 +526,14 @@ Verb
     | 'a' -> RDF_TYPE
     ;
 ObjectList
-    : (GraphNode ',')* GraphNode -> $1.concat($2)
+    : (GraphNode ',')* GraphNode -> appendTo($1, $2)
     ;
 TriplesSameSubjectPath
     : VarOrTerm PropertyListPathNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
-    | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : $2.map(function (t) { return extend(triple($1.entity), t); }).concat($1.triples) /* the subject is a blank node, possibly with more triples */
+    | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : appendAllTo($2.map(function (t) { return extend(triple($1.entity), t); }), $1.triples) /* the subject is a blank node, possibly with more triples */
     ;
 PropertyListPathNotEmpty
-    : ( Path | VAR ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail* -> objectListToTriples($1, $2.concat([$3]), $4)
+    : ( Path | VAR ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail* -> objectListToTriples($1, appendTo($2, $3), $4)
     ;
 PropertyListPathNotEmptyTail
     : ';' -> []
@@ -588,10 +592,10 @@ VarOrTerm
     | NIL  -> RDF_NIL
     ;
 Expression
-    : ( ConditionalAndExpression '||' )* ConditionalAndExpression -> $1.length ? operation('||', $1.concat([$2])) : $2
+    : ( ConditionalAndExpression '||' )* ConditionalAndExpression -> $1.length ? operation('||', appendTo($1, $2)) : $2
     ;
 ConditionalAndExpression
-    : ( RelationalExpression '&&' )* RelationalExpression -> $1.length ? operation('&&', $1.concat([$2])) : $2
+    : ( RelationalExpression '&&' )* RelationalExpression -> $1.length ? operation('&&', appendTo($1, $2)) : $2
     ;
 RelationalExpression
     : AdditiveExpression
