@@ -1,0 +1,69 @@
+{
+  "type": "query",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "app": "http://example.org/ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "subject": "?s",
+      "predicate": "?p",
+      "object": "?o"
+    }
+  ],
+  "where": [
+    [
+      {
+        "type": "graph",
+        "patterns": [
+          {
+            "type": "bgp",
+            "triples": [
+              {
+                "subject": "?s",
+                "predicate": "?p",
+                "object": "?o"
+              }
+            ]
+          }
+        ],
+        "name": "?g"
+      },
+      {
+        "type": "bgp",
+        "triples": [
+          {
+            "subject": "?g",
+            "predicate": "http://purl.org/dc/elements/1.1/publisher",
+            "object": "http://www.w3.org/"
+          },
+          {
+            "subject": "?g",
+            "predicate": "http://purl.org/dc/elements/1.1/date",
+            "object": "?date"
+          }
+        ]
+      }
+    ],
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": ">",
+        "args": [
+          {
+            "type": "functionCall",
+            "function": "http://example.org/ns#customDate",
+            "args": [
+              "?date"
+            ],
+            "distinct": false
+          },
+          "\"2005-02-28T00:00:00Z\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+        ]
+      }
+    }
+  ]
+}

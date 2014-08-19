@@ -1,0 +1,39 @@
+{
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "site": "http://example.org/stats#"
+  },
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "subject": "_:b0",
+      "predicate": "http://xmlns.com/foaf/0.1/name",
+      "object": "?name"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "_:b1",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?name"
+        },
+        {
+          "subject": "_:b1",
+          "predicate": "http://example.org/stats#hits",
+          "object": "?hits"
+        }
+      ]
+    }
+  ],
+  "order": [
+    {
+      "expression": "?hits",
+      "descending": true
+    }
+  ],
+  "limit": 2
+}
