@@ -1,0 +1,22 @@
+{
+  "type": "query",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?title"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "http://example.org/book/book1",
+          "predicate": "http://purl.org/dc/elements/1.1/title",
+          "object": "?title"
+        }
+      ]
+    }
+  ]
+}

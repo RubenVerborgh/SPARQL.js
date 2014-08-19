@@ -12,7 +12,7 @@
       XSD_TRUE =  '"true"^^'  + XSD_BOOLEAN,
       XSD_FALSE = '"false"^^' + XSD_BOOLEAN;
 
-  var prefixes;
+  var prefixes, base = '', basePath = '', baseRoot = '';
 
   function appendTo(array, item) {
     return array.push(item), array;
@@ -22,8 +22,28 @@
     return array.push.apply(array, items), array;
   }
 
-  function toIRI(iri) {
-    return iri.substring(1, iri.length - 1);
+  // Resolves an IRI against a base path
+  function resolveIRI(iri) {
+    // Strip off possible angular brackets
+    if (iri[0] === '<')
+      iri = iri.substring(1, iri.length - 1);
+    switch (iri[0]) {
+    // An empty relative IRI indicates the base IRI
+    case undefined:
+      return base;
+    // Resolve relative fragment IRIs against the base IRI
+    case '#':
+      return base + iri;
+    // Resolve relative query string IRIs by replacing the query string
+    case '?':
+      return base.replace(/(?:\?.*)?$/, iri);
+    // Resolve root relative IRIs at the root of the base IRI
+    case '/':
+      return baseRoot + iri;
+    // Resolve all other IRIs at the base IRI's path
+    default:
+      return /^[a-z]+:/.test(iri) ? iri : basePath + iri;
+    }
   }
 
   // If the item is a variable, ensures it starts with a question mark
@@ -344,6 +364,7 @@ QueryUnit
     : Query EOF
     {
       prefixes = null;
+      base = basePath = baseRoot = '';
       return $1;
     }
     ;
@@ -357,14 +378,19 @@ Prologue
     : ( BaseDecl | PrefixDecl )*
     ;
 BaseDecl
-    : 'BASE' IRIREF -> { type: 'base', iri: toIRI($2) }
+    : 'BASE' IRIREF
+    {
+      base = resolveIRI($2)
+      basePath = base.replace(/[^\/]*$/, '');
+      baseRoot = base.match(/^(?:[a-z]+:\/*)?[^\/]*/)[0];
+    }
     ;
 PrefixDecl
     : 'PREFIX' PNAME_NS IRIREF
     {
       if (!prefixes) prefixes = {};
       $2 = $2.substr(0, $2.length - 1);
-      $3 = toIRI($3);
+      $3 = resolveIRI($3);
       prefixes[$2] = $3;
     }
     ;
@@ -697,19 +723,19 @@ NumericLiteralNegative
     | DOUBLE_NEGATIVE  -> createLiteral($1.toLowerCase(), XSD_DOUBLE)
     ;
 iri
-    : IRIREF -> toIRI($1)
+    : IRIREF -> resolveIRI($1)
     | PNAME_LN
     {
       var namePos = $1.indexOf(':'),
           prefix = $1.substr(0, namePos),
           expansion = prefixes[prefix];
       if (!expansion) throw new Error('Unknown prefix: ' + prefix);
-      $$ = expansion + $1.substr(namePos + 1);
+      $$ = resolveIRI(expansion + $1.substr(namePos + 1));
     }
     | PNAME_NS
     {
       $1 = $1.substr(0, $1.length - 1);
-      $$ = prefixes[$1];
-      if (!$$) throw new Error('Unknown prefix: ' + $1);
+      if (!($1 in prefixes)) throw new Error('Unknown prefix: ' + $1);
+      $$ = resolveIRI(prefixes[$1]);
     }
     ;
