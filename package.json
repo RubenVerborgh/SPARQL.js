@@ -9,7 +9,7 @@
   "bin": "bin/sparql-to-json",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha",
-    "postinstall": "./node_modules/jison/lib/cli.js ./lib/sparql.jison -p slr -o ./lib/sparql.js"
+    "postinstall": "./build"
   },
   "devDependencies": {
     "jison": ">=0.4.14",
