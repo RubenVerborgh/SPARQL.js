@@ -1,0 +1,44 @@
+{
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?name",
+    "?mbox"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?name"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "regex",
+        "args": [
+          "?name",
+          "\"Smith\""
+        ]
+      }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/mbox",
+          "object": "?mbox"
+        }
+      ]
+    }
+  ]
+}
