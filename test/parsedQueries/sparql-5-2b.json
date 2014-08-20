@@ -16,12 +16,7 @@
           "subject": "?x",
           "predicate": "http://xmlns.com/foaf/0.1/name",
           "object": "?name"
-        }
-      ]
-    },
-    {
-      "type": "bgp",
-      "triples": [
+        },
         {
           "subject": "?x",
           "predicate": "http://xmlns.com/foaf/0.1/mbox",

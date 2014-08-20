@@ -36,6 +36,21 @@
           "subject": "?review",
           "predicate": "http://purl.org/stuff/rev#text",
           "object": "?text"
+        },
+        {
+          "subject": "?review",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/reviewDate",
+          "object": "?reviewDate"
+        },
+        {
+          "subject": "?review",
+          "predicate": "http://purl.org/stuff/rev#reviewer",
+          "object": "?reviewer"
+        },
+        {
+          "subject": "?reviewer",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?reviewerName"
         }
       ]
     },
@@ -55,26 +70,6 @@
           "\"EN\""
         ]
       }
-    },
-    {
-      "type": "bgp",
-      "triples": [
-        {
-          "subject": "?review",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/reviewDate",
-          "object": "?reviewDate"
-        },
-        {
-          "subject": "?review",
-          "predicate": "http://purl.org/stuff/rev#reviewer",
-          "object": "?reviewer"
-        },
-        {
-          "subject": "?reviewer",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?reviewerName"
-        }
-      ]
     },
     {
       "type": "optional",

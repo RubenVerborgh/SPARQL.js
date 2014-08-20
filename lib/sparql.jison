@@ -502,7 +502,22 @@ TriplesTemplate
     : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> unionAll($1, [$2])
     ;
 GroupGraphPattern
-    : '{' ( SubSelect | GroupGraphPatternSub ) '}' -> { type: 'group', patterns: $2 }
+    : '{' ( SubSelect | GroupGraphPatternSub ) '}'
+    {
+      // Simplify the pattern by grouping all BGPs together
+      if ($2.length > 1) {
+        var bgpTriples = [], otherPatterns = [];
+        for (var i = 0, pattern; pattern=$2[i]; i++) {
+          if (pattern.type === 'bgp')
+            appendAllTo(bgpTriples, pattern.triples);
+          else if (!pattern.patterns || pattern.patterns.length > 0)
+            otherPatterns.push(pattern);
+        }
+        $2 = !bgpTriples.length ? otherPatterns
+                                : appendAllTo([{ type: 'bgp', triples: bgpTriples }], otherPatterns);
+      }
+      $$ = { type: 'group', patterns: $2 }
+    }
     ;
 GroupGraphPatternSub
     : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? unionAll([$1], $2) : $2
