@@ -1,0 +1,42 @@
+{
+  "type": "query",
+  "prefixes": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?person"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?person",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+          "object": "http://xmlns.com/foaf/0.1/Person"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "exists",
+        "args": [
+          {
+            "type": "bgp",
+            "triples": [
+              {
+                "subject": "?person",
+                "predicate": "http://xmlns.com/foaf/0.1/name",
+                "object": "?name"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

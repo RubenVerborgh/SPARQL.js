@@ -1,0 +1,35 @@
+{
+  "type": "query",
+  "prefixes": {},
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?s",
+          "predicate": "?p",
+          "object": "?o"
+        }
+      ]
+    },
+    {
+      "type": "minus",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?x",
+              "predicate": "?y",
+              "object": "?z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://example/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://example/p",
+          "object": "?n"
+        }
+      ]
+    },
+    {
+      "type": "minus",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?x",
+              "predicate": "http://example/q",
+              "object": "?m"
+            }
+          ]
+        },
+        {
+          "type": "filter",
+          "expression": {
+            "type": "operation",
+            "operator": "=",
+            "args": [
+              "?n",
+              "?m"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
