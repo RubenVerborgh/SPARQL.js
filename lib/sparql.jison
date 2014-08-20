@@ -543,7 +543,7 @@ FunctionCall
     ;
 ExpressionList
     : NIL -> []
-    | '(' ( Expression ',' )* Expression ')' -> appendAllTo($2, $3)
+    | '(' ( Expression ',' )* Expression ')' -> appendTo($2, $3)
     ;
 ConstructTemplate
     : '{' ConstructTriples? '}' -> $2
@@ -682,11 +682,9 @@ BuiltInCall
     | FUNC_ARITY1 '(' Expression ')' -> operation($1.toLowerCase(), [$3])
     | FUNC_ARITY2 '(' Expression ',' Expression ')' -> operation($1.toLowerCase(), [$3, $5])
     | 'IF' '(' Expression ',' Expression ',' Expression ')' -> operation($1.toLowerCase(), [$3, $5, $7])
-    | ( 'CONCAT' | 'COALESCE' ) ExpressionList -> operation($1.toLowerCase(), $2)
+    | ( 'CONCAT' | 'COALESCE' | 'SUBSTR' | 'REGEX' | 'REPLACE' ) ExpressionList -> operation($1.toLowerCase(), $2)
     | 'BOUND' '(' VAR ')' -> operation('bound', [toVar($3)])
     | 'BNODE' ( '(' Expression ')' | NIL )
-    | ('SUBSTR'|'REGEX') '(' Expression ',' Expression ( ',' Expression )? ')'
-    | 'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
     | 'NOT'? 'EXISTS' GroupGraphPattern
     ;
 Aggregate
