@@ -1,0 +1,38 @@
+{
+  "type": "query",
+  "prefixes": {
+    "dc10": "http://purl.org/dc/elements/1.0/",
+    "dc11": "http://purl.org/dc/elements/1.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?title"
+  ],
+  "where": [
+    {
+      "type": "union",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?book",
+              "predicate": "http://purl.org/dc/elements/1.0/title",
+              "object": "?title"
+            }
+          ]
+        },
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?book",
+              "predicate": "http://purl.org/dc/elements/1.1/title",
+              "object": "?title"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
