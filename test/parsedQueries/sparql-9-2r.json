@@ -1,0 +1,36 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://example/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "http://example/list",
+          "predicate": {
+            "type": "path",
+            "pathType": "/",
+            "items": [
+              {
+                "type": "path",
+                "pathType": "*",
+                "items": [
+                  "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"
+                ]
+              },
+              "http://www.w3.org/1999/02/22-rdf-syntax-ns#first"
+            ]
+          },
+          "object": "?element"
+        }
+      ]
+    }
+  ]
+}

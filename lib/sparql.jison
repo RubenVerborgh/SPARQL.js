@@ -83,6 +83,10 @@
     return expression;
   }
 
+  function path(type, items) {
+    return { type: 'path', pathType: type, items: items };
+  }
+
   function flattenOperationList(initialExpression, operationList) {
     for (var i = 0, l = operationList.length, item; i < l && (item = operationList[i]); i++)
       initialExpression = operation(item[0], [initialExpression, item[1]]);
@@ -111,9 +115,9 @@
 
   function triple(subject, predicate, object) {
     var triple = {};
-    if (typeof subject   === 'string') triple.subject   = subject;
-    if (typeof predicate === 'string') triple.predicate = predicate;
-    if (typeof object    === 'string') triple.object    = object;
+    if (subject   != null) triple.subject   = subject;
+    if (predicate != null) triple.predicate = predicate;
+    if (object    != null) triple.object    = object;
     return triple;
   }
 
@@ -405,7 +409,7 @@ SelectClause
     ;
 SelectClauseItem
     : VAR -> toVar($1)
-    | '(' Expression 'AS' VAR ')'
+    | '(' Expression 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
     ;
 ConstructQuery
     : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, groupDatasets($3), $4, $5)
@@ -599,32 +603,33 @@ PropertyListPathNotEmptyTail
     | ';' ( Path | VAR ) ObjectList -> objectListToTriples(toVar($2), $3)
     ;
 Path
-    : ( PathSequence '|' )* PathSequence -> $2
+    : ( PathSequence '|' )* PathSequence -> $1.length ? path('|',appendTo($1, $2)) : $2
     ;
 PathSequence
-    : ( PathEltOrInverse '/' )* PathEltOrInverse -> $2
+    : ( PathEltOrInverse '/' )* PathEltOrInverse -> $1.length ? path('/', appendTo($1, $2)) : $2
     ;
 PathElt
-    : PathPrimary ( '?' | '*' | '+' )?
+    : PathPrimary ( '?' | '*' | '+' )? -> $2 ? path($2, [$1]) : $1
     ;
 PathEltOrInverse
-    : PathElt
-    | '^' PathElt
+    : '^'? PathElt -> $1 ? path($1, [$2]) : $2;
     ;
 PathPrimary
     : iri
     | 'a' -> RDF_TYPE
-    | '!' PathNegatedPropertySet
-    | '(' Path ')'
+    | '!' PathNegatedPropertySet -> path($1, [$2])
+    | '(' Path ')' -> $2
     ;
 PathNegatedPropertySet
     : PathOneInPropertySet
-    | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')'
+    | NIL -> []
+    | '(' ( PathOneInPropertySet '|' )* PathOneInPropertySet? ')' -> path('|', appendTo($2, $3))
     ;
 PathOneInPropertySet
     : iri
-    | 'a' -> RDF_type
-    | '^' ( iri | 'a' )
+    | 'a' -> RDF_TYPE
+    | '^' iri -> path($1, [$2])
+    | '^' 'a' -> path($1, [RDF_TYPE])
     ;
 TriplesNode
     : '(' GraphNode+ ')' -> createList($2)
@@ -704,7 +709,7 @@ BuiltInCall
     ;
 Aggregate
     : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
-    | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')'
+    | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')' -> expression($4, { type: 'aggregate', aggregation: $1, distinct: !!$3, expression: $4 })
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
     ;
 Literal

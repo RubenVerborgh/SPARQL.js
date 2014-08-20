@@ -1,0 +1,34 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://example/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "?p",
+          "object": "?v"
+        },
+        {
+          "subject": "?p",
+          "predicate": {
+            "type": "path",
+            "pathType": "*",
+            "items": [
+              "http://www.w3.org/2000/01/rdf-schema#subPropertyOf"
+            ]
+          },
+          "object": "http://example/property"
+        }
+      ]
+    }
+  ]
+}

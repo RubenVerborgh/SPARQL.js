@@ -1,0 +1,29 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://example/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?s",
+          "predicate": {
+            "type": "path",
+            "pathType": "/",
+            "items": [
+              "http://example/item",
+              "http://example/price"
+            ]
+          },
+          "object": "?x"
+        }
+      ]
+    }
+  ]
+}
