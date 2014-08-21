@@ -14,39 +14,37 @@
     }
   ],
   "where": [
-    [
-      {
-        "type": "graph",
-        "patterns": [
-          {
-            "type": "bgp",
-            "triples": [
-              {
-                "subject": "?s",
-                "predicate": "?p",
-                "object": "?o"
-              }
-            ]
-          }
-        ],
-        "name": "?g"
-      },
-      {
-        "type": "bgp",
-        "triples": [
-          {
-            "subject": "?g",
-            "predicate": "http://purl.org/dc/elements/1.1/publisher",
-            "object": "http://www.w3.org/"
-          },
-          {
-            "subject": "?g",
-            "predicate": "http://purl.org/dc/elements/1.1/date",
-            "object": "?date"
-          }
-        ]
-      }
-    ],
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?g",
+          "predicate": "http://purl.org/dc/elements/1.1/publisher",
+          "object": "http://www.w3.org/"
+        },
+        {
+          "subject": "?g",
+          "predicate": "http://purl.org/dc/elements/1.1/date",
+          "object": "?date"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?s",
+              "predicate": "?p",
+              "object": "?o"
+            }
+          ]
+        }
+      ],
+      "name": "?g"
+    },
     {
       "type": "filter",
       "expression": {

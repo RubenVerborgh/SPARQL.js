@@ -1,0 +1,44 @@
+{
+  "type": "query",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "": "http://example.org/book/",
+    "ns": "http://example.org/ns#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?book",
+    "?title",
+    "?price"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?book",
+          "predicate": "http://purl.org/dc/elements/1.1/title",
+          "object": "?title"
+        },
+        {
+          "subject": "?book",
+          "predicate": "http://example.org/ns#price",
+          "object": "?price"
+        }
+      ]
+    },
+    {
+      "type": "values",
+      "values": [
+        {
+          "?title": "\"SPARQL Tutorial\"",
+          "?book": "{undefined}"
+        },
+        {
+          "?title": "{undefined}",
+          "?book": "http://example.org/book/book2"
+        }
+      ]
+    }
+  ]
+}

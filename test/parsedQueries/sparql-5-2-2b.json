@@ -9,33 +9,31 @@
     "?mbox"
   ],
   "where": [
-    [
-      {
-        "type": "filter",
-        "expression": {
-          "type": "operation",
-          "operator": "regex",
-          "args": [
-            "?name",
-            "\"Smith\""
-          ]
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?name"
+        },
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/mbox",
+          "object": "?mbox"
         }
-      },
-      {
-        "type": "bgp",
-        "triples": [
-          {
-            "subject": "?x",
-            "predicate": "http://xmlns.com/foaf/0.1/name",
-            "object": "?name"
-          },
-          {
-            "subject": "?x",
-            "predicate": "http://xmlns.com/foaf/0.1/mbox",
-            "object": "?mbox"
-          }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "regex",
+        "args": [
+          "?name",
+          "\"Smith\""
         ]
       }
-    ]
+    }
   ]
 }

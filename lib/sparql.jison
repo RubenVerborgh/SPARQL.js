@@ -373,7 +373,7 @@ QueryUnit
     }
     ;
 Query
-    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend({ type: 'query', prefixes: prefixes || {} }, $2)
+    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend({ type: 'query', prefixes: prefixes || {} }, $2, $3)
     ;
 UpdateUnit
     : Update
@@ -461,6 +461,29 @@ LimitOffsetClauses
 ValuesClause
     : 'VALUES' InlineData -> { type: 'values', values: $2 }
     ;
+InlineData
+    : VAR '{' DataBlockValue* '}' -> $3.map(function(v) { var o = {}; o[$1] = v; return o; })
+    | '(' VAR* ')' '{' DataBlockValueList* '}'
+    {
+      var length = $2.length;
+      $$ = $5.map(function (values) {
+        if (values.length !== length)
+          throw Error('Inconsistent VALUES length');
+        var valuesObject = {};
+        for(var i = 0; i<length; i++)
+          valuesObject[$2[i]] = values[i];
+        return valuesObject;
+      });
+    }
+    ;
+DataBlockValue
+    : iri
+    | Literal
+    | 'UNDEF' -> undefined
+    ;
+DataBlockValueList
+    : '(' DataBlockValue* ')' -> $2
+    ;
 Update
     : Prologue ( Update1 ( ';' Update )? )?
     ;
@@ -524,7 +547,7 @@ GroupGraphPattern
     }
     ;
 GroupGraphPatternSub
-    : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? unionAll([$1], $2) : $2
+    : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? unionAll([$1], $2) : unionAll($2)
     ;
 GroupGraphPatternSubTail
     : GraphPatternNotTriples '.'? TriplesBlock? -> $3 ? [$1, $3] : $1
@@ -541,15 +564,6 @@ GraphPatternNotTriples
     | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
     | 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
     | ValuesClause
-    ;
-InlineData
-    : VAR '{' DataBlockValue* '}' -> { variable: toVar($1), values: $3 }
-    | ( NIL | '(' VAR* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
-    ;
-DataBlockValue
-    : iri
-    | Literal
-    | 'UNDEF'
     ;
 Constraint
     : BrackettedExpression

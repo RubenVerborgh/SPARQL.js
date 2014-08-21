@@ -19,7 +19,7 @@ describe('The SPARQL parser', function () {
     if (!fs.existsSync(parsedQueryFile)) return;
 
     it('should correctly parse query "' + query + '"', function () {
-      var parsedQuery = JSON.parse(fs.readFileSync(parsedQueryFile, 'utf8'));
+      var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
       query = fs.readFileSync(queriesPath + query + '.sparql', 'utf8');
       expect(SparqlParser.parse(query)).to.deep.equal(parsedQuery);
     });
@@ -35,3 +35,21 @@ describe('The SPARQL parser', function () {
     expect(error.message).to.include('Parse error on line 1');
   });
 });
+
+// Parses a JSON object, restoring `undefined` values
+function parseJSON(string) {
+  var object = JSON.parse(string);
+  return /"\{undefined\}"/.test(string) ? restoreUndefined(object) : object;
+}
+
+// Recursively replace values of "{undefined}" by `undefined`
+function restoreUndefined(object) {
+  for (var key in object) {
+    var item = object[key];
+    if (typeof item === 'object')
+      object[key] = restoreUndefined(item);
+    else if (item === '{undefined}')
+      object[key] = undefined;
+  }
+  return object;
+}

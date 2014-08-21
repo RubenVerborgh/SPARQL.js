@@ -1,0 +1,64 @@
+{
+  "type": "query",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "ns": "http://example.org/ns#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?title",
+    "?price"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://example.org/ns#price",
+          "object": "?p"
+        },
+        {
+          "subject": "?x",
+          "predicate": "http://example.org/ns#discount",
+          "object": "?discount"
+        },
+        {
+          "subject": "?x",
+          "predicate": "http://purl.org/dc/elements/1.1/title",
+          "object": "?title"
+        }
+      ]
+    },
+    {
+      "type": "bind",
+      "variable": "?price",
+      "expression": {
+        "type": "operation",
+        "operator": "*",
+        "args": [
+          "?p",
+          {
+            "type": "operation",
+            "operator": "-",
+            "args": [
+              "\"1\"^^http://www.w3.org/2001/XMLSchema#integer",
+              "?discount"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "<",
+        "args": [
+          "?price",
+          "\"20\"^^http://www.w3.org/2001/XMLSchema#integer"
+        ]
+      }
+    }
+  ]
+}
