@@ -1,0 +1,44 @@
+{
+  "type": "query",
+  "prefixes": {},
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?a",
+          "predicate": "?b",
+          "object": "?c"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "in",
+        "args": [
+          "\"1\"^^http://www.w3.org/2001/XMLSchema#integer",
+          "\"2\"^^http://www.w3.org/2001/XMLSchema#integer",
+          "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
+        ]
+      }
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "notin",
+        "args": [
+          "\"1\"^^http://www.w3.org/2001/XMLSchema#integer",
+          "\"2\"^^http://www.w3.org/2001/XMLSchema#integer",
+          "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
+        ]
+      }
+    }
+  ]
+}
