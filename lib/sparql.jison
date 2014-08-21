@@ -719,7 +719,8 @@ BuiltInCall
     | 'IF' '(' Expression ',' Expression ',' Expression ')' -> operation($1.toLowerCase(), [$3, $5, $7])
     | ( 'CONCAT' | 'COALESCE' | 'SUBSTR' | 'REGEX' | 'REPLACE' ) ExpressionList -> operation($1.toLowerCase(), $2)
     | 'BOUND' '(' VAR ')' -> operation('bound', [toVar($3)])
-    | 'BNODE' ( '(' Expression ')' | NIL )
+    | 'BNODE' NIL -> operation($1, [])
+    | 'BNODE' '(' Expression ')' -> operation($1, [$3])
     | 'NOT'? 'EXISTS' GroupGraphPattern -> operation($1 ? 'notexists' :'exists', [degroupSingle($3)])
     ;
 Aggregate
