@@ -14,6 +14,11 @@
 
   var prefixes = {}, base = '', basePath = '', baseRoot = '';
 
+  // Returns a lowercase version of the given string
+  function lowercase(string) {
+    return string.toLowerCase();
+  }
+
   function appendTo(array, item) {
     return array.push(item), array;
   }
@@ -399,7 +404,7 @@ SubSelect
     : SelectClause WhereClause SolutionModifier ValuesClause? -> extend({ type: 'query' }, $1, $2, $3, $4)
     ;
 SelectClause
-    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }, $2 && ($1 = $2.toLowerCase(), $2 = {}, $2[$1] = true, $2))
+    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
     ;
 SelectClauseItem
     : VAR -> toVar($1)
@@ -488,8 +493,8 @@ Update
     ;
 Update1
     : 'LOAD' 'SILENT'? iri IntoGraphClause? -> $extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })
-    | ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: $1.toLowerCase(), silent: !!$2, graph: $3 }
-    | ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: $1.toLowerCase(), silent: !!$2, source: $3, destination: $5 }
+    | ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: lowercase($1), silent: !!$2, graph: $3 }
+    | ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: lowercase($1), silent: !!$2, source: $3, destination: $5 }
     | 'CREATE' 'SILENT'? 'GRAPH' iri -> { type: 'create', silent: !!$2, graph: $3 }
     | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: $2 }
     | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: $2 }
@@ -518,7 +523,7 @@ GraphOrDefault
     ;
 GraphRefAll
     : 'GRAPH' iri -> { type: 'graph', name: $2 }
-    | ( 'DEFAULT' | 'NAMED' | 'ALL' ) { $$ = {}; $$[$1.toLowerCase()] = true; }
+    | ( 'DEFAULT' | 'NAMED' | 'ALL' ) { $$ = {}; $$[lowercase($1)] = true; }
     ;
 QuadPattern
     : '{' TriplesTemplate? QuadsNotTriples* '}' -> $2 ? unionAll($3, [$2]) : unionAll($3)
@@ -718,11 +723,11 @@ BrackettedExpression
     ;
 BuiltInCall
     : Aggregate
-    | FUNC_ARITY0 NIL -> operation($1.toLowerCase())
-    | FUNC_ARITY1 '(' Expression ')' -> operation($1.toLowerCase(), [$3])
-    | FUNC_ARITY2 '(' Expression ',' Expression ')' -> operation($1.toLowerCase(), [$3, $5])
-    | 'IF' '(' Expression ',' Expression ',' Expression ')' -> operation($1.toLowerCase(), [$3, $5, $7])
-    | ( 'CONCAT' | 'COALESCE' | 'SUBSTR' | 'REGEX' | 'REPLACE' ) ExpressionList -> operation($1.toLowerCase(), $2)
+    | FUNC_ARITY0 NIL -> operation(lowercase($1))
+    | FUNC_ARITY1 '(' Expression ')' -> operation(lowercase($1), [$3])
+    | FUNC_ARITY2 '(' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5])
+    | 'IF' '(' Expression ',' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5, $7])
+    | ( 'CONCAT' | 'COALESCE' | 'SUBSTR' | 'REGEX' | 'REPLACE' ) ExpressionList -> operation(lowercase($1), $2)
     | 'BOUND' '(' VAR ')' -> operation('bound', [toVar($3)])
     | 'BNODE' NIL -> operation($1, [])
     | 'BNODE' '(' Expression ')' -> operation($1, [$3])
@@ -730,16 +735,16 @@ BuiltInCall
     ;
 Aggregate
     : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
-    | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')' -> expression($4, { type: 'aggregate', aggregation: $1.toLowerCase(), distinct: !!$3, expression: $4 })
+    | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')' -> expression($4, { type: 'aggregate', aggregation: lowercase($1), distinct: !!$3, expression: $4 })
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
     ;
 Literal
     : String
-    | String LANGTAG  -> $1 + $2.toLowerCase()
+    | String LANGTAG  -> $1 + lowercase($2)
     | String '^^' iri -> $1 + '^^' + $3
     | INTEGER -> createLiteral($1, XSD_INTEGER)
     | DECIMAL -> createLiteral($1, XSD_DECIMAL)
-    | DOUBLE  -> createLiteral($1.toLowerCase(), XSD_DOUBLE)
+    | DOUBLE  -> createLiteral(lowercase($1), XSD_DOUBLE)
     | NumericLiteralPositive
     | NumericLiteralNegative
     | 'true'  -> XSD_TRUE
@@ -759,7 +764,7 @@ NumericLiteralPositive
 NumericLiteralNegative
     : INTEGER_NEGATIVE -> createLiteral($1, XSD_INTEGER)
     | DECIMAL_NEGATIVE -> createLiteral($1, XSD_DECIMAL)
-    | DOUBLE_NEGATIVE  -> createLiteral($1.toLowerCase(), XSD_DOUBLE)
+    | DOUBLE_NEGATIVE  -> createLiteral(lowercase($1), XSD_DOUBLE)
     ;
 iri
     : IRIREF -> resolveIRI($1)
