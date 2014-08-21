@@ -1,0 +1,80 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://example.org/WMterms#",
+    "t": "http://example.org/types#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?aLabel1",
+    "?bLabel"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?a",
+          "predicate": "http://example.org/WMterms#label",
+          "object": "?aLabel"
+        },
+        {
+          "subject": "?a",
+          "predicate": "http://example.org/WMterms#weight",
+          "object": "?aWeight"
+        },
+        {
+          "subject": "?a",
+          "predicate": "http://example.org/WMterms#displacement",
+          "object": "?aDisp"
+        },
+        {
+          "subject": "?b",
+          "predicate": "http://example.org/WMterms#label",
+          "object": "?bLabel"
+        },
+        {
+          "subject": "?b",
+          "predicate": "http://example.org/WMterms#weight",
+          "object": "?bWeight"
+        },
+        {
+          "subject": "?b",
+          "predicate": "http://example.org/WMterms#displacement",
+          "object": "?bDisp"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "&&",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "sameterm",
+            "args": [
+              "?aWeight",
+              "?bWeight"
+            ]
+          },
+          {
+            "type": "operation",
+            "operator": "!",
+            "args": [
+              {
+                "type": "operation",
+                "operator": "sameterm",
+                "args": [
+                  "?aDisp",
+                  "?bDisp"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

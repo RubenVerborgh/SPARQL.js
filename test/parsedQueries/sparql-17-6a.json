@@ -1,0 +1,40 @@
+{
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "func": "http://example.org/functions#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?name",
+    "?id"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?name"
+        },
+        {
+          "subject": "?x",
+          "predicate": "http://example.org/functions#empId",
+          "object": "?id"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "functionCall",
+        "function": "http://example.org/functions#even",
+        "args": [
+          "?id"
+        ],
+        "distinct": false
+      }
+    }
+  ]
+}

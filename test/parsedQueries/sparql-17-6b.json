@@ -1,0 +1,68 @@
+{
+  "type": "query",
+  "prefixes": {
+    "aGeo": "http://example.org/geo#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?neighbor"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?a",
+          "predicate": "http://example.org/geo#placeName",
+          "object": "\"Grenoble\""
+        },
+        {
+          "subject": "?a",
+          "predicate": "http://example.org/geo#locationX",
+          "object": "?axLoc"
+        },
+        {
+          "subject": "?a",
+          "predicate": "http://example.org/geo#locationY",
+          "object": "?ayLoc"
+        },
+        {
+          "subject": "?b",
+          "predicate": "http://example.org/geo#placeName",
+          "object": "?neighbor"
+        },
+        {
+          "subject": "?b",
+          "predicate": "http://example.org/geo#locationX",
+          "object": "?bxLoc"
+        },
+        {
+          "subject": "?b",
+          "predicate": "http://example.org/geo#locationY",
+          "object": "?byLoc"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "<",
+        "args": [
+          {
+            "type": "functionCall",
+            "function": "http://example.org/geo#distance",
+            "args": [
+              "?axLoc",
+              "?ayLoc",
+              "?bxLoc",
+              "?byLoc"
+            ],
+            "distinct": false
+          },
+          "\"10\"^^http://www.w3.org/2001/XMLSchema#integer"
+        ]
+      }
+    }
+  ]
+}

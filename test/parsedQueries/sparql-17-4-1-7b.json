@@ -1,0 +1,47 @@
+{
+  "type": "query",
+  "prefixes": {
+    "a": "http://www.w3.org/2000/10/annotation-ns#",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?annotates"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?annot",
+          "predicate": "http://www.w3.org/2000/10/annotation-ns#annotates",
+          "object": "?annotates"
+        },
+        {
+          "subject": "?annot",
+          "predicate": "http://purl.org/dc/elements/1.1/date",
+          "object": "?date"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "=",
+        "args": [
+          "?date",
+          {
+            "type": "functionCall",
+            "function": "http://www.w3.org/2001/XMLSchema#dateTime",
+            "args": [
+              "\"2005-01-01T00:00:00Z\""
+            ],
+            "distinct": false
+          }
+        ]
+      }
+    }
+  ]
+}

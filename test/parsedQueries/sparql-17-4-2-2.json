@@ -1,0 +1,60 @@
+{
+  "type": "query",
+  "prefixes": {
+    "a": "http://www.w3.org/2000/10/annotation-ns#",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?given",
+    "?family"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?annot",
+          "predicate": "http://www.w3.org/2000/10/annotation-ns#annotates",
+          "object": "http://www.w3.org/TR/rdf-sparql-query/"
+        },
+        {
+          "subject": "?annot",
+          "predicate": "http://purl.org/dc/elements/1.1/creator",
+          "object": "?c"
+        }
+      ]
+    },
+    {
+      "type": "optional",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?c",
+              "predicate": "http://xmlns.com/foaf/0.1/given",
+              "object": "?given"
+            },
+            {
+              "subject": "?c",
+              "predicate": "http://xmlns.com/foaf/0.1/family",
+              "object": "?family"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "isblank",
+        "args": [
+          "?c"
+        ]
+      }
+    }
+  ]
+}

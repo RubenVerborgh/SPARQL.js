@@ -1,0 +1,69 @@
+{
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?name1",
+    "?name2"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?name1"
+        },
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/mbox",
+          "object": "?mbox1"
+        },
+        {
+          "subject": "?y",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?name2"
+        },
+        {
+          "subject": "?y",
+          "predicate": "http://xmlns.com/foaf/0.1/mbox",
+          "object": "?mbox2"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "&&",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "sameterm",
+            "args": [
+              "?mbox1",
+              "?mbox2"
+            ]
+          },
+          {
+            "type": "operation",
+            "operator": "!",
+            "args": [
+              {
+                "type": "operation",
+                "operator": "sameterm",
+                "args": [
+                  "?name1",
+                  "?name2"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
