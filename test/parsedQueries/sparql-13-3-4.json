@@ -1,0 +1,51 @@
+{
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "dc": "http://purl.org/dc/elements/1.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?name",
+    "?mbox",
+    "?date"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?g",
+          "predicate": "http://purl.org/dc/elements/1.1/publisher",
+          "object": "?name"
+        },
+        {
+          "subject": "?g",
+          "predicate": "http://purl.org/dc/elements/1.1/date",
+          "object": "?date"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?person",
+              "predicate": "http://xmlns.com/foaf/0.1/name",
+              "object": "?name"
+            },
+            {
+              "subject": "?person",
+              "predicate": "http://xmlns.com/foaf/0.1/mbox",
+              "object": "?mbox"
+            }
+          ]
+        }
+      ],
+      "name": "?g"
+    }
+  ]
+}

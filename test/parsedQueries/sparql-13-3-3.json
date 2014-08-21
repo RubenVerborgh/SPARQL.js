@@ -1,0 +1,80 @@
+{
+  "type": "query",
+  "prefixes": {
+    "data": "http://example.org/foaf/",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?mbox",
+    "?nick",
+    "?ppd"
+  ],
+  "from": {
+    "default": [],
+    "named": [
+      "http://example.org/foaf/aliceFoaf",
+      "http://example.org/foaf/bobFoaf"
+    ]
+  },
+  "where": [
+    {
+      "type": "graph",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?alice",
+              "predicate": "http://xmlns.com/foaf/0.1/mbox",
+              "object": "mailto:alice@work.example"
+            },
+            {
+              "subject": "?alice",
+              "predicate": "http://xmlns.com/foaf/0.1/knows",
+              "object": "?whom"
+            },
+            {
+              "subject": "?whom",
+              "predicate": "http://xmlns.com/foaf/0.1/mbox",
+              "object": "?mbox"
+            },
+            {
+              "subject": "?whom",
+              "predicate": "http://www.w3.org/2000/01/rdf-schema#seeAlso",
+              "object": "?ppd"
+            },
+            {
+              "subject": "?ppd",
+              "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+              "object": "http://xmlns.com/foaf/0.1/PersonalProfileDocument"
+            }
+          ]
+        }
+      ],
+      "name": "http://example.org/foaf/aliceFoaf"
+    },
+    {
+      "type": "graph",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?w",
+              "predicate": "http://xmlns.com/foaf/0.1/mbox",
+              "object": "?mbox"
+            },
+            {
+              "subject": "?w",
+              "predicate": "http://xmlns.com/foaf/0.1/nick",
+              "object": "?nick"
+            }
+          ]
+        }
+      ],
+      "name": "?ppd"
+    }
+  ]
+}

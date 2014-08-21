@@ -1,0 +1,41 @@
+{
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "data": "http://example.org/foaf/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?nick"
+  ],
+  "from": {
+    "default": [],
+    "named": [
+      "http://example.org/foaf/aliceFoaf",
+      "http://example.org/foaf/bobFoaf"
+    ]
+  },
+  "where": [
+    {
+      "type": "graph",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?x",
+              "predicate": "http://xmlns.com/foaf/0.1/mbox",
+              "object": "mailto:bob@work.example"
+            },
+            {
+              "subject": "?x",
+              "predicate": "http://xmlns.com/foaf/0.1/nick",
+              "object": "?nick"
+            }
+          ]
+        }
+      ],
+      "name": "http://example.org/foaf/bobFoaf"
+    }
+  ]
+}
