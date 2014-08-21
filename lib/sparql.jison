@@ -235,7 +235,7 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 
 %%
 
-\s+                      /* ignore */
+\s+|"#"[^\n\r]*          /* ignore */
 "BASE"                   return 'BASE'
 "PREFIX"                 return 'PREFIX'
 "SELECT"                 return 'SELECT'
