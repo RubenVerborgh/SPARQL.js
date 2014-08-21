@@ -1,0 +1,37 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "deletewhere",
+      "delete": [
+        {
+          "type": "graph",
+          "triples": [
+            {
+              "subject": "?person",
+              "predicate": "http://xmlns.com/foaf/0.1/givenName",
+              "object": "\"Fred\""
+            },
+            {
+              "subject": "?person",
+              "predicate": "?property1",
+              "object": "?value1"
+            }
+          ],
+          "name": "http://example.com/names"
+        },
+        {
+          "type": "graph",
+          "triples": [
+            {
+              "subject": "?person",
+              "predicate": "?property2",
+              "object": "?value2"
+            }
+          ],
+          "name": "http://example.com/addresses"
+        }
+      ]
+    }
+  ]
+}

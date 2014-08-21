@@ -1,0 +1,39 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "insertdelete",
+      "graph": "http://example/addresses",
+      "delete": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?person",
+              "predicate": "?property",
+              "object": "?value"
+            }
+          ]
+        }
+      ],
+      "insert": [],
+      "where": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?person",
+              "predicate": "?property",
+              "object": "?value"
+            },
+            {
+              "subject": "?person",
+              "predicate": "http://xmlns.com/foaf/0.1/givenName",
+              "object": "\"Fred\""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

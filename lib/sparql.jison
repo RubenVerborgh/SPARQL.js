@@ -360,26 +360,20 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 
 %ebnf
 
-%start QueryUnit
+%start QueryOrUpdateUnit
 
 %%
 
-QueryUnit
-    : Query EOF
+QueryOrUpdateUnit
+    : ( BaseDecl | PrefixDecl )* ( Query | Update ) EOF
     {
       prefixes = null;
       base = basePath = baseRoot = '';
-      return $1;
+      return $2;
     }
     ;
 Query
-    : Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend({ type: 'query', prefixes: prefixes || {} }, $2, $3)
-    ;
-UpdateUnit
-    : Update
-    ;
-Prologue
-    : ( BaseDecl | PrefixDecl )*
+    : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend({ type: 'query', prefixes: prefixes || {} }, $1, $2)
     ;
 BaseDecl
     : 'BASE' IRIREF
@@ -413,7 +407,7 @@ SelectClauseItem
     ;
 ConstructQuery
     : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, groupDatasets($3), $4, $5)
-    | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $5 || [] }, groupDatasets($2), { where: { type: 'bgp', triples: appendAllTo([], $5 || []) } }, $7)
+    | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $5 = ($5 ? $5.triples : []) }, groupDatasets($2), { where: { type: 'bgp', triples: appendAllTo([], $5) } }, $7)
     ;
 DescribeQuery
     : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? ['*'] : $2.map(toVar) }, groupDatasets($3), $4, $5)
@@ -490,48 +484,54 @@ DataBlockValueList
     : '(' DataBlockValue* ')' -> $2
     ;
 Update
-    : Prologue ( Update1 ( ';' Update )? )?
+    : (Update1 ';')* Update1 -> { type: 'update', updates: appendTo($1, $2) }
     ;
 Update1
-    : 'LOAD' 'SILENT'? iri ( 'INTO' 'GRAPH' iri )?
-    | 'CLEAR' 'SILENT'? GraphRefAll
-    | 'DROP' 'SILENT'? GraphRefAll
-    | 'ADD' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-    | 'MOVE' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-    | 'COPY' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-    | 'CREATE' 'SILENT'? 'GRAPH' iri
-    | 'INSERT DATA' QuadPattern
-    | 'DELETE DATA' QuadPattern
-    | 'DELETE WHERE' QuadPattern
-    | ( 'WITH' iri )? ( DeleteClause InsertClause? | InsertClause ) UsingClause* 'WHERE' GroupGraphPattern
+    : 'LOAD' 'SILENT'? iri IntoGraphClause? -> $extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })
+    | ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: $1.toLowerCase(), silent: !!$2, graph: $3 }
+    | ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: $1.toLowerCase(), silent: !!$2, source: $3, destination: $5 }
+    | 'CREATE' 'SILENT'? 'GRAPH' iri -> { type: 'create', silent: !!$2, graph: $3 }
+    | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: $2 }
+    | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: $2 }
+    | 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: $2 }
+    | WithClause? InsertClause DeleteClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { insert: $2 || [] }, { delete: $3 || [] }, groupDatasets($4), { where: $6.patterns })
+    | WithClause? DeleteClause InsertClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { delete: $2 || [] }, { insert: $3 || [] }, groupDatasets($4), { where: $6.patterns })
     ;
 DeleteClause
-    : 'DELETE' QuadPattern
+    : 'DELETE' QuadPattern -> $2
     ;
 InsertClause
-    : 'INSERT' QuadPattern
+    : 'INSERT' QuadPattern -> $2
     ;
 UsingClause
-    : 'USING' 'NAMED'? iri
+    : 'USING' 'NAMED'? iri -> { iri: $3, named: !!$2 }
+    ;
+WithClause
+    : 'WITH' iri -> { graph: $2 }
+    ;
+IntoGraphClause
+    : 'INTO' 'GRAPH' iri -> $3
     ;
 GraphOrDefault
-    : 'DEFAULT'
-    | 'GRAPH'? iri
+    : 'DEFAULT' -> { type: 'graph', default: true }
+    | 'GRAPH'? iri -> { type: 'graph', name: $2 }
     ;
 GraphRefAll
-    : 'GRAPH' iri
-    | 'DEFAULT'
-    | 'NAMED'
-    | 'ALL'
+    : 'GRAPH' iri -> { type: 'graph', name: $2 }
+    | ( 'DEFAULT' | 'NAMED' | 'ALL' ) { $$ = {}; $$[$1.toLowerCase()] = true; }
     ;
 QuadPattern
-    : '{' TriplesTemplate? ( QuadsNotTriples '.'? TriplesTemplate? )* '}'
+    : '{' TriplesTemplate? QuadsNotTriples* '}' -> $2 ? unionAll($3, [$2]) : unionAll($3)
     ;
 QuadsNotTriples
-    : 'GRAPH' (VAR | iri) '{' TriplesTemplate? '}'
+    : 'GRAPH' (VAR | iri) '{' TriplesTemplate? '}' '.'? TriplesTemplate?
+    {
+      var graph = extend($4 || { triples: [] }, { type: 'graph', name: toVar($2) });
+      $$ = $7 ? [graph, $7] : [graph];
+    }
     ;
 TriplesTemplate
-    : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> unionAll($1, [$2])
+    : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
 GroupGraphPattern
     : '{' SubSelect '}' -> $2

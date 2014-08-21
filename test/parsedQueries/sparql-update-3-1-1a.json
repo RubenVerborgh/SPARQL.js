@@ -1,0 +1,25 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "insert",
+      "insert": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "http://example/book1",
+              "predicate": "http://purl.org/dc/elements/1.1/title",
+              "object": "\"A new book\""
+            },
+            {
+              "subject": "http://example/book1",
+              "predicate": "http://purl.org/dc/elements/1.1/creator",
+              "object": "\"A.N.Other\""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "type": "copy",
+      "silent": false,
+      "source": {
+        "type": "graph",
+        "default": true
+      },
+      "destination": {
+        "type": "graph",
+        "name": "http://example.org/named"
+      }
+    }
+  ]
+}

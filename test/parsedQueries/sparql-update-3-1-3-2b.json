@@ -1,0 +1,60 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "insertdelete",
+      "insert": [
+        {
+          "type": "graph",
+          "triples": [
+            {
+              "subject": "?person",
+              "predicate": "http://xmlns.com/foaf/0.1/name",
+              "object": "?name"
+            },
+            {
+              "subject": "?person",
+              "predicate": "http://xmlns.com/foaf/0.1/mbox",
+              "object": "?email"
+            }
+          ],
+          "name": "http://example/addresses"
+        }
+      ],
+      "delete": [],
+      "where": [
+        {
+          "type": "graph",
+          "patterns": [
+            {
+              "type": "bgp",
+              "triples": [
+                {
+                  "subject": "?person",
+                  "predicate": "http://xmlns.com/foaf/0.1/name",
+                  "object": "?name"
+                }
+              ]
+            },
+            {
+              "type": "optional",
+              "patterns": [
+                {
+                  "type": "bgp",
+                  "triples": [
+                    {
+                      "subject": "?person",
+                      "predicate": "http://xmlns.com/foaf/0.1/mbox",
+                      "object": "?email"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "name": "http://example/people"
+        }
+      ]
+    }
+  ]
+}

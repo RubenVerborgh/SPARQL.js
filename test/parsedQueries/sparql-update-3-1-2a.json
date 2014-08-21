@@ -1,0 +1,25 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "delete",
+      "delete": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "http://example/book2",
+              "predicate": "http://purl.org/dc/elements/1.1/title",
+              "object": "\"David Copperfield\""
+            },
+            {
+              "subject": "http://example/book2",
+              "predicate": "http://purl.org/dc/elements/1.1/creator",
+              "object": "\"Edmund Wells\""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

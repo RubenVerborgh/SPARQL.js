@@ -1,0 +1,106 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "insertdelete",
+      "insert": [
+        {
+          "type": "graph",
+          "triples": [
+            {
+              "subject": "?book",
+              "predicate": "?p",
+              "object": "?v"
+            }
+          ],
+          "name": "http://example/bookStore2"
+        }
+      ],
+      "delete": [],
+      "where": [
+        {
+          "type": "graph",
+          "patterns": [
+            {
+              "type": "bgp",
+              "triples": [
+                {
+                  "subject": "?book",
+                  "predicate": "http://purl.org/dc/elements/1.1/date",
+                  "object": "?date"
+                },
+                {
+                  "subject": "?book",
+                  "predicate": "?p",
+                  "object": "?v"
+                }
+              ]
+            },
+            {
+              "type": "filter",
+              "expression": {
+                "type": "operation",
+                "operator": "<",
+                "args": [
+                  "?date",
+                  "\"2000-01-01T00:00:00-02:00\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+                ]
+              }
+            }
+          ],
+          "name": "http://example/bookStore"
+        }
+      ]
+    },
+    {
+      "updateType": "insertdelete",
+      "graph": "http://example/bookStore",
+      "delete": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?book",
+              "predicate": "?p",
+              "object": "?v"
+            }
+          ]
+        }
+      ],
+      "insert": [],
+      "where": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?book",
+              "predicate": "http://purl.org/dc/elements/1.1/date",
+              "object": "?date"
+            },
+            {
+              "subject": "?book",
+              "predicate": "http://purl.org/dc/elements/1.1/type",
+              "object": "http://purl.org/dc/dcmitype/PhysicalObject"
+            },
+            {
+              "subject": "?book",
+              "predicate": "?p",
+              "object": "?v"
+            }
+          ]
+        },
+        {
+          "type": "filter",
+          "expression": {
+            "type": "operation",
+            "operator": "<",
+            "args": [
+              "?date",
+              "\"2000-01-01T00:00:00-02:00\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

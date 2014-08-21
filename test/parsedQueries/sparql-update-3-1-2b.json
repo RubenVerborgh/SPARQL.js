@@ -1,0 +1,37 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "delete",
+      "delete": [
+        {
+          "type": "graph",
+          "triples": [
+            {
+              "subject": "http://example/book1",
+              "predicate": "http://purl.org/dc/elements/1.1/title",
+              "object": "\"Fundamentals of Compiler Desing\""
+            }
+          ],
+          "name": "http://example/bookStore"
+        }
+      ]
+    },
+    {
+      "updateType": "insert",
+      "insert": [
+        {
+          "type": "graph",
+          "triples": [
+            {
+              "subject": "http://example/book1",
+              "predicate": "http://purl.org/dc/elements/1.1/title",
+              "object": "\"Fundamentals of Compiler Design\""
+            }
+          ],
+          "name": "http://example/bookStore"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "deletewhere",
+      "delete": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?person",
+              "predicate": "http://xmlns.com/foaf/0.1/givenName",
+              "object": "\"Fred\""
+            },
+            {
+              "subject": "?person",
+              "predicate": "?property",
+              "object": "?value"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
