@@ -1,0 +1,49 @@
+{
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?nameX",
+    "?nameY",
+    "?nickY"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/knows",
+          "object": "?y"
+        },
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?nameX"
+        },
+        {
+          "subject": "?y",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?nameY"
+        }
+      ]
+    },
+    {
+      "type": "optional",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?y",
+              "predicate": "http://xmlns.com/foaf/0.1/nick",
+              "object": "?nickY"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

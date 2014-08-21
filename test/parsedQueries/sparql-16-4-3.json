@@ -1,0 +1,22 @@
+{
+  "type": "query",
+  "prefixes": {
+    "ent": "http://org.example.com/employees#"
+  },
+  "queryType": "DESCRIBE",
+  "variables": [
+    "?x"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://org.example.com/employees#employeeId",
+          "object": "\"1234\""
+        }
+      ]
+    }
+  ]
+}

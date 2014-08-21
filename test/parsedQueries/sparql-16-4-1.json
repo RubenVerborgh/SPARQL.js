@@ -1,0 +1,8 @@
+{
+  "type": "query",
+  "prefixes": {},
+  "queryType": "DESCRIBE",
+  "variables": [
+    "http://example.org/"
+  ]
+}
