@@ -1,0 +1,40 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://data.example/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "expression": {
+        "expression": "?y",
+        "type": "aggregate",
+        "aggregation": "avg",
+        "distinct": false
+      },
+      "variable": "?avg"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?a",
+          "predicate": "http://data.example/x",
+          "object": "?x"
+        },
+        {
+          "subject": "?a",
+          "predicate": "http://data.example/y",
+          "object": "?y"
+        }
+      ]
+    }
+  ],
+  "group": [
+    {
+      "expression": "?x"
+    }
+  ]
+}

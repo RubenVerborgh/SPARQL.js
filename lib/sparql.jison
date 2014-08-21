@@ -12,7 +12,7 @@
       XSD_TRUE =  '"true"^^'  + XSD_BOOLEAN,
       XSD_FALSE = '"false"^^' + XSD_BOOLEAN;
 
-  var prefixes, base = '', basePath = '', baseRoot = '';
+  var prefixes = {}, base = '', basePath = '', baseRoot = '';
 
   function appendTo(array, item) {
     return array.push(item), array;
@@ -723,7 +723,7 @@ BuiltInCall
     ;
 Aggregate
     : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
-    | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')' -> expression($4, { type: 'aggregate', aggregation: $1, distinct: !!$3, expression: $4 })
+    | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')' -> expression($4, { type: 'aggregate', aggregation: $1.toLowerCase(), distinct: !!$3, expression: $4 })
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
     ;
 Literal

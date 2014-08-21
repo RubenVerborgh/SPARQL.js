@@ -1,0 +1,57 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/data/#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?x",
+    {
+      "expression": {
+        "type": "operation",
+        "operator": "*",
+        "args": [
+          {
+            "expression": "?y",
+            "type": "aggregate",
+            "aggregation": "min",
+            "distinct": false
+          },
+          "\"2\"^^http://www.w3.org/2001/XMLSchema#integer"
+        ]
+      },
+      "variable": "?min"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://example.com/data/#p",
+          "object": "?y"
+        },
+        {
+          "subject": "?x",
+          "predicate": "http://example.com/data/#q",
+          "object": "?z"
+        }
+      ]
+    }
+  ],
+  "group": [
+    {
+      "expression": "?x"
+    },
+    {
+      "expression": {
+        "type": "operation",
+        "operator": "str",
+        "args": [
+          "?z"
+        ]
+      }
+    }
+  ]
+}

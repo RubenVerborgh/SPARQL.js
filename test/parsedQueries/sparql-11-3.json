@@ -1,0 +1,50 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://data.example/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "expression": {
+        "expression": "?size",
+        "type": "aggregate",
+        "aggregation": "avg",
+        "distinct": false
+      },
+      "variable": "?asize"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://data.example/size",
+          "object": "?size"
+        }
+      ]
+    }
+  ],
+  "group": [
+    {
+      "expression": "?x"
+    }
+  ],
+  "having": [
+    {
+      "type": "operation",
+      "operator": ">",
+      "args": [
+        {
+          "expression": "?size",
+          "type": "aggregate",
+          "aggregation": "avg",
+          "distinct": false
+        },
+        "\"10\"^^http://www.w3.org/2001/XMLSchema#integer"
+      ]
+    }
+  ]
+}
