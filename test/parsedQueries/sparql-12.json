@@ -1,0 +1,56 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://people.example/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?y",
+    "?minName"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "http://people.example/alice",
+          "predicate": "http://people.example/knows",
+          "object": "?y"
+        }
+      ]
+    },
+    {
+      "type": "query",
+      "queryType": "SELECT",
+      "variables": [
+        "?y",
+        {
+          "expression": {
+            "expression": "?name",
+            "type": "aggregate",
+            "aggregation": "min",
+            "distinct": false
+          },
+          "variable": "?minName"
+        }
+      ],
+      "where": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?y",
+              "predicate": "http://people.example/name",
+              "object": "?name"
+            }
+          ]
+        }
+      ],
+      "group": [
+        {
+          "expression": "?y"
+        }
+      ]
+    }
+  ]
+}

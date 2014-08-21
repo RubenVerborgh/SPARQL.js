@@ -402,7 +402,7 @@ SelectQuery
     : SelectClause DatasetClause* WhereClause SolutionModifier -> extend($1, groupDatasets($2), $3, $4)
     ;
 SubSelect
-    : SelectClause WhereClause SolutionModifier ValuesClause?
+    : SelectClause WhereClause SolutionModifier ValuesClause? -> extend({ type: 'query' }, $1, $2, $3, $4)
     ;
 SelectClause
     : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }, $2 && ($1 = $2.toLowerCase(), $2 = {}, $2[$1] = true, $2))
@@ -529,7 +529,8 @@ TriplesTemplate
     : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> unionAll($1, [$2])
     ;
 GroupGraphPattern
-    : '{' ( SubSelect | GroupGraphPatternSub ) '}'
+    : '{' SubSelect '}' -> $2
+    | '{' GroupGraphPatternSub '}'
     {
       // Simplify the pattern by grouping all BGPs together
       if ($2.length > 1) {
