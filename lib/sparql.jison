@@ -462,10 +462,15 @@ ValuesClause
     : 'VALUES' InlineData -> { type: 'values', values: $2 }
     ;
 InlineData
-    : VAR '{' DataBlockValue* '}' -> $3.map(function(v) { var o = {}; o[$1] = v; return o; })
+    : VAR '{' DataBlockValue* '}'
+    {
+      $1 = toVar($1);
+      $$ = $3.map(function(v) { var o = {}; o[$1] = v; return o; })
+    }
     | '(' VAR* ')' '{' DataBlockValueList* '}'
     {
       var length = $2.length;
+      $2 = $2.map(toVar);
       $$ = $5.map(function (values) {
         if (values.length !== length)
           throw Error('Inconsistent VALUES length');
