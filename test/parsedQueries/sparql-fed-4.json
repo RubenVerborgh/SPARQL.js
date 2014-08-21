@@ -1,0 +1,58 @@
+{
+  "type": "query",
+  "prefixes": {
+    "void": "http://rdfs.org/ns/void#",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "doap": "http://usefulinc.com/ns/doap#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?service",
+    "?projectName"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?p",
+          "predicate": "http://purl.org/dc/elements/1.1/subject",
+          "object": "?projectSubject"
+        },
+        {
+          "subject": "?p",
+          "predicate": "http://rdfs.org/ns/void#sparqlEndpoint",
+          "object": "?service"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "regex",
+        "args": [
+          "?projectSubject",
+          "\"remote\""
+        ]
+      }
+    },
+    {
+      "type": "service",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?project",
+              "predicate": "http://usefulinc.com/ns/doap#name",
+              "object": "?projectName"
+            }
+          ]
+        }
+      ],
+      "name": "?service",
+      "silent": false
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?name"
+  ],
+  "where": [
+    {
+      "type": "service",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "http://example.org/people15",
+              "predicate": "http://xmlns.com/foaf/0.1/name",
+              "object": "?name"
+            }
+          ]
+        }
+      ],
+      "name": "http://people.example.org/sparql",
+      "silent": true
+    }
+  ]
+}

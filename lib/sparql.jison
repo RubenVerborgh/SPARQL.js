@@ -561,7 +561,7 @@ GraphPatternNotTriples
     | 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
     | 'MINUS' GroupGraphPattern    -> extend($2, { type: 'minus' })
     | 'GRAPH' (VAR | iri) GroupGraphPattern -> extend($3, { type: 'graph', name: toVar($2) })
-    | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> extend($4, { type: 'service', silent: !!$2, name: toVar($3) })
+    | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> extend($4, { type: 'service', name: toVar($3), silent: !!$2 })
     | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
     | 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
     | ValuesClause

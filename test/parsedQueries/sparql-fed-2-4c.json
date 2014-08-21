@@ -1,0 +1,31 @@
+{
+  "type": "values",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "": "http://example.org/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?s",
+          "predicate": "http://xmlns.com/foaf/0.1/knows",
+          "object": "?o"
+        }
+      ]
+    }
+  ],
+  "values": [
+    {
+      "?s": "http://example.org/a"
+    },
+    {
+      "?s": "http://example.org/b"
+    }
+  ]
+}

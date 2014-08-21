@@ -1,0 +1,63 @@
+{
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?person",
+    "?interest",
+    "?known"
+  ],
+  "where": [
+    {
+      "type": "service",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?person",
+              "predicate": "http://xmlns.com/foaf/0.1/name",
+              "object": "?name"
+            }
+          ]
+        },
+        {
+          "type": "optional",
+          "patterns": [
+            {
+              "type": "bgp",
+              "triples": [
+                {
+                  "subject": "?person",
+                  "predicate": "http://xmlns.com/foaf/0.1/interest",
+                  "object": "?interest"
+                }
+              ]
+            },
+            {
+              "type": "service",
+              "patterns": [
+                {
+                  "type": "bgp",
+                  "triples": [
+                    {
+                      "subject": "?person",
+                      "predicate": "http://xmlns.com/foaf/0.1/knows",
+                      "object": "?known"
+                    }
+                  ]
+                }
+              ],
+              "name": "http://people2.example.org/sparql",
+              "silent": false
+            }
+          ]
+        }
+      ],
+      "name": "http://people.example.org/sparql",
+      "silent": false
+    }
+  ]
+}
