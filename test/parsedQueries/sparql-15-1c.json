@@ -1,0 +1,37 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://example.org/ns#",
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    "?name"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?name"
+        },
+        {
+          "subject": "?x",
+          "predicate": "http://example.org/ns#empId",
+          "object": "?emp"
+        }
+      ]
+    }
+  ],
+  "order": [
+    {
+      "expression": "?name"
+    },
+    {
+      "expression": "?emp",
+      "descending": true
+    }
+  ]
+}
