@@ -30,8 +30,12 @@
   "devDependencies": {
     "jison": "0.4.x",
     "mocha": "1.21.x",
-    "chai": "1.9.x"
+    "chai": "1.9.x",
+    "pre-commit": "~0.0.9"
   },
+  "pre-commit": [
+    "test"
+  ],
   "testling": {
     "files": "test/*.js",
     "harness": "mocha",
