@@ -1,4 +1,9 @@
 %{
+  /*
+    SPARQL parser in the Jison parser generator format.
+  */
+
+  // Common namespaces and entities
   var RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
       RDF_TYPE  = RDF + 'type',
       RDF_FIRST = RDF + 'first',
@@ -19,12 +24,31 @@
     return string.toLowerCase();
   }
 
+  // Appends the item to the array and returns the array
   function appendTo(array, item) {
     return array.push(item), array;
   }
 
+  // Appends the items to the array and returns the array
   function appendAllTo(array, items) {
     return array.push.apply(array, items), array;
+  }
+
+  // Extends a base object with properties of other objects
+  function extend(base) {
+    if (!base) base = {};
+    for (var i = 1, l = arguments.length, arg; i < l && (arg = arguments[i] || {}); i++)
+      for (var name in arg)
+        base[name] = arg[name];
+    return base;
+  }
+
+  // Creates an array that contains all items of the given arrays
+  function unionAll() {
+    var union = [];
+    for (var i = 0, l = arguments.length; i < l; i++)
+      union = union.concat.apply(union, arguments[i]);
+    return union;
   }
 
   // Resolves an IRI against a base path
@@ -61,25 +85,12 @@
     return variable;
   }
 
-  function extend(base) {
-    if (!base) base = {};
-    for (var i = 1, l = arguments.length, arg; i < l && (arg = arguments[i] || {}); i++)
-      for (var name in arg)
-        base[name] = arg[name];
-    return base;
-  }
-
-  function unionAll() {
-    var union = [];
-    for (var i = 0, l = arguments.length; i < l; i++)
-      union = union.concat.apply(union, arguments[i]);
-    return union;
-  }
-
+  // Creates an operation with the given name and arguments
   function operation(operatorName, args) {
     return { type: 'operation', operator: operatorName, args: args || [] };
   }
 
+  // Creates an expression with the given type and attributes
   function expression(expr, attr) {
     var expression = { expression: expr };
     if (attr)
@@ -88,11 +99,13 @@
     return expression;
   }
 
+  // Creates a path with the given type and items
   function path(type, items) {
     return { type: 'path', pathType: type, items: items };
   }
 
-  function flattenOperationList(initialExpression, operationList) {
+  // Transforms a list of operations types and arguments into a tree of operations
+  function createOperationTree(initialExpression, operationList) {
     for (var i = 0, l = operationList.length, item; i < l && (item = operationList[i]); i++)
       initialExpression = operation(item[0], [initialExpression, item[1]]);
     return initialExpression;
@@ -106,18 +119,22 @@
     return l ? { from: { default: defaults, named: named } } : null;
   }
 
+  // Converts the number to a string
   function toInt(string) {
     return parseInt(string, 10);
   }
 
+  // Transforms a possibly single group into its patterns
   function degroupSingle(group) {
     return group.type === 'group' && group.patterns.length === 1 ? group.patterns[0] : group;
   }
 
+  // Creates a literal with the given value and type
   function createLiteral(value, type) {
     return '"' + value + '"^^' + type;
   }
 
+  // Creates a triple with the given subject, predicate, and object
   function triple(subject, predicate, object) {
     var triple = {};
     if (subject   != null) triple.subject   = subject;
@@ -126,6 +143,7 @@
     return triple;
   }
 
+  // Creates a new blank node identifier
   function blank() {
     return '_:b' + blankId++;
   };
@@ -138,6 +156,7 @@
                              't': '\t', 'b': '\b', 'n': '\n', 'r': '\r', 'f': '\f' },
       fromCharCode = String.fromCharCode;
 
+  // Translates escape codes in the string into their textual equivalent
   function unescapeString(string, trimLength) {
     string = string.substring(trimLength, string.length - trimLength);
     try {
@@ -709,15 +728,15 @@ RelationalExpression
     | AdditiveExpression 'NOT'? 'IN' ExpressionList -> operation($2 ? 'notin' : 'in', $4)
     ;
 AdditiveExpression
-    : MultiplicativeExpression AdditiveExpressionTail* -> flattenOperationList($1, $2)
+    : MultiplicativeExpression AdditiveExpressionTail* -> createOperationTree($1, $2)
     ;
 AdditiveExpressionTail
     : ( '+' | '-' ) MultiplicativeExpression -> [$1, $2]
-    | NumericLiteralPositive MultiplicativeExpressionTail* -> ['+', flattenOperationList($1, $2)]
-    | NumericLiteralNegative MultiplicativeExpressionTail* -> ['-', flattenOperationList($1.replace('-', ''), $2)]
+    | NumericLiteralPositive MultiplicativeExpressionTail* -> ['+', createOperationTree($1, $2)]
+    | NumericLiteralNegative MultiplicativeExpressionTail* -> ['-', createOperationTree($1.replace('-', ''), $2)]
     ;
 MultiplicativeExpression
-    : UnaryExpression MultiplicativeExpressionTail* -> flattenOperationList($1, $2)
+    : UnaryExpression MultiplicativeExpressionTail* -> createOperationTree($1, $2)
     ;
 MultiplicativeExpressionTail
     : ( '*' | '/' ) UnaryExpression -> [$1, $2]
