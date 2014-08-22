@@ -8,8 +8,8 @@
   "main": "lib/sparql",
   "bin": "bin/sparql-to-json",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha",
-    "postinstall": "./build"
+    "test": "./build;./node_modules/mocha/bin/mocha",
+    "prepublish": "./build"
   },
   "devDependencies": {
     "jison": ">=0.4.14",
