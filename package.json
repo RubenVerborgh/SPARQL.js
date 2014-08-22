@@ -15,5 +15,17 @@
     "jison": "0.4.x",
     "mocha": "1.21.x",
     "chai": "1.9.x"
+  },
+  "testling": {
+    "files": "test/*.js",
+    "harness": "mocha",
+    "browsers": [
+      "ie/9..latest",
+      "firefox/24..latest",
+      "chrome/29..latest",
+      "safari/6..latest",
+      "iphone/6..latest",
+      "ipad/6..latest"
+    ]
   }
 }
