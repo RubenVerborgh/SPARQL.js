@@ -11,16 +11,6 @@
   ],
   "where": [
     {
-      "type": "bgp",
-      "triples": [
-        {
-          "subject": "?x",
-          "predicate": "http://purl.org/dc/elements/1.1/title",
-          "object": "?title"
-        }
-      ]
-    },
-    {
       "type": "group",
       "patterns": [
         {
@@ -56,6 +46,16 @@
               }
             ]
           }
+        }
+      ]
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://purl.org/dc/elements/1.1/title",
+          "object": "?title"
         }
       ]
     },

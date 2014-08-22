@@ -13,6 +13,17 @@
   ],
   "where": [
     {
+      "type": "values",
+      "values": [
+        {
+          "?book": "http://example.org/book/book1"
+        },
+        {
+          "?book": "http://example.org/book/book3"
+        }
+      ]
+    },
+    {
       "type": "bgp",
       "triples": [
         {
@@ -24,17 +35,6 @@
           "subject": "?book",
           "predicate": "http://example.org/ns#price",
           "object": "?price"
-        }
-      ]
-    },
-    {
-      "type": "values",
-      "values": [
-        {
-          "?book": "http://example.org/book/book1"
-        },
-        {
-          "?book": "http://example.org/book/book3"
         }
       ]
     }

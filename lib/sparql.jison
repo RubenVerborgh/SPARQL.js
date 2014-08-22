@@ -542,17 +542,34 @@ GroupGraphPattern
     : '{' SubSelect '}' -> $2
     | '{' GroupGraphPatternSub '}'
     {
-      // Simplify the pattern by grouping all BGPs together
+      // Simplify the groups by merging adjacent BGPs and moving filters to the back
       if ($2.length > 1) {
-        var bgpTriples = [], otherPatterns = [];
-        for (var i = 0, pattern; pattern=$2[i]; i++) {
-          if (pattern.type === 'bgp')
-            appendAllTo(bgpTriples, pattern.triples);
-          else if (!pattern.patterns || pattern.patterns.length > 0)
-            otherPatterns.push(pattern);
+        var groups = [], currentBgp, filters = [];
+        for (var i = 0, group; group=$2[i]; i++) {
+          switch (group.type) {
+            // Add a BGP's triples to the current BGP
+            case 'bgp':
+              if (group.triples.length) {
+                if (!currentBgp)
+                  appendTo(groups, currentBgp = group);
+                else
+                  appendAllTo(currentBgp.triples, group.triples);
+              }
+              break;
+            // Save filters separately
+            case 'filter':
+              appendTo(filters, group);
+              break;
+            // All other groups break up a BGP
+            default:
+              // Only add the group if its pattern is non-empty
+              if (!group.patterns || group.patterns.length > 0) {
+                appendTo(groups, group);
+                currentBgp = null;
+              }
+          }
         }
-        $2 = !bgpTriples.length ? otherPatterns
-                                : appendAllTo([{ type: 'bgp', triples: bgpTriples }], otherPatterns);
+        $2 = appendAllTo(groups, filters);
       }
       $$ = { type: 'group', patterns: $2 }
     }

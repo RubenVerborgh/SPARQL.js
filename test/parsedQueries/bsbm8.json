@@ -55,23 +55,6 @@
       ]
     },
     {
-      "type": "filter",
-      "expression": {
-        "type": "operation",
-        "operator": "langmatches",
-        "args": [
-          {
-            "type": "operation",
-            "operator": "lang",
-            "args": [
-              "?text"
-            ]
-          },
-          "\"EN\""
-        ]
-      }
-    },
-    {
       "type": "optional",
       "patterns": [
         {
@@ -130,6 +113,23 @@
           ]
         }
       ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "langmatches",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "lang",
+            "args": [
+              "?text"
+            ]
+          },
+          "\"EN\""
+        ]
+      }
     }
   ],
   "order": [
