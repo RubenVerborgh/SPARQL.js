@@ -8,9 +8,9 @@ if (args.length < 1) {
 }
 
 var fs = require('fs'),
-    SparqlParser = require('../lib/sparql');
+    SparqlParser = require('../sparql').Parser;
 
 // Parse and display the query
 var query = fs.readFileSync(args[0]).toString(),
-    parseTree = SparqlParser.parse(query);
+    parseTree = new SparqlParser().parse(query);
 console.log('%s', JSON.stringify(parseTree, null, '  '));

@@ -1,4 +1,4 @@
-var SparqlParser = require('../lib/sparql');
+var SparqlParser = require('../sparql').Parser;
 
 var fs = require('fs'),
     expect = require('chai').expect;
@@ -7,8 +7,10 @@ var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 
 describe('The SPARQL parser', function () {
+  var parser = new SparqlParser();
+
   // Ensure the same blank node identifiers are used in every test
-  beforeEach(function () { SparqlParser.Parser._resetBlanks(); });
+  beforeEach(function () { SparqlParser._resetBlanks(); });
 
   var queries = fs.readdirSync(queriesPath);
   queries = queries.map(function (q) { return q.replace(/\.sparql$/, ''); });
@@ -21,13 +23,13 @@ describe('The SPARQL parser', function () {
     it('should correctly parse query "' + query + '"', function () {
       var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
       query = fs.readFileSync(queriesPath + query + '.sparql', 'utf8');
-      expect(SparqlParser.parse(query)).to.deep.equal(parsedQuery);
+      expect(parser.parse(query)).to.deep.equal(parsedQuery);
     });
   });
 
   it('should throw an error on an invalid query', function () {
     var query = 'invalid', error = null;
-    try { SparqlParser.parse(query); }
+    try { parser.parse(query); }
     catch (e) { error = e; }
 
     expect(error).to.exist;
