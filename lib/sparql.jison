@@ -17,7 +17,7 @@
       XSD_TRUE =  '"true"^^'  + XSD_BOOLEAN,
       XSD_FALSE = '"false"^^' + XSD_BOOLEAN;
 
-  var prefixes = {}, base = '', basePath = '', baseRoot = '';
+  var base = '', basePath = '', baseRoot = '';
 
   // Returns a lowercase version of the given string
   function lowercase(string) {
@@ -391,13 +391,13 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 QueryOrUpdateUnit
     : ( BaseDecl | PrefixDecl )* ( Query | Update ) EOF
     {
-      prefixes = null;
+      Parser.prefixes = null;
       base = basePath = baseRoot = '';
       return $2;
     }
     ;
 Query
-    : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend({ type: 'query', prefixes: prefixes || {} }, $1, $2)
+    : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend({ type: 'query', prefixes: Parser.prefixes || {} }, $1, $2)
     ;
 BaseDecl
     : 'BASE' IRIREF
@@ -410,10 +410,10 @@ BaseDecl
 PrefixDecl
     : 'PREFIX' PNAME_NS IRIREF
     {
-      if (!prefixes) prefixes = {};
+      if (!Parser.prefixes) Parser.prefixes = {};
       $2 = $2.substr(0, $2.length - 1);
       $3 = resolveIRI($3);
-      prefixes[$2] = $3;
+      Parser.prefixes[$2] = $3;
     }
     ;
 SelectQuery
@@ -808,14 +808,14 @@ iri
     {
       var namePos = $1.indexOf(':'),
           prefix = $1.substr(0, namePos),
-          expansion = prefixes[prefix];
+          expansion = Parser.prefixes[prefix];
       if (!expansion) throw new Error('Unknown prefix: ' + prefix);
       $$ = resolveIRI(expansion + $1.substr(namePos + 1));
     }
     | PNAME_NS
     {
       $1 = $1.substr(0, $1.length - 1);
-      if (!($1 in prefixes)) throw new Error('Unknown prefix: ' + $1);
-      $$ = resolveIRI(prefixes[$1]);
+      if (!($1 in Parser.prefixes)) throw new Error('Unknown prefix: ' + $1);
+      $$ = resolveIRI(Parser.prefixes[$1]);
     }
     ;
