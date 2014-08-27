@@ -511,7 +511,7 @@ Update
     : (Update1 ';')* Update1 -> { type: 'update', updates: appendTo($1, $2) }
     ;
 Update1
-    : 'LOAD' 'SILENT'? iri IntoGraphClause? -> $extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })
+    : 'LOAD' 'SILENT'? iri IntoGraphClause? -> extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })
     | ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: lowercase($1), silent: !!$2, graph: $3 }
     | ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: lowercase($1), silent: !!$2, source: $3, destination: $5 }
     | 'CREATE' 'SILENT'? 'GRAPH' iri -> { type: 'create', silent: !!$2, graph: $3 }

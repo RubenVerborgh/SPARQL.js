@@ -1,0 +1,11 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "type": "load",
+      "silent": false,
+      "source": "http://www.w3.org/TR/skos-reference/skos.rdf",
+      "destination": "urn:namespaces:skos"
+    }
+  ]
+}
