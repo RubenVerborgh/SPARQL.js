@@ -1,0 +1,24 @@
+{
+  "type": "query",
+  "prefixes": {},
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "subject": "?s",
+      "predicate": "?p",
+      "object": "?o"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?s",
+          "predicate": "?p",
+          "object": "?o"
+        }
+      ]
+    }
+  ]
+}
