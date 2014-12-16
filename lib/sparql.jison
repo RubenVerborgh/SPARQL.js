@@ -518,8 +518,8 @@ Update1
     | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: $2 }
     | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: $2 }
     | 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: $2 }
-    | WithClause? InsertClause DeleteClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { insert: $2 || [] }, { delete: $3 || [] }, groupDatasets($4), { where: $6.patterns })
-    | WithClause? DeleteClause InsertClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { delete: $2 || [] }, { insert: $3 || [] }, groupDatasets($4), { where: $6.patterns })
+    | WithClause? InsertClause DeleteClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { insert: $2 || [] }, { delete: $3 || [] }, groupDatasets($4), { where: $6.patterns })
+    | WithClause? DeleteClause InsertClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { delete: $2 || [] }, { insert: $3 || [] }, groupDatasets($4), { where: $6.patterns })
     ;
 DeleteClause
     : 'DELETE' QuadPattern -> $2
@@ -550,7 +550,7 @@ QuadPattern
 QuadsNotTriples
     : 'GRAPH' (VAR | iri) '{' TriplesTemplate? '}' '.'? TriplesTemplate?
     {
-      var graph = extend($4 || { triples: [] }, { type: 'graph', name: toVar($2) });
+      var graph = extend($4 || { triples: [] }, { type: 'graph', name: toVar($2) });
       $$ = $7 ? [graph, $7] : [graph];
     }
     ;
