@@ -21,7 +21,9 @@ $ sparql-to-json query.sparql
 ### Browser
 Through [browserify](http://browserify.org/):
 ```bash
-$ browserify sparql.js > sparqljs-browser.js
+$ cd SPARQL.js
+$ npm install
+$ browserify sparql.js --standalone sparqljs > sparqljs-browser.js
 $ uglifyjs sparqljs-browser.js -c -m > sparqljs-browser-min.js
 ```
 
