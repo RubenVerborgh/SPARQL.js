@@ -32,9 +32,9 @@
   },
   "devDependencies": {
     "jison": "0.4.x",
-    "mocha": "1.21.x",
-    "chai": "1.9.x",
-    "pre-commit": "~0.0.9"
+    "mocha": "2.1.x",
+    "chai": "2.0.x",
+    "pre-commit": "~1.0.4"
   },
   "pre-commit": [
     "test"
