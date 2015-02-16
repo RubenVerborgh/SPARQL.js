@@ -22,12 +22,13 @@
   "main": "./sparql.js",
   "bin": "bin/sparql-to-json",
   "scripts": {
-    "test": "./build;./node_modules/mocha/bin/mocha",
+    "pretest": "npm run build",
+    "test": "mocha",
     "build": "jison ./lib/sparql.jison -p slr -o ./lib/SparqlParser.js",
     "prepublish": "npm run build"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.12.0"
   },
   "devDependencies": {
     "jison": "0.4.x",
