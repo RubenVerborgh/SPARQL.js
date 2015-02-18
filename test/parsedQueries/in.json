@@ -22,9 +22,12 @@
         "type": "operation",
         "operator": "in",
         "args": [
-          "\"1\"^^http://www.w3.org/2001/XMLSchema#integer",
-          "\"2\"^^http://www.w3.org/2001/XMLSchema#integer",
-          "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
+          "?a",
+          [
+            "\"1\"^^http://www.w3.org/2001/XMLSchema#integer",
+            "\"2\"^^http://www.w3.org/2001/XMLSchema#integer",
+            "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
+          ]
         ]
       }
     },
@@ -34,9 +37,12 @@
         "type": "operation",
         "operator": "notin",
         "args": [
-          "\"1\"^^http://www.w3.org/2001/XMLSchema#integer",
-          "\"2\"^^http://www.w3.org/2001/XMLSchema#integer",
-          "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
+          "?c",
+          [
+            "\"1\"^^http://www.w3.org/2001/XMLSchema#integer",
+            "\"2\"^^http://www.w3.org/2001/XMLSchema#integer",
+            "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
+          ]
         ]
       }
     }

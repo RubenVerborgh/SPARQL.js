@@ -725,7 +725,7 @@ ConditionalAndExpression
 RelationalExpression
     : AdditiveExpression
     | AdditiveExpression ( '=' | '!=' | '<' | '>' | '<=' | '>=' ) AdditiveExpression -> operation($2, [$1, $3])
-    | AdditiveExpression 'NOT'? 'IN' ExpressionList -> operation($2 ? 'notin' : 'in', $4)
+    | AdditiveExpression 'NOT'? 'IN' ExpressionList -> operation($2 ? 'notin' : 'in', [$1, $4])
     ;
 AdditiveExpression
     : MultiplicativeExpression AdditiveExpressionTail* -> createOperationTree($1, $2)
