@@ -1,4 +1,5 @@
 var Parser = require('./lib/SparqlParser').Parser;
+var Generator = require('./lib/SparqlGenerator');
 
 module.exports = {
   // Creates a SPARQL parser with the given pre-defined prefixes
@@ -18,4 +19,5 @@ module.exports = {
     parser._resetBlanks = Parser._resetBlanks;
     return parser;
   },
+  Generator: Generator,
 };
