@@ -28,7 +28,7 @@ function parseJSON(string) {
   return /"\{undefined\}"/.test(string) ? restoreUndefined(object) : object;
 }
 
-describe.only('A SPARQL generator', function () {
+describe('A SPARQL generator', function () {
   var parser = new SparqlParser();
 
   // Ensure the same blank node identifiers are used in every test
