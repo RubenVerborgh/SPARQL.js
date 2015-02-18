@@ -1,5 +1,9 @@
 {
   "type": "update",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "ns": "http://example.org/ns#"
+  },
   "updates": [
     {
       "updateType": "insert",

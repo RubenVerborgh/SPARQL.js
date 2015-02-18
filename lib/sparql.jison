@@ -391,13 +391,14 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 QueryOrUpdateUnit
     : ( BaseDecl | PrefixDecl )* ( Query | Update ) EOF
     {
+      $2.prefixes = Parser.prefixes;
       Parser.prefixes = null;
       base = basePath = baseRoot = '';
       return $2;
     }
     ;
 Query
-    : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend({ type: 'query', prefixes: Parser.prefixes || {} }, $1, $2)
+    : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend({ type: 'query' }, $1, $2)
     ;
 BaseDecl
     : 'BASE' IRIREF

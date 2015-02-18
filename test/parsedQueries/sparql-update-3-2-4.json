@@ -1,5 +1,6 @@
 {
   "type": "update",
+  "prefixes": {},
   "updates": [
     {
       "type": "move",
