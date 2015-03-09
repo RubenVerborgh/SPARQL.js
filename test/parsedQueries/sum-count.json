@@ -1,0 +1,53 @@
+{
+  "type": "query",
+  "prefixes": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "expression": {
+        "expression": "?val",
+        "type": "aggregate",
+        "aggregation": "sum",
+        "distinct": false
+      },
+      "variable": "?sum"
+    },
+    {
+      "expression": {
+        "expression": "?a",
+        "type": "aggregate",
+        "aggregation": "count",
+        "distinct": false
+      },
+      "variable": "?count"
+    },
+    {
+      "expression": {
+        "expression": "*",
+        "type": "aggregate",
+        "aggregation": "count",
+        "distinct": false
+      },
+      "variable": "?countAll"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?a",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
+          "object": "?val"
+        }
+      ]
+    }
+  ],
+  "group": [
+    {
+      "expression": "?a"
+    }
+  ]
+}
