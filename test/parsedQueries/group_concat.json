@@ -1,0 +1,45 @@
+{
+  "group": [
+    {
+      "expression": "?s"
+    }
+  ],
+  "prefixes": {},
+  "queryType": "SELECT",
+  "type": "query",
+  "variables": [
+    "?s",
+    {
+      "expression": {
+        "expression": "?p",
+        "type": "aggregate",
+        "aggregation": "group_concat",
+        "separator": " ",
+        "distinct": false
+      },
+      "variable": "?plist"
+    },
+    {
+      "expression": {
+        "expression": "?p",
+        "type": "aggregate",
+        "aggregation": "group_concat",
+        "separator": ",\"/",
+        "distinct": true
+      },
+      "variable": "?plist2"
+    }
+  ],
+  "where": [
+    {
+      "triples": [
+        {
+          "object": "?c",
+          "predicate": "?p",
+          "subject": "?s"
+        }
+      ],
+      "type": "bgp"
+    }
+  ]
+}
