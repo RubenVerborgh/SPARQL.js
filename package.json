@@ -22,17 +22,19 @@
   "main": "./sparql.js",
   "bin": "bin/sparql-to-json",
   "scripts": {
-    "test": "./build;./node_modules/mocha/bin/mocha",
-    "prepublish": "./build"
+    "pretest": "npm run build",
+    "test": "mocha",
+    "build": "jison ./lib/sparql.jison -p slr -o ./lib/SparqlParser.js",
+    "prepublish": "npm run build"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.12.0"
   },
   "devDependencies": {
     "jison": "0.4.x",
-    "mocha": "1.21.x",
-    "chai": "1.9.x",
-    "pre-commit": "~0.0.9"
+    "mocha": "2.1.x",
+    "chai": "2.0.x",
+    "pre-commit": "~1.0.4"
   },
   "pre-commit": [
     "test"

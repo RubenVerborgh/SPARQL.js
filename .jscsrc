@@ -1,0 +1,32 @@
+{
+    "preset": "google",
+    "fileExtensions": [".js"],
+
+    "excludeFiles": [],
+
+    "maximumLineLength": 120,
+
+    "validateLineBreaks": "LF",
+    "validateIndentation": 2,
+    "validateQuoteMarks": "'",
+
+    "requireParenthesesAroundIIFE": true,
+    "requireBlocksOnNewline": true,
+    "requireCapitalizedConstructors": true,
+    "requireDotNotation": true,
+    "requireCommaBeforeLineBreak": true,
+
+    "disallowEmptyBlocks": true,
+    "disallowMultipleVarDecl": true,
+    "disallowKeywords": ["with"],
+    "disallowQuotedKeysInObjects": true,
+    "disallowSpaceAfterObjectKeys": true,
+    "disallowKeywordsOnNewLine": ["else", "catch"],
+    "disallowYodaConditions": true,
+    "disallowNewlineBeforeBlockStatements": true,
+    "disallowImplicitTypeConversion": ["numeric", "boolean", "binary", "string"],
+    "disallowSpacesInFunctionDeclaration": {
+        "beforeOpeningRoundBrace": false,
+        "beforeOpeningCurlyBrace": false
+    }
+}
