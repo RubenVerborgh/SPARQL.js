@@ -90,3 +90,6 @@ and released under the [MIT License](https://github.com/RubenVerborgh/SPARQL.js/
 [![Browser Build Status](https://ci.testling.com/RubenVerborgh/SPARQL.js.png)](https://ci.testling.com/RubenVerborgh/SPARQL.js)
 
 [Contributions are welcome](https://github.com/RubenVerborgh/SPARQL.js/blob/master/CONTRIBUTING.md), and bug reports or pull requests are always helpful.
+
+## Contributors
+- Thanks to [Tim Ermilov](https://github.com/yamalight) for [driving the SPARQL generator](https://github.com/RubenVerborgh/SPARQL.js/pull/9)
