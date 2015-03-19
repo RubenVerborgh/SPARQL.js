@@ -7,11 +7,18 @@ It fully supports the [SPARQL 1.1 specification](http://www.w3.org/TR/sparql11-q
 ## Usage
 ### Library
 ```JavaScript
+// Parse a SPARQL query to a JSON object
 var SparqlParser = require('sparqljs').Parser;
-
 var parser = new SparqlParser();
-var query = parser.parse('PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' +
-                         'SELECT * { ?mickey foaf:name "Mickey Mouse"@en; foaf:knows ?other. }');
+var parsedQuery = parser.parse(
+  'PREFIX foaf: <http://xmlns.com/foaf/0.1/> ' +
+  'SELECT * { ?mickey foaf:name "Mickey Mouse"@en; foaf:knows ?other. }');
+
+// Regenerate a SPARQL query from a JSON object
+var SparqlGenerator = require('sparqljs').Generator;
+var generator = new SparqlGenerator();
+query.variables = ['?mickey'];
+var generatedQuery = generator.stringify(query);
 ```
 ### Standalone
 ```bash
