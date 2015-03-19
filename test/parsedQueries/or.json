@@ -1,0 +1,119 @@
+{
+  "prefixes": {},
+  "type": "query",
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?a",
+          "predicate": "?b",
+          "object": "?c"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "||",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "=",
+            "args": [ "?a", "\"1\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+          },
+          {
+            "type": "operation",
+            "operator": "=",
+            "args": [ "?a", "\"2\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+          },
+          {
+            "type": "operation",
+            "operator": "=",
+            "args": [ "?a", "\"3\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+          },
+          {
+            "type": "operation",
+            "operator": "=",
+            "args": [ "?a", "\"4\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "&&",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "=",
+            "args": [ "?a", "\"1\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+          },
+          {
+            "type": "operation",
+            "operator": "=",
+            "args": [ "?a", "\"2\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+          },
+          {
+            "type": "operation",
+            "operator": "=",
+            "args": [ "?a", "\"3\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+          },
+          {
+            "type": "operation",
+            "operator": "=",
+            "args": [ "?a", "\"4\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "||",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "&&",
+            "args": [
+              {
+                "type": "operation",
+                "operator": "=",
+                "args": [ "?a", "\"1\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+              },
+              {
+                "type": "operation",
+                "operator": "=",
+                "args": [ "?a", "\"2\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+              }
+            ]
+          },
+          {
+            "type": "operation",
+            "operator": "&&",
+            "args": [
+              {
+                "type": "operation",
+                "operator": "=",
+                "args": [ "?a", "\"3\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+              },
+              {
+                "type": "operation",
+                "operator": "=",
+                "args": [ "?a", "\"4\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
