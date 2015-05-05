@@ -2,7 +2,7 @@
 
 // Parse arguments
 var args = process.argv.slice(2);
-if (args.length < 1) {
+if (args.length > 1) {
   console.error('usage: sparql-to-json query.sparql');
   return process.exit(1);
 }
@@ -11,6 +11,10 @@ var fs = require('fs'),
     SparqlParser = require('../sparql').Parser;
 
 // Parse and display the query
-var query = fs.readFileSync(args[0]).toString(),
-    parseTree = new SparqlParser().parse(query);
-console.log('%s', JSON.stringify(parseTree, null, '  '));
+var query = '', source = args[0] ? fs.createReadStream(args[0]) : process.stdin;
+source.setEncoding('utf8');
+source.on('data', function (data) { query += data; });
+source.on('end', function () {
+  var parseTree = new SparqlParser().parse(query);
+  process.stdout.write(JSON.stringify(parseTree, null, '  ') + '\n');
+});
