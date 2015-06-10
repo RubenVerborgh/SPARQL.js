@@ -1,0 +1,30 @@
+{
+  "type": "query",
+  "queryType": "SELECT",
+  "variables": [
+    "?str",
+    {
+      "expression": {
+        "type": "operation",
+        "operator": "strlen",
+        "args": [
+          "?str"
+        ]
+      },
+      "variable": "?strlen"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "_:b0",
+          "predicate": "?p",
+          "object": "?str"
+        }
+      ]
+    }
+  ],
+  "prefixes": {}
+}
