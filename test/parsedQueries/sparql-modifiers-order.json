@@ -1,0 +1,65 @@
+{
+  "type": "query",
+  "prefixes": {
+    "": "http://books.example/"
+  },
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "expression": {
+        "expression": "?lprice",
+        "type": "aggregate",
+        "aggregation": "sum",
+        "distinct": false
+      },
+      "variable": "?totalPrice"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?org",
+          "predicate": "http://books.example/affiliates",
+          "object": "?auth"
+        },
+        {
+          "subject": "?auth",
+          "predicate": "http://books.example/writesBook",
+          "object": "?book"
+        },
+        {
+          "subject": "?book",
+          "predicate": "http://books.example/price",
+          "object": "?lprice"
+        }
+      ]
+    }
+  ],
+  "group": [
+    {
+      "expression": "?org"
+    }
+  ],
+  "having": [
+    {
+      "type": "operation",
+      "operator": ">",
+      "args": [
+        {
+          "expression": "?lprice",
+          "type": "aggregate",
+          "aggregation": "sum",
+          "distinct": false
+        },
+        "\"10\"^^http://www.w3.org/2001/XMLSchema#integer"
+      ]
+    }
+  ],
+  "order": [
+    {
+      "expression": "?totalPrice"
+    }
+  ]
+}
