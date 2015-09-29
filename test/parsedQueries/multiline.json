@@ -1,0 +1,20 @@
+{
+    "type": "query",
+    "queryType": "SELECT",
+    "variables": [
+        "?p"
+    ],
+    "where": [
+        {
+            "type": "bgp",
+            "triples": [
+                {
+                    "subject": "?p",
+                    "predicate": "http://xmlns.com/foaf/0.1/name",
+                    "object": "\"York\ntest\"@en"
+                }
+            ]
+        }
+    ],
+    "prefixes": {}
+}
