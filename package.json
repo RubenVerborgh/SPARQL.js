@@ -34,6 +34,11 @@
     "chai": "1.9.x",
     "pre-commit": "~0.0.9"
   },
+  "browser": {
+    "_process": false,
+    "fs": false,
+    "path": false
+  },
   "pre-commit": [
     "test"
   ],

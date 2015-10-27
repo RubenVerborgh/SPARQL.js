@@ -30,7 +30,7 @@ Through [browserify](http://browserify.org/):
 ```bash
 $ cd SPARQL.js
 $ npm install
-$ browserify sparql.js --standalone sparqljs > sparqljs-browser.js
+$ browserify sparql.js --standalone -u fs -u path -u _process sparqljs > sparqljs-browser.js
 $ uglifyjs sparqljs-browser.js -c -m > sparqljs-browser-min.js
 ```
 
