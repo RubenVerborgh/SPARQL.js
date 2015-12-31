@@ -398,7 +398,7 @@ QueryOrUpdateUnit
     }
     ;
 Query
-    : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend({ type: 'query' }, $1, $2)
+    : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend($1, $2, { type: 'query' })
     ;
 BaseDecl
     : 'BASE' IRIREF
@@ -478,9 +478,6 @@ LimitOffsetClauses
     | 'OFFSET' INTEGER 'LIMIT'  INTEGER -> { limit: toInt($4), offset: toInt($2) }
     ;
 ValuesClause
-    : 'VALUES' InlineData -> { values: $2 }
-    ;
-ValuesClauseInline
     : 'VALUES' InlineData -> { type: 'values', values: $2 }
     ;
 InlineData
@@ -614,7 +611,7 @@ GraphPatternNotTriples
     | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> extend($4, { type: 'service', name: toVar($3), silent: !!$2 })
     | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
     | 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
-    | ValuesClauseInline
+    | ValuesClause
     ;
 Constraint
     : BrackettedExpression
