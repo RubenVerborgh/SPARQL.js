@@ -1,5 +1,5 @@
 {
-  "type": "values",
+  "type": "query",
   "prefixes": {
     "foaf": "http://xmlns.com/foaf/0.1/",
     "": "http://example.org/"
