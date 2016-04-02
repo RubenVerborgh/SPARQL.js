@@ -29,7 +29,7 @@
     "node": ">=0.10.0"
   },
   "devDependencies": {
-    "jison": "0.4.x",
+    "jison": "0.4.16",
     "mocha": "1.21.x",
     "chai": "1.9.x",
     "pre-commit": "~0.0.9"
