@@ -9,7 +9,7 @@ git checkout $TAG 2>/dev/null
 echo "Building distribution"
 ./build
 cp license.js sparqljs-browser.js
-browserify sparql.js >> sparqljs-browser.js
+browserify -s sparqljs sparql.js >> sparqljs-browser.js
 uglifyjs --compress --mangle --comments -- sparqljs-browser.js > sparqljs-browser.min.js 2>/dev/null
 
 echo "Committing distribution"
