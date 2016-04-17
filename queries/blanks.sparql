@@ -1,3 +1,4 @@
+BASE <ex:>
 CONSTRUCT {
   ?s0 ?p0 [ <a0> [ <b0> <c0> ] ].
   [ <a0> [ <b0> <c0> ] ] ?p0 ?o0.

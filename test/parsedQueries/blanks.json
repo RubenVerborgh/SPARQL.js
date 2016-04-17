@@ -1,5 +1,6 @@
 {
   "type": "query",
+  "base": "ex:",
   "prefixes": {},
   "queryType": "CONSTRUCT",
   "template": [
@@ -10,13 +11,13 @@
     },
     {
       "subject": "_:b1",
-      "predicate": "a0",
+      "predicate": "ex:a0",
       "object": "_:b0"
     },
     {
       "subject": "_:b0",
-      "predicate": "b0",
-      "object": "c0"
+      "predicate": "ex:b0",
+      "object": "ex:c0"
     },
     {
       "subject": "_:b3",
@@ -25,13 +26,13 @@
     },
     {
       "subject": "_:b3",
-      "predicate": "a0",
+      "predicate": "ex:a0",
       "object": "_:b2"
     },
     {
       "subject": "_:b2",
-      "predicate": "b0",
-      "object": "c0"
+      "predicate": "ex:b0",
+      "object": "ex:c0"
     }
   ],
   "where": [
@@ -46,17 +47,17 @@
         {
           "subject": "?s1",
           "predicate": "?p1",
-          "object": "a1"
+          "object": "ex:a1"
         },
         {
           "subject": "?s1",
           "predicate": "?q1",
-          "object": "b1"
+          "object": "ex:b1"
         },
         {
           "subject": "?s1",
           "predicate": "?q1",
-          "object": "c1"
+          "object": "ex:c1"
         },
         {
           "subject": "_:b5",
@@ -70,8 +71,8 @@
         },
         {
           "subject": "_:b6",
-          "predicate": "a3",
-          "object": "b3"
+          "predicate": "ex:a3",
+          "object": "ex:b3"
         },
         {
           "subject": "?s4",
@@ -80,18 +81,18 @@
         },
         {
           "subject": "_:b7",
-          "predicate": "a4",
-          "object": "b4"
+          "predicate": "ex:a4",
+          "object": "ex:b4"
         },
         {
           "subject": "_:b7",
-          "predicate": "c4",
-          "object": "d4"
+          "predicate": "ex:c4",
+          "object": "ex:d4"
         },
         {
           "subject": "_:b7",
-          "predicate": "c4",
-          "object": "e4"
+          "predicate": "ex:c4",
+          "object": "ex:e4"
         },
         {
           "subject": "?s5",
@@ -100,13 +101,13 @@
         },
         {
           "subject": "_:b9",
-          "predicate": "a5",
+          "predicate": "ex:a5",
           "object": "_:b8"
         },
         {
           "subject": "_:b8",
-          "predicate": "b5",
-          "object": "c5"
+          "predicate": "ex:b5",
+          "object": "ex:c5"
         },
         {
           "subject": "_:b11",
@@ -115,28 +116,28 @@
         },
         {
           "subject": "_:b11",
-          "predicate": "a6",
+          "predicate": "ex:a6",
           "object": "_:b10"
         },
         {
           "subject": "_:b10",
-          "predicate": "b6",
-          "object": "c6"
+          "predicate": "ex:b6",
+          "object": "ex:c6"
         },
         {
           "subject": "_:b12",
-          "predicate": "a7",
-          "object": "b7"
+          "predicate": "ex:a7",
+          "object": "ex:b7"
         },
         {
           "subject": "_:b12",
-          "predicate": "c7",
-          "object": "d7"
+          "predicate": "ex:c7",
+          "object": "ex:d7"
         },
         {
           "subject": "_:b12",
-          "predicate": "c7",
-          "object": "e7"
+          "predicate": "ex:c7",
+          "object": "ex:e7"
         }
       ]
     }

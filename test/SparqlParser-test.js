@@ -38,31 +38,51 @@ describe('A SPARQL parser', function () {
   });
 
   describe('with pre-defined prefixes', function () {
-    var prefixes = { a: 'abc#', b: 'def#' };
+    var prefixes = { a: 'ex:abc#', b: 'ex:def#' };
     var parser = new SparqlParser(prefixes);
 
     it('should use those prefixes', function () {
       var query = 'SELECT * { a:a b:b "" }';
       expect(parser.parse(query).where[0].triples[0])
-        .to.deep.equal({subject: 'abc#a', predicate: 'def#b', object: '""'});
+        .to.deep.equal({subject: 'ex:abc#a', predicate: 'ex:def#b', object: '""'});
     });
 
     it('should allow temporarily overriding prefixes', function () {
-      var query = 'PREFIX a: <xyz#> SELECT * { a:a b:b "" }';
+      var query = 'PREFIX a: <ex:xyz#> SELECT * { a:a b:b "" }';
       expect(parser.parse(query).where[0].triples[0])
-        .to.deep.equal({subject: 'xyz#a', predicate: 'def#b', object: '""'});
+        .to.deep.equal({subject: 'ex:xyz#a', predicate: 'ex:def#b', object: '""'});
       expect(parser.parse('SELECT * { a:a b:b "" }').where[0].triples[0])
-        .to.deep.equal({subject: 'abc#a', predicate: 'def#b', object: '""'});
+        .to.deep.equal({subject: 'ex:abc#a', predicate: 'ex:def#b', object: '""'});
     });
 
     it('should not change the original prefixes', function () {
-      expect(prefixes).to.deep.equal({ a: 'abc#', b: 'def#' });
+      expect(prefixes).to.deep.equal({ a: 'ex:abc#', b: 'ex:def#' });
     });
 
     it('should not take over changes to the original prefixes', function () {
-      prefixes.a = 'xyz#';
+      prefixes.a = 'ex:xyz#';
       expect(parser.parse('SELECT * { a:a b:b "" }').where[0].triples[0])
-        .to.deep.equal({subject: 'abc#a', predicate: 'def#b', object: '""'});
+        .to.deep.equal({subject: 'ex:abc#a', predicate: 'ex:def#b', object: '""'});
     });
+  });
+
+  describe('with pre-defined base IRI', function () {
+    var parser = new SparqlParser(null, 'http://ex.org/');
+
+    it('should use the base IRI', function () {
+      var query = 'SELECT * { <> <#b> "" }';
+      expect(parser.parse(query).where[0].triples[0])
+        .to.deep.equal({subject: 'http://ex.org/', predicate: 'http://ex.org/#b', object: '""'});
+    });
+  });
+
+  it('should throw an error on relative IRIs if no base IRI is specified', function () {
+    var query = 'SELECT * { <a> <b> <c> }', error = null;
+    try { parser.parse(query); }
+    catch (e) { error = e; }
+
+    expect(error).to.exist;
+    expect(error).to.be.an.instanceof(Error);
+    expect(error.message).to.include('Cannot resolve relative IRI a because no base IRI was set.');
   });
 });

@@ -1,5 +1,6 @@
 {
   "type": "query",
+  "base": "ex:",
   "prefixes": {},
   "queryType": "CONSTRUCT",
   "template": [
@@ -11,7 +12,7 @@
     {
       "subject": "_:b2",
       "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-      "object": "a0"
+      "object": "ex:a0"
     },
     {
       "subject": "_:b2",
@@ -31,7 +32,7 @@
     {
       "subject": "_:b0",
       "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-      "object": "b0"
+      "object": "ex:b0"
     },
     {
       "subject": "_:b0",
@@ -41,7 +42,7 @@
     {
       "subject": "_:b1",
       "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-      "object": "c0"
+      "object": "ex:c0"
     },
     {
       "subject": "_:b1",
@@ -56,7 +57,7 @@
     {
       "subject": "_:b6",
       "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-      "object": "a0"
+      "object": "ex:a0"
     },
     {
       "subject": "_:b6",
@@ -76,7 +77,7 @@
     {
       "subject": "_:b4",
       "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-      "object": "b0"
+      "object": "ex:b0"
     },
     {
       "subject": "_:b4",
@@ -86,7 +87,7 @@
     {
       "subject": "_:b5",
       "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-      "object": "c0"
+      "object": "ex:c0"
     },
     {
       "subject": "_:b5",
@@ -106,7 +107,7 @@
         {
           "subject": "?s1",
           "predicate": "?p1",
-          "object": "a1"
+          "object": "ex:a1"
         },
         {
           "subject": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil",
@@ -121,7 +122,7 @@
         {
           "subject": "_:b8",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "a3"
+          "object": "ex:a3"
         },
         {
           "subject": "_:b8",
@@ -136,7 +137,7 @@
         {
           "subject": "_:b9",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "a4"
+          "object": "ex:a4"
         },
         {
           "subject": "_:b9",
@@ -146,7 +147,7 @@
         {
           "subject": "_:b10",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "b4"
+          "object": "ex:b4"
         },
         {
           "subject": "_:b10",
@@ -156,7 +157,7 @@
         {
           "subject": "_:b11",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "c4"
+          "object": "ex:c4"
         },
         {
           "subject": "_:b11",
@@ -171,7 +172,7 @@
         {
           "subject": "_:b14",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "a5"
+          "object": "ex:a5"
         },
         {
           "subject": "_:b14",
@@ -191,7 +192,7 @@
         {
           "subject": "_:b12",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "b5"
+          "object": "ex:b5"
         },
         {
           "subject": "_:b12",
@@ -201,7 +202,7 @@
         {
           "subject": "_:b13",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "c5"
+          "object": "ex:c5"
         },
         {
           "subject": "_:b13",
@@ -216,7 +217,7 @@
         {
           "subject": "_:b18",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "a6"
+          "object": "ex:a6"
         },
         {
           "subject": "_:b18",
@@ -236,7 +237,7 @@
         {
           "subject": "_:b16",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "b6"
+          "object": "ex:b6"
         },
         {
           "subject": "_:b16",
@@ -246,7 +247,7 @@
         {
           "subject": "_:b17",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "c6"
+          "object": "ex:c6"
         },
         {
           "subject": "_:b17",
@@ -256,7 +257,7 @@
         {
           "subject": "_:b20",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "a7"
+          "object": "ex:a7"
         },
         {
           "subject": "_:b20",
@@ -266,7 +267,7 @@
         {
           "subject": "_:b21",
           "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first",
-          "object": "b7"
+          "object": "ex:b7"
         },
         {
           "subject": "_:b21",
@@ -290,18 +291,18 @@
         },
         {
           "subject": "_:b22",
-          "predicate": "a8",
-          "object": "b8"
+          "predicate": "ex:a8",
+          "object": "ex:b8"
         },
         {
           "subject": "_:b22",
-          "predicate": "c8",
-          "object": "d8"
+          "predicate": "ex:c8",
+          "object": "ex:d8"
         },
         {
           "subject": "_:b22",
-          "predicate": "c8",
-          "object": "e8"
+          "predicate": "ex:c8",
+          "object": "ex:e8"
         }
       ]
     }

@@ -56,6 +56,16 @@
     // Strip off possible angular brackets
     if (iri[0] === '<')
       iri = iri.substring(1, iri.length - 1);
+    // Return absolute IRIs unmodified
+    if (/^[a-z]+:/.test(iri))
+      return iri;
+    if (!Parser.base)
+      throw new Error('Cannot resolve relative IRI ' + iri + ' because no base IRI was set.');
+    if (!base) {
+      base = Parser.base;
+      basePath = base.replace(/[^\/:]*$/, '');
+      baseRoot = base.match(/^(?:[a-z]+:\/*)?[^\/]*/)[0];
+    }
     switch (iri[0]) {
     // An empty relative IRI indicates the base IRI
     case undefined:
@@ -71,7 +81,7 @@
       return baseRoot + iri;
     // Resolve all other IRIs at the base IRI's path
     default:
-      return /^[a-z]+:/.test(iri) ? iri : basePath + iri;
+      return basePath + iri;
     }
   }
 
@@ -391,11 +401,11 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 QueryOrUpdateUnit
     : ( BaseDecl | PrefixDecl )* ( Query | Update ) EOF
     {
-      if (base)
-        $2.base = base;
+      if (Parser.base)
+        $2.base = Parser.base;
+      Parser.base = base = basePath = baseRoot = '';
       $2.prefixes = Parser.prefixes;
       Parser.prefixes = null;
-      base = basePath = baseRoot = '';
       return $2;
     }
     ;
@@ -405,9 +415,8 @@ Query
 BaseDecl
     : 'BASE' IRIREF
     {
-      base = resolveIRI($2)
-      basePath = base.replace(/[^\/]*$/, '');
-      baseRoot = base.match(/^(?:[a-z]+:\/*)?[^\/]*/)[0];
+      Parser.base = resolveIRI($2)
+      base = basePath = baseRoot = '';
     }
     ;
 PrefixDecl

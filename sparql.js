@@ -2,8 +2,8 @@ var Parser = require('./lib/SparqlParser').Parser;
 var Generator = require('./lib/SparqlGenerator');
 
 module.exports = {
-  // Creates a SPARQL parser with the given pre-defined prefixes
-  Parser: function (prefixes) {
+  // Creates a SPARQL parser with the given pre-defined prefixes and base IRI
+  Parser: function (prefixes, baseIRI) {
     // Create a copy of the prefixes
     var prefixesCopy = {};
     for (var prefix in prefixes || {})
@@ -13,6 +13,7 @@ module.exports = {
     // (Workaround for https://github.com/zaach/jison/issues/241)
     var parser = new Parser();
     parser.parse = function () {
+      Parser.base = baseIRI || '';
       Parser.prefixes = Object.create(prefixesCopy);
       return Parser.prototype.parse.apply(parser, arguments);
     };

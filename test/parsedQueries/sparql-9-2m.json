@@ -1,5 +1,6 @@
 {
   "type": "query",
+  "base": "http://example.org/",
   "prefixes": {
     "ex": "http://example.org/#"
   },
@@ -27,7 +28,7 @@
               }
             ]
           },
-          "object": "#me"
+          "object": "http://example.org/#me"
         }
       ]
     }
