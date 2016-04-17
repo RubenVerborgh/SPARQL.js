@@ -391,6 +391,8 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 QueryOrUpdateUnit
     : ( BaseDecl | PrefixDecl )* ( Query | Update ) EOF
     {
+      if (base)
+        $2.base = base;
       $2.prefixes = Parser.prefixes;
       Parser.prefixes = null;
       base = basePath = baseRoot = '';
