@@ -1,6 +1,6 @@
 # SPARQL.js – A SPARQL 1.1 parser for JavaScript
 The [SPARQL 1.1 Query Language](http://www.w3.org/TR/sparql11-query/) allows to query datasources of [RDF triples](http://www.w3.org/TR/rdf11-concepts/).
-SPARQL.js translates SPARQL into a JSON structure, so you can use SPARQL queries in your JavaScript applications.
+SPARQL.js translates SPARQL into a JSON structure, so you can dynamically build SPARQL queries in your JavaScript applications.
 
 It fully supports the [SPARQL 1.1 specification](http://www.w3.org/TR/sparql11-query/), including [property paths](http://www.w3.org/TR/sparql11-query/#propertypaths), [federation](http://www.w3.org/TR/sparql11-federated-query/), and [updates](http://www.w3.org/TR/sparql11-update/).
 
