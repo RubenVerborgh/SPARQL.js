@@ -573,9 +573,9 @@ GroupGraphPattern
     : '{' SubSelect '}' -> $2
     | '{' GroupGraphPatternSub '}'
     {
-      // Simplify the groups by merging adjacent BGPs and moving filters to the back
+      // Simplify the groups by merging adjacent BGPs
       if ($2.length > 1) {
-        var groups = [], currentBgp, filters = [];
+        var groups = [], currentBgp;
         for (var i = 0, group; group=$2[i]; i++) {
           switch (group.type) {
             // Add a BGP's triples to the current BGP
@@ -587,10 +587,6 @@ GroupGraphPattern
                   appendAllTo(currentBgp.triples, group.triples);
               }
               break;
-            // Save filters separately
-            case 'filter':
-              appendTo(filters, group);
-              break;
             // All other groups break up a BGP
             default:
               // Only add the group if its pattern is non-empty
@@ -600,7 +596,7 @@ GroupGraphPattern
               }
           }
         }
-        $2 = appendAllTo(groups, filters);
+        $2 = groups;
       }
       $$ = { type: 'group', patterns: $2 }
     }

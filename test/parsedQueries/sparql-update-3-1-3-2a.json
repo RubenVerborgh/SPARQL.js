@@ -32,11 +32,6 @@
                   "subject": "?book",
                   "predicate": "http://purl.org/dc/elements/1.1/date",
                   "object": "?date"
-                },
-                {
-                  "subject": "?book",
-                  "predicate": "?p",
-                  "object": "?v"
                 }
               ]
             },
@@ -50,6 +45,16 @@
                   "\"1970-01-01T00:00:00-02:00\"^^http://www.w3.org/2001/XMLSchema#dateTime"
                 ]
               }
+            },
+            {
+              "type": "bgp",
+              "triples": [
+                {
+                  "subject": "?book",
+                  "predicate": "?p",
+                  "object": "?v"
+                }
+              ]
             }
           ],
           "name": "http://example/bookStore"

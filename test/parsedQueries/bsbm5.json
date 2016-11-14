@@ -19,7 +19,23 @@
           "subject": "?product",
           "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
           "object": "?productLabel"
-        },
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "!=",
+        "args": [
+          "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
+          "?product"
+        ]
+      }
+    },
+    {
+      "type": "bgp",
+      "triples": [
         {
           "subject": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
           "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature",
@@ -39,29 +55,8 @@
           "subject": "?product",
           "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1",
           "object": "?simProperty1"
-        },
-        {
-          "subject": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2",
-          "object": "?origProperty2"
-        },
-        {
-          "subject": "?product",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2",
-          "object": "?simProperty2"
         }
       ]
-    },
-    {
-      "type": "filter",
-      "expression": {
-        "type": "operation",
-        "operator": "!=",
-        "args": [
-          "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
-          "?product"
-        ]
-      }
     },
     {
       "type": "filter",
@@ -101,6 +96,21 @@
           }
         ]
       }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2",
+          "object": "?origProperty2"
+        },
+        {
+          "subject": "?product",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2",
+          "object": "?simProperty2"
+        }
+      ]
     },
     {
       "type": "filter",

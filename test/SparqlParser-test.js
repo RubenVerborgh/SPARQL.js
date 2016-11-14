@@ -37,6 +37,15 @@ describe('A SPARQL parser', function () {
     expect(error.message).to.include('Parse error on line 1');
   });
 
+  it('should preserve BGP and filter pattern order', function () {
+    var parser = new SparqlParser();
+    var query = 'SELECT * { ?s ?p "1" . FILTER(true) . ?s ?p "2"  }';
+    var groups = parser.parse(query).where;
+    expect(groups[0].type).to.equal("bgp");
+    expect(groups[1].type).to.equal("filter");
+    expect(groups[2].type).to.equal("bgp");
+  });
+
   describe('with pre-defined prefixes', function () {
     var prefixes = { a: 'ex:abc#', b: 'ex:def#' };
     var parser = new SparqlParser(prefixes);

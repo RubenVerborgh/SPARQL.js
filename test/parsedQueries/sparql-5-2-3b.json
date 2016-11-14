@@ -16,11 +16,6 @@
           "subject": "?x",
           "predicate": "http://xmlns.com/foaf/0.1/name",
           "object": "?name"
-        },
-        {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/mbox",
-          "object": "?mbox"
         }
       ]
     },
@@ -34,6 +29,16 @@
           "\"Smith\""
         ]
       }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://xmlns.com/foaf/0.1/mbox",
+          "object": "?mbox"
+        }
+      ]
     }
   ]
 }

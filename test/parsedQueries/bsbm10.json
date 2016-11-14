@@ -39,16 +39,6 @@
           "subject": "?offer",
           "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/deliveryDays",
           "object": "?deliveryDays"
-        },
-        {
-          "subject": "?offer",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/price",
-          "object": "?price"
-        },
-        {
-          "subject": "?offer",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/validTo",
-          "object": "?date"
         }
       ]
     },
@@ -62,6 +52,21 @@
           "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
         ]
       }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?offer",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/price",
+          "object": "?price"
+        },
+        {
+          "subject": "?offer",
+          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/validTo",
+          "object": "?date"
+        }
+      ]
     },
     {
       "type": "filter",

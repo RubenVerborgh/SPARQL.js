@@ -27,11 +27,6 @@
             ]
           },
           "object": "?y"
-        },
-        {
-          "subject": "?y",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?name"
         }
       ]
     },
@@ -45,6 +40,16 @@
           "?y"
         ]
       }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?y",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "?name"
+        }
+      ]
     }
   ]
 }

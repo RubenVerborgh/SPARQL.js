@@ -45,16 +45,6 @@
       }
     },
     {
-      "type": "bgp",
-      "triples": [
-        {
-          "subject": "?x",
-          "predicate": "http://purl.org/dc/elements/1.1/title",
-          "object": "?title"
-        }
-      ]
-    },
-    {
       "type": "filter",
       "expression": {
         "type": "operation",
@@ -64,6 +54,16 @@
           "\"20\"^^http://www.w3.org/2001/XMLSchema#integer"
         ]
       }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?x",
+          "predicate": "http://purl.org/dc/elements/1.1/title",
+          "object": "?title"
+        }
+      ]
     }
   ]
 }
