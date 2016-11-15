@@ -10,6 +10,17 @@
   ],
   "where": [
     {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "regex",
+        "args": [
+          "?name",
+          "\"Smith\""
+        ]
+      }
+    },
+    {
       "type": "bgp",
       "triples": [
         {
@@ -23,17 +34,6 @@
           "object": "?mbox"
         }
       ]
-    },
-    {
-      "type": "filter",
-      "expression": {
-        "type": "operation",
-        "operator": "regex",
-        "args": [
-          "?name",
-          "\"Smith\""
-        ]
-      }
     }
   ]
 }

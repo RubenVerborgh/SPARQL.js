@@ -36,7 +36,29 @@
           "subject": "?review",
           "predicate": "http://purl.org/stuff/rev#text",
           "object": "?text"
-        },
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "langmatches",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "lang",
+            "args": [
+              "?text"
+            ]
+          },
+          "\"EN\""
+        ]
+      }
+    },
+    {
+      "type": "bgp",
+      "triples": [
         {
           "subject": "?review",
           "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/reviewDate",
@@ -113,23 +135,6 @@
           ]
         }
       ]
-    },
-    {
-      "type": "filter",
-      "expression": {
-        "type": "operation",
-        "operator": "langmatches",
-        "args": [
-          {
-            "type": "operation",
-            "operator": "lang",
-            "args": [
-              "?text"
-            ]
-          },
-          "\"EN\""
-        ]
-      }
     }
   ],
   "order": [
