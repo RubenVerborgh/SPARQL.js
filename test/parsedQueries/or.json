@@ -24,18 +24,30 @@
         "args": [
           {
             "type": "operation",
-            "operator": "=",
-            "args": [ "?a", "\"1\"^^http://www.w3.org/2001/XMLSchema#integer" ]
-          },
-          {
-            "type": "operation",
-            "operator": "=",
-            "args": [ "?a", "\"2\"^^http://www.w3.org/2001/XMLSchema#integer" ]
-          },
-          {
-            "type": "operation",
-            "operator": "=",
-            "args": [ "?a", "\"3\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+            "operator": "||",
+            "args": [
+              {
+                "type": "operation",
+                "operator": "||",
+                "args": [
+                  {
+                    "type": "operation",
+                    "operator": "=",
+                    "args": [ "?a", "\"1\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+                  },
+                  {
+                    "type": "operation",
+                    "operator": "=",
+                    "args": [ "?a", "\"2\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+                  }
+                ]
+              },
+              {
+                "type": "operation",
+                "operator": "=",
+                "args": [ "?a", "\"3\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+              }
+            ]
           },
           {
             "type": "operation",
@@ -53,18 +65,30 @@
         "args": [
           {
             "type": "operation",
-            "operator": "=",
-            "args": [ "?a", "\"1\"^^http://www.w3.org/2001/XMLSchema#integer" ]
-          },
-          {
-            "type": "operation",
-            "operator": "=",
-            "args": [ "?a", "\"2\"^^http://www.w3.org/2001/XMLSchema#integer" ]
-          },
-          {
-            "type": "operation",
-            "operator": "=",
-            "args": [ "?a", "\"3\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+            "operator": "&&",
+            "args": [
+              {
+                "type": "operation",
+                "operator": "&&",
+                "args": [
+                  {
+                    "type": "operation",
+                    "operator": "=",
+                    "args": [ "?a", "\"1\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+                  },
+                  {
+                    "type": "operation",
+                    "operator": "=",
+                    "args": [ "?a", "\"2\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+                  }
+                ]
+              },
+              {
+                "type": "operation",
+                "operator": "=",
+                "args": [ "?a", "\"3\"^^http://www.w3.org/2001/XMLSchema#integer" ]
+              }
+            ]
           },
           {
             "type": "operation",

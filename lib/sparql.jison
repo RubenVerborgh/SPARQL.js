@@ -725,10 +725,16 @@ VarOrTerm
     | NIL  -> RDF_NIL
     ;
 Expression
-    : ( ConditionalAndExpression '||' )* ConditionalAndExpression -> $1.length ? operation('||', appendTo($1, $2)) : $2
+    : ConditionalAndExpression ExpressionTail* -> createOperationTree($1, $2)
+    ;
+ExpressionTail
+    : '||' ConditionalAndExpression -> ['||', $2]
     ;
 ConditionalAndExpression
-    : ( RelationalExpression '&&' )* RelationalExpression -> $1.length ? operation('&&', appendTo($1, $2)) : $2
+    : RelationalExpression ConditionalAndExpressionTail* -> createOperationTree($1, $2)
+    ;
+ConditionalAndExpressionTail
+    : '&&' RelationalExpression -> ['&&', $2]
     ;
 RelationalExpression
     : AdditiveExpression
