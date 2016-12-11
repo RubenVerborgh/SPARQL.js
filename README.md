@@ -1,4 +1,8 @@
 # SPARQL.js – A SPARQL 1.1 parser for JavaScript
+[![Build Status](https://travis-ci.org/RubenVerborgh/SPARQL.js.svg?branch=master)](https://travis-ci.org/RubenVerborgh/SPARQL.js)
+[![npm version](https://badge.fury.io/js/sparqljs.svg)](https://www.npmjs.com/package/sparqljs)
+[![DOI](https://zenodo.org/badge/22990236.svg)](https://zenodo.org/badge/latestdoi/22990236)
+
 The [SPARQL 1.1 Query Language](http://www.w3.org/TR/sparql11-query/) allows to query datasources of [RDF triples](http://www.w3.org/TR/rdf11-concepts/).
 SPARQL.js translates SPARQL into JSON and back,
 so you can parse and build SPARQL queries in your JavaScript applications.
