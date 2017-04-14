@@ -6,9 +6,11 @@ var fs = require('fs'),
 
 var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
+var unusedPrefixesPath = __dirname + '/../test/unusedPrefixes/';
 
 describe('A SPARQL generator', function () {
-  var generator = new SparqlGenerator();
+  var defaultGenerator = new SparqlGenerator();
+  var allPrefixesGenerator = new SparqlGenerator({allPrefixes: true});
 
   var queries = fs.readdirSync(queriesPath);
   queries = queries.map(function (q) { return q.replace(/\.sparql$/, ''); });
@@ -20,8 +22,25 @@ describe('A SPARQL generator', function () {
 
     it('should correctly generate query "' + query + '"', function () {
       var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
-      var genQuery = generator.stringify(parsedQuery);
+      var genQuery = allPrefixesGenerator.stringify(parsedQuery);
       expect(new SparqlParser().parse(genQuery)).to.deep.equal(parsedQuery);
+    });
+  });
+
+  var queriesWithUnusedPrefixes = fs.readdirSync(unusedPrefixesPath)
+    .filter(function (query) { return query.endsWith('.json'); })
+    .map(function (query) { return query.replace(/\.json$/, ''); });
+
+  queriesWithUnusedPrefixes.forEach(function (query) {
+    var parsedQueryFile = unusedPrefixesPath + query + '.json';
+    var generatedQueryFile = unusedPrefixesPath + query + '.sparql';
+    if (!fs.existsSync(generatedQueryFile)) return;
+
+    it('should remove unused prefixes from "' + query + '"', function () {
+      var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
+      var expectedQuery = fs.readFileSync(generatedQueryFile, 'utf8');
+      var generatedQuery = defaultGenerator.stringify(parsedQuery);
+      expect(generatedQuery + '\n').to.be.equal(expectedQuery);
     });
   });
 });

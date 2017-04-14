@@ -1,0 +1,1 @@
+SELECT ?title WHERE { <http://example.org/person/foo1/netWorth> <schema:value> 32 . }
