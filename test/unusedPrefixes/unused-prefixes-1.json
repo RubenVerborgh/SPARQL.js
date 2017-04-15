@@ -1,6 +1,9 @@
 {
   "type": "query",
   "prefixes": {
+    "a": "http://purl.org/",
+    "b": "http://purl.org/dc/",
+    "c": "http://purl.org/dc/elements/",
     "dc": "http://purl.org/dc/elements/1.1/",
     "schema": "http://schema.org/",
     "xsd": "http://www.w3.org/2001/XMLSchema",
