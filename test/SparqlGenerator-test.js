@@ -43,4 +43,14 @@ describe('A SPARQL generator', function () {
       expect(generatedQuery + '\n').to.be.equal(expectedQuery);
     });
   });
+
+  it('should use inherited prefixes', function () {
+    var parser = new SparqlParser({rdfs: 'http://www.w3.org/2000/01/rdf-schema#'});
+    var parsedQuery = parser.parse('SELECT * WHERE { ?s rdfs:label ?o }');
+    var generatedQuery = defaultGenerator.stringify(parsedQuery);
+    var expectedQuery =
+      'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n' +
+      'SELECT * WHERE { ?s rdfs:label ?o. }';
+    expect(generatedQuery).to.be.equal(expectedQuery);
+  });
 });
