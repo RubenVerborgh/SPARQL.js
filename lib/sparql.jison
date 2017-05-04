@@ -226,6 +226,32 @@
     });
     return unionAll(objects, otherTriples || [], triples);
   }
+
+  function collapseAjacentBGPs(ajacentPatterns) {
+    // Simplify the groups by merging adjacent BGPs
+    var groups = [], currentBgp;
+    for (var i = 0, group; group = ajacentPatterns[i]; i++) {
+      switch (group.type) {
+        // Add a BGP's triples to the current BGP
+        case 'bgp':
+          if (group.triples.length) {
+            if (!currentBgp)
+              appendTo(groups, currentBgp = group);
+            else
+              appendAllTo(currentBgp.triples, group.triples);
+          }
+          break;
+        // All other groups break up a BGP
+        default:
+          // Only add the group if its pattern is non-empty
+          if (!group.patterns || group.patterns.length > 0) {
+            appendTo(groups, group);
+            currentBgp = null;
+          }
+      }
+    }
+    return groups;
+  }
 %}
 
 %lex
@@ -573,30 +599,8 @@ GroupGraphPattern
     : '{' SubSelect '}' -> $2
     | '{' GroupGraphPatternSub '}'
     {
-      // Simplify the groups by merging adjacent BGPs
-      if ($2.length > 1) {
-        var groups = [], currentBgp;
-        for (var i = 0, group; group=$2[i]; i++) {
-          switch (group.type) {
-            // Add a BGP's triples to the current BGP
-            case 'bgp':
-              if (group.triples.length) {
-                if (!currentBgp)
-                  appendTo(groups, currentBgp = group);
-                else
-                  appendAllTo(currentBgp.triples, group.triples);
-              }
-              break;
-            // All other groups break up a BGP
-            default:
-              // Only add the group if its pattern is non-empty
-              if (!group.patterns || group.patterns.length > 0) {
-                appendTo(groups, group);
-                currentBgp = null;
-              }
-          }
-        }
-        $2 = groups;
+      if (Parser.options.collapseGroups && $2.length > 1) {
+        $2 = collapseAjacentBGPs($2);
       }
       $$ = { type: 'group', patterns: $2 }
     }
@@ -611,7 +615,14 @@ TriplesBlock
     : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
 GraphPatternNotTriples
-    : ( GroupGraphPattern 'UNION' )* GroupGraphPattern -> $1.length ? { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) } : degroupSingle($2)
+    : ( GroupGraphPattern 'UNION' )* GroupGraphPattern 
+    {
+      if ($1.length) {
+        $$ = { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) };
+      } else {
+        $$ = Parser.options.collapseGroups ? degroupSingle($2) : $2;
+      }
+    }
     | 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
     | 'MINUS' GroupGraphPattern    -> extend($2, { type: 'minus' })
     | 'GRAPH' (VAR | iri) GroupGraphPattern -> extend($3, { type: 'graph', name: toVar($2) })
