@@ -94,4 +94,38 @@ describe('A SPARQL parser', function () {
     expect(error).to.be.an.instanceof(Error);
     expect(error.message).to.include('Cannot resolve relative IRI a because no base IRI was set.');
   });
+
+  describe('with group collapsing enabled', function () {
+    var parser = new SparqlParser(null, null, { collapseGroups: true });
+
+    it('should collapse pattern groups', function () {
+      var query = 'SELECT * WHERE { { ?s ?p ?o } ?a ?b ?c }';
+      expect(parser.parse(query).where).to.deep.equal([
+        {
+          type: 'bgp',
+          triples: [
+            {subject: '?s', predicate: '?p', object: '?o'},
+            {subject: '?a', predicate: '?b', object: '?c'},
+          ]
+        },
+      ]);
+    });
+  });
+
+  describe('with group collapsing disabled', function () {
+    var parser = new SparqlParser(null, null, { collapseGroups: false });
+
+    it('should keep explicit pattern group', function () {
+      var query = 'SELECT * WHERE { { ?s ?p ?o } ?a ?b ?c }';
+      expect(parser.parse(query).where).to.deep.equal([
+        {
+          type: 'group',
+          patterns: [
+            { type: 'bgp', triples: [{subject: '?s', predicate: '?p', object: '?o'}] },
+          ]
+        },
+        { type: 'bgp', triples: [{subject: '?a', predicate: '?b', object: '?c'}] },
+      ]);
+    });
+  });
 });
