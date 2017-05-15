@@ -616,11 +616,10 @@ TriplesBlock
 GraphPatternNotTriples
     : ( GroupGraphPattern 'UNION' )* GroupGraphPattern
     {
-      if (!Parser.options.collapseGroups)
-        $$ = !$1.length ? $2 : { type: 'union', patterns: unionAll($1, $2) };
+      if ($1.length)
+        $$ = { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) };
       else
-        $$ = !$1.length ? degroupSingle($2) :
-             { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) };
+        $$ = Parser.options.collapseGroups ? degroupSingle($2) : $2;
     }
     | 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
     | 'MINUS' GroupGraphPattern    -> extend($2, { type: 'minus' })

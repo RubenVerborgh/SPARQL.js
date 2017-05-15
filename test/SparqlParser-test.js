@@ -127,5 +127,18 @@ describe('A SPARQL parser', function () {
         { type: 'bgp', triples: [{subject: '?a', predicate: '?b', object: '?c'}] },
       ]);
     });
+
+    it('should still collapse immediate union groups', function () {
+      var query = 'SELECT * WHERE { { ?s ?p ?o } UNION { ?a ?b ?c } }';
+      expect(parser.parse(query).where).to.deep.equal([
+        {
+          type: 'union',
+          patterns: [
+            { type: 'bgp', triples: [{subject: '?s', predicate: '?p', object: '?o'}] },
+            { type: 'bgp', triples: [{subject: '?a', predicate: '?b', object: '?c'}] },
+          ]
+        },
+      ]);
+    });
   });
 });
