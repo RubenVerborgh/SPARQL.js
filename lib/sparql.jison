@@ -617,7 +617,8 @@ GraphPatternNotTriples
     : ( GroupGraphPattern 'UNION' )* GroupGraphPattern
     {
       if (!Parser.options.collapseGroups)
-        $$ = !$1.length ? $2 : { type: 'union', patterns: unionAll($1, $2) };
+        $$ = !$1.length ? $2 :
+             { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) };
       else
         $$ = !$1.length ? degroupSingle($2) :
              { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) };
