@@ -141,7 +141,7 @@
 
   // Creates a literal with the given value and type
   function createLiteral(value, type) {
-    return '"' + value + '"^^' + type;
+    return '"' + value + '"^^<' + type + '>';
   }
 
   // Creates a triple with the given subject, predicate, and object
