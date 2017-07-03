@@ -22,8 +22,8 @@ var parsedQuery = parser.parse(
 // Regenerate a SPARQL query from a JSON object
 var SparqlGenerator = require('sparqljs').Generator;
 var generator = new SparqlGenerator();
-query.variables = ['?mickey'];
-var generatedQuery = generator.stringify(query);
+parsedQuery.variables = ['?mickey'];
+var generatedQuery = generator.stringify(parsedQuery);
 ```
 ### Standalone
 ```bash
