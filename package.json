@@ -27,10 +27,10 @@
     "node": ">=0.10.0"
   },
   "devDependencies": {
-    "jison": "0.4.16",
-    "mocha": "1.21.x",
-    "chai": "1.9.x",
-    "pre-commit": "~0.0.9"
+    "jison": "0.4.18",
+    "mocha": "3.5.x",
+    "chai": "4.1.x",
+    "pre-commit": "~1.2.2"
   },
   "browser": {
     "_process": false,
