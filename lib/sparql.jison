@@ -458,7 +458,7 @@ SelectQuery
     : SelectClause DatasetClause* WhereClause SolutionModifier -> extend($1, groupDatasets($2), $3, $4)
     ;
 SubSelect
-    : SelectClause WhereClause SolutionModifier ValuesClause? -> extend({ type: 'query' }, $1, $2, $3, $4)
+    : SelectClause WhereClause SolutionModifier ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
     ;
 SelectClause
     : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
