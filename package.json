@@ -21,7 +21,7 @@
   "bin": "bin/sparql-to-json",
   "scripts": {
     "test": "./build;./node_modules/mocha/bin/mocha",
-    "prepublish": "./build"
+    "prepare": "./build"
   },
   "engines": {
     "node": ">=0.10.0"
