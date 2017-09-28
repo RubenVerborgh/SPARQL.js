@@ -2,9 +2,7 @@
   "name": "sparqljs",
   "version": "1.5.1",
   "description": "A parser for the SPARQL query language",
-  "author": [
-    "Ruben Verborgh <ruben.verborgh@gmail.com>"
-  ],
+  "author": "Ruben Verborgh <ruben.verborgh@gmail.com>",
   "keywords": [
     "sparql",
     "rdf",
