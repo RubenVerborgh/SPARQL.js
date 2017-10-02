@@ -22,7 +22,7 @@ module.exports = {
     parser.parse = function () {
       Parser.base = baseIRI || '';
       Parser.prefixes = Object.create(prefixesCopy);
-      Parser.options  = Object.assign({ collapseGroups: true }, options);
+      Parser.options  = Object.assign({}, options);
       return Parser.prototype.parse.apply(parser, arguments);
     };
     parser._resetBlanks = Parser._resetBlanks;

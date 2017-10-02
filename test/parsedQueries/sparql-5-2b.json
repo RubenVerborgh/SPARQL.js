@@ -10,17 +10,32 @@
   ],
   "where": [
     {
-      "type": "bgp",
-      "triples": [
+      "type": "group",
+      "patterns": [
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?name"
-        },
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?x",
+              "predicate": "http://xmlns.com/foaf/0.1/name",
+              "object": "?name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "patterns": [
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/mbox",
-          "object": "?mbox"
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?x",
+              "predicate": "http://xmlns.com/foaf/0.1/mbox",
+              "object": "?mbox"
+            }
+          ]
         }
       ]
     }

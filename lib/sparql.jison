@@ -597,12 +597,7 @@ TriplesTemplate
     ;
 GroupGraphPattern
     : '{' SubSelect '}' -> { type: 'group', patterns: [ $2 ] }
-    | '{' GroupGraphPatternSub '}'
-    {
-      if (Parser.options.collapseGroups && $2.length > 1)
-        $2 = mergeAdjacentBGPs($2);
-      $$ = { type: 'group', patterns: $2 }
-    }
+    | '{' GroupGraphPatternSub '}' -> { type: 'group', patterns: $2 }
     ;
 GroupGraphPatternSub
     : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? unionAll([$1], $2) : unionAll($2)
@@ -619,7 +614,7 @@ GraphPatternNotTriples
       if ($1.length)
         $$ = { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) };
       else
-        $$ = Parser.options.collapseGroups ? degroupSingle($2) : $2;
+        $$ = $2;
     }
     | 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
     | 'MINUS' GroupGraphPattern    -> extend($2, { type: 'minus' })

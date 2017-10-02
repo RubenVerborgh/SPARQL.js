@@ -6,26 +6,31 @@
   ],
   "where": [
     {
-      "type": "query",
-      "queryType": "SELECT",
-      "variables": [
-        "*"
-      ],
-      "where": [
+      "type": "group",
+      "patterns": [
         {
-          "type": "bgp",
-          "triples": [
+          "type": "query",
+          "queryType": "SELECT",
+          "variables": [
+            "*"
+          ],
+          "where": [
             {
-              "subject": "?s",
-              "predicate": "?p",
-              "object": "?o"
+              "type": "bgp",
+              "triples": [
+                {
+                  "subject": "?s",
+                  "predicate": "?p",
+                  "object": "?o"
+                }
+              ]
+            }
+          ],
+          "values": [
+            {
+              "?o": "http://example.org/b"
             }
           ]
-        }
-      ],
-      "values": [
-        {
-          "?o": "http://example.org/b"
         }
       ]
     }

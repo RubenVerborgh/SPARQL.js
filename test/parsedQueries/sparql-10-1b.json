@@ -50,12 +50,17 @@
       ]
     },
     {
-      "type": "bgp",
-      "triples": [
+      "type": "group",
+      "patterns": [
         {
-          "subject": "?x",
-          "predicate": "http://purl.org/dc/elements/1.1/title",
-          "object": "?title"
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?x",
+              "predicate": "http://purl.org/dc/elements/1.1/title",
+              "object": "?title"
+            }
+          ]
         }
       ]
     },

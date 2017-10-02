@@ -5,6 +5,10 @@
   ],
   "where": [
     {
+      "patterns": [],
+      "type": "group"
+    },
+    {
       "type": "optional",
       "patterns": [
         {

@@ -20,37 +20,42 @@
       ]
     },
     {
-      "type": "query",
-      "queryType": "SELECT",
-      "variables": [
-        "?y",
+      "patterns": [
         {
-          "expression": {
-            "expression": "?name",
-            "type": "aggregate",
-            "aggregation": "min",
-            "distinct": false
-          },
-          "variable": "?minName"
-        }
-      ],
-      "where": [
-        {
-          "type": "bgp",
-          "triples": [
+          "type": "query",
+          "queryType": "SELECT",
+          "variables": [
+            "?y",
             {
-              "subject": "?y",
-              "predicate": "http://people.example/name",
-              "object": "?name"
+              "expression": {
+                "expression": "?name",
+                "type": "aggregate",
+                "aggregation": "min",
+                "distinct": false
+              },
+              "variable": "?minName"
+            }
+          ],
+          "where": [
+            {
+              "type": "bgp",
+              "triples": [
+                {
+                  "subject": "?y",
+                  "predicate": "http://people.example/name",
+                  "object": "?name"
+                }
+              ]
+            }
+          ],
+          "group": [
+            {
+              "expression": "?y"
             }
           ]
         }
       ],
-      "group": [
-        {
-          "expression": "?y"
-        }
-      ]
+      "type": "group"
     }
   ]
 }
