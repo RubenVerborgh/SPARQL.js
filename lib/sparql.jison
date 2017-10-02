@@ -596,7 +596,7 @@ TriplesTemplate
     : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
 GroupGraphPattern
-    : '{' SubSelect '}' -> $2
+    : '{' SubSelect '}' -> { type: 'group', patterns: [ $2 ] }
     | '{' GroupGraphPatternSub '}'
     {
       if (Parser.options.collapseGroups && $2.length > 1)
