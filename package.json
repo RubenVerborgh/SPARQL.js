@@ -17,11 +17,11 @@
   "bugs": {
     "url": "https://github.com/RubenVerborgh/SPARQL.js/issues"
   },
-  "main": "./sparql.js",
+  "main": "sparql.js",
   "bin": "bin/sparql-to-json",
   "scripts": {
-    "test": "./build;./node_modules/mocha/bin/mocha",
-    "prepare": "./build"
+    "build": "jison lib/sparql.jison -p slr -o lib/SparqlParser.js",
+    "test": "mocha"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -38,6 +38,7 @@
     "path": false
   },
   "pre-commit": [
+    "build",
     "test"
   ],
   "testling": {

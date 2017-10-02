@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-./node_modules/jison/lib/cli.js ./lib/sparql.jison -p slr -o ./lib/SparqlParser.js

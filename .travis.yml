@@ -3,6 +3,9 @@ node_js:
  - "4"
  - "6"
  - "node"
+script:
+  - npm run-script build
+  - npm test
 cache:
   directories:
     - node_modules

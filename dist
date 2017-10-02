@@ -7,7 +7,7 @@ echo "Checking out latest version" $TAG
 git checkout $TAG 2>/dev/null
 
 echo "Building distribution"
-./build
+npm run-script build
 mkdir -p tmp
 cp license.js tmp/sparqljs-browser.js
 browserify -s sparqljs sparql.js >> tmp/sparqljs-browser.js
