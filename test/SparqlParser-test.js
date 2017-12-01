@@ -96,7 +96,7 @@ describe('A SPARQL parser', function () {
   });
 
   describe('with group collapsing disabled', function () {
-    var parser = new SparqlParser(null, null, { collapseGroups: false });
+    var parser = new SparqlParser(null, null);
 
     it('should keep explicit pattern group', function () {
       var query = 'SELECT * WHERE { { ?s ?p ?o } ?a ?b ?c }';
