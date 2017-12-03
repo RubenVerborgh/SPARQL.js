@@ -97,10 +97,6 @@ $ [sudo] npm [-g] install sparqljs
 The SPARQL.js library is copyrighted by [Ruben Verborgh](http://ruben.verborgh.org/)
 and released under the [MIT License](https://github.com/RubenVerborgh/SPARQL.js/blob/master/LICENSE.md).
 
-[![Build Status](https://travis-ci.org/RubenVerborgh/SPARQL.js.png?branch=master)](https://travis-ci.org/RubenVerborgh/SPARQL.js)
-<br>
-[![Browser Build Status](https://ci.testling.com/RubenVerborgh/SPARQL.js.png)](https://ci.testling.com/RubenVerborgh/SPARQL.js)
-
 [Contributions are welcome](https://github.com/RubenVerborgh/SPARQL.js/blob/master/CONTRIBUTING.md), and bug reports or pull requests are always helpful.
 
 ## Contributors
