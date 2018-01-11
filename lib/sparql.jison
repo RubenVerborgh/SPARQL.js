@@ -420,12 +420,12 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 
 %ebnf
 
-%start QueryOrUpdateUnit
+%start QueryOrUpdate
 
 %%
 
-QueryOrUpdateUnit
-    : ( BaseDecl | PrefixDecl )* ( Query | Update ) EOF
+QueryOrUpdate
+    : Prologue ( Query | Update ) EOF
     {
       if (Parser.base)
         $2.base = Parser.base;
@@ -435,6 +435,8 @@ QueryOrUpdateUnit
       return $2;
     }
     ;
+Prologue
+    : ( BaseDecl | PrefixDecl )*;
 Query
     : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend($1, $2, { type: 'query' })
     ;
@@ -546,7 +548,7 @@ DataBlockValueList
     : '(' DataBlockValue* ')' -> $2
     ;
 Update
-    : (Update1 ';')* Update1 -> { type: 'update', updates: appendTo($1, $2) }
+    : (Update1 ';' Prologue)* Update1 -> { type: 'update', updates: appendTo($1, $2) }
     ;
 Update1
     : 'LOAD' 'SILENT'? iri IntoGraphClause? -> extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })

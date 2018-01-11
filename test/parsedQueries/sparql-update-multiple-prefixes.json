@@ -1,0 +1,39 @@
+{
+  "type": "update",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  },
+  "updates": [
+    {
+      "updateType": "insert",
+      "insert": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "http://example/book1",
+              "predicate": "http://purl.org/dc/elements/1.1/title",
+              "object": "\"A new book\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "updateType": "insert",
+      "insert": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "http://example/book2",
+              "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+              "object": "\"A second book\""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
