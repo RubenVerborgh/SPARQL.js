@@ -1,0 +1,23 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "insert",
+      "insert": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "http://example/book1",
+              "predicate": "urn:label",
+              "object": "\"A new book\""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "prefixes": {
+    "a": "urn:a"
+  }
+}

@@ -425,8 +425,9 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 %%
 
 QueryOrUpdate
-    : Prologue ( Query | Update ) EOF
+    : Prologue ( Query | Update? ) EOF
     {
+      $2 = $2 || {};
       if (Parser.base)
         $2.base = Parser.base;
       Parser.base = base = basePath = baseRoot = '';
@@ -548,7 +549,7 @@ DataBlockValueList
     : '(' DataBlockValue* ')' -> $2
     ;
 Update
-    : (Update1 ';' Prologue)* Update1 -> { type: 'update', updates: appendTo($1, $2) }
+    : (Update1 ';' Prologue)* Update1 (';' Prologue)? -> { type: 'update', updates: appendTo($1, $2) }
     ;
 Update1
     : 'LOAD' 'SILENT'? iri IntoGraphClause? -> extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })
