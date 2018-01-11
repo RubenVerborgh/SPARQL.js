@@ -17,7 +17,7 @@ module.exports = {
     // (Workaround for https://github.com/zaach/jison/issues/241)
     var parser = new Parser();
     parser.parse = function () {
-      Parser.base = baseIRI || '';
+      Parser.base = baseIRI || '';
       Parser.prefixes = Object.create(prefixesCopy);
       return Parser.prototype.parse.apply(parser, arguments);
     };
