@@ -1,0 +1,54 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    "?O12",
+    {
+      "expression": {
+        "expression": "?O1",
+        "type": "aggregate",
+        "aggregation": "count",
+        "distinct": false
+      },
+      "variable": "?C"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?S",
+          "predicate": "http://www.example.org/p",
+          "object": "?O1"
+        },
+        {
+          "subject": "?S",
+          "predicate": "http://www.example.org/q",
+          "object": "?O2"
+        }
+      ]
+    }
+  ],
+  "group": [
+    {
+      "expression": {
+        "type": "operation",
+        "operator": "+",
+        "args": [
+          "?O1",
+          "?O2"
+        ]
+      },
+      "variable": "?O12"
+    }
+  ],
+  "order": [
+    {
+      "expression": "?O12"
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://www.example.org/"
+  }
+}
