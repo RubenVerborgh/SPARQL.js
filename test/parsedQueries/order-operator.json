@@ -1,0 +1,34 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?s",
+          "predicate": "?p",
+          "object": "?o"
+        }
+      ]
+    }
+  ],
+  "order": [
+    {
+      "expression": {
+        "type": "operation",
+        "operator": "+",
+        "args": [
+          "?o",
+          "\"5\"^^http://www.w3.org/2001/XMLSchema#integer"
+        ]
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.org/ns#"
+  }
+}
