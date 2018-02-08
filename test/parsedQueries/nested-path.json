@@ -1,0 +1,39 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    "?X"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "http://example.org/A0",
+          "predicate": {
+            "type": "path",
+            "pathType": "*",
+            "items": [
+              {
+                "type": "path",
+                "pathType": "*",
+                "items": [
+                  "http://example.org/P"
+                ]
+              }
+            ]
+          },
+          "object": "?X"
+        }
+      ]
+    }
+  ],
+  "order": [
+    {
+      "expression": "?X"
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.org/"
+  }
+}
