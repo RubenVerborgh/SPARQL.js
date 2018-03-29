@@ -427,7 +427,7 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 QueryOrUpdate
     : Prologue ( Query | Update? ) EOF
     {
-      $2 = $2 || {};
+      $2 = $2 || {};
       if (Parser.base)
         $2.base = Parser.base;
       Parser.base = base = basePath = baseRoot = '';

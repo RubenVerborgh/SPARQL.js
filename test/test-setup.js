@@ -1,4 +1,4 @@
-// Parses a JSON object, restoring `undefined` values
+// Parses a JSON object, restoring `undefined` values
 global.parseJSON = function parseJSON(string) {
   var object = JSON.parse(string);
   return /"\{undefined\}"/.test(string) ? restoreUndefined(object) : object;
