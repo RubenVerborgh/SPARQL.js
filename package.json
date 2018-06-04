@@ -20,8 +20,8 @@
   "main": "sparql.js",
   "bin": "bin/sparql-to-json",
   "scripts": {
-    "build": "jison lib/sparql.jison -p slr -o lib/SparqlParser.js",
-    "test": "mocha"
+    "build": "./node_modules/.bin/jison lib/sparql.jison -p slr -o lib/SparqlParser.js",
+    "test": "./node_modules/.bin/mocha"
   },
   "engines": {
     "node": ">=0.10.0"
