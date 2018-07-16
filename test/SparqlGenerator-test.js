@@ -2,7 +2,8 @@ var SparqlGenerator = require('../sparql').Generator;
 var SparqlParser = require('../sparql').Parser;
 
 var fs = require('fs'),
-    expect = require('chai').expect;
+    expect = require('chai').expect,
+    os = require('os');
 
 var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
@@ -38,7 +39,8 @@ describe('A SPARQL generator', function () {
 
     it('should remove unused prefixes from "' + query + '"', function () {
       var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
-      var expectedQuery = fs.readFileSync(generatedQueryFile, 'utf8');
+      var expectedQuery = fs.readFileSync(generatedQueryFile, 'utf8')
+        .split(os.EOL).join('\n');
       var generatedQuery = defaultGenerator.stringify(parsedQuery);
       expect(generatedQuery + '\n').to.be.equal(expectedQuery);
     });
