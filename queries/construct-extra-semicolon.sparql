@@ -1,0 +1,1 @@
+CONSTRUCT { ?s a <http://example.org/ExampleThing>; ?p ?o; . } WHERE { ?s ?p ?o }

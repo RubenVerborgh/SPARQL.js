@@ -654,7 +654,7 @@ PropertyList
     : PropertyListNotEmpty?
     ;
 PropertyListNotEmpty
-    : ( VerbObjectList ';'+ )* VerbObjectList -> unionAll($1, [$2])
+    : ( VerbObjectList ';'+ )* VerbObjectList ';'? -> unionAll($1, [$2])
     ;
 VerbObjectList
     : Verb ObjectList -> objectListToTriples($1, $2)
