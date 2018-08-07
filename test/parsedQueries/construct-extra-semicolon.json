@@ -10,6 +10,11 @@
     },
     {
       "subject": "?s",
+      "predicate": "http://example.org/hasvalue",
+      "object": "\"value\""
+    },
+    {
+      "subject": "?s",
       "predicate": "?p",
       "object": "?o"
     }
