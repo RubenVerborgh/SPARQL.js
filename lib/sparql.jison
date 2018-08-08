@@ -654,7 +654,7 @@ PropertyList
     : PropertyListNotEmpty?
     ;
 PropertyListNotEmpty
-    : VerbObjectList ( SemiOptionalVerbObjectList )* -> $2 ? unionAll([$1], $2) : unionAll([$1])
+    : VerbObjectList ( SemiOptionalVerbObjectList )* -> unionAll([$1], $2)
     ;
 SemiOptionalVerbObjectList
     : ';' VerbObjectList? -> unionAll($2)
