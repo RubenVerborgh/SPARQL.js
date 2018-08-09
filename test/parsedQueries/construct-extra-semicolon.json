@@ -1,0 +1,34 @@
+{
+  "type": "query",
+  "prefixes": {},
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "subject": "?s",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "object": "http://example.org/ExampleThing"
+    },
+    {
+      "subject": "?s",
+      "predicate": "http://example.org/hasvalue",
+      "object": "\"value\""
+    },
+    {
+      "subject": "?s",
+      "predicate": "?p",
+      "object": "?o"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?s",
+          "predicate": "?p",
+          "object": "?o"
+        }
+      ]
+    }
+  ]
+}
