@@ -1,0 +1,76 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "ex:s1",
+          "predicate": "ex:p1",
+          "object": "ex:o1"
+        },
+        {
+          "subject": "ex:s1",
+          "predicate": "ex:p2",
+          "object": "ex:o2"
+        },
+        {
+          "subject": "ex:s1",
+          "predicate": "ex:p3",
+          "object": "_:b1"
+        },
+        {
+          "subject": "_:b1",
+          "predicate": "ex:p4",
+          "object": "ex:o4"
+        },
+        {
+          "subject": "_:b1",
+          "predicate": "ex:p5",
+          "object": "_:b0"
+        },
+        {
+          "subject": "_:b0",
+          "predicate": "ex:p6",
+          "object": "ex:o6"
+        },
+        {
+          "subject": "_:b0",
+          "predicate": "ex:p7",
+          "object": "ex:o7"
+        },
+        {
+          "subject": "_:b0",
+          "predicate": "ex:p7",
+          "object": "ex:o7a"
+        },
+        {
+          "subject": "_:b1",
+          "predicate": "ex:p8",
+          "object": "ex:o8"
+        },
+        {
+          "subject": "ex:s1",
+          "predicate": "ex:p9",
+          "object": "ex:o9"
+        },
+        {
+          "subject": "ex:s1",
+          "predicate": "ex:p9",
+          "object": "ex:o9a"
+        },
+        {
+          "subject": "ex:s1",
+          "predicate": "ex:p9",
+          "object": "ex:o9b"
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "base": "ex:",
+  "prefixes": {}
+}
