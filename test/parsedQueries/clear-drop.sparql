@@ -1,0 +1,64 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "type": "clear",
+      "silent": true,
+      "graph": {
+        "type": "graph",
+        "name": "ex:graph"
+      }
+    },
+    {
+      "type": "clear",
+      "silent": false,
+      "graph": {
+        "default": true
+      }
+    },
+    {
+      "type": "clear",
+      "silent": false,
+      "graph": {
+        "named": true
+      }
+    },
+    {
+      "type": "clear",
+      "silent": false,
+      "graph": {
+        "all": true
+      }
+    },
+    {
+      "type": "drop",
+      "silent": true,
+      "graph": {
+        "type": "graph",
+        "name": "ex:graph"
+      }
+    },
+    {
+      "type": "drop",
+      "silent": false,
+      "graph": {
+        "default": true
+      }
+    },
+    {
+      "type": "drop",
+      "silent": false,
+      "graph": {
+        "named": true
+      }
+    },
+    {
+      "type": "drop",
+      "silent": false,
+      "graph": {
+        "all": true
+      }
+    }
+  ],
+  "prefixes": {}
+}
