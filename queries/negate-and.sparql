@@ -1,0 +1,8 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+select *
+where {
+    { ?c a owl:Class . }
+    FILTER ( ! (BOUND(?c) && ( REGEX(str(?c), "^toto","i"))) )
+}
+limit 10
