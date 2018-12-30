@@ -1,0 +1,65 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    "*"
+  ],
+  "where": [
+    {
+      "type": "group",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "?c",
+              "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+              "object": "http://www.w3.org/2002/07/owl#Class"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "!",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "&&",
+            "args": [
+              {
+                "type": "operation",
+                "operator": "bound",
+                "args": [
+                  "?c"
+                ]
+              },
+              {
+                "type": "operation",
+                "operator": "regex",
+                "args": [
+                  {
+                    "type": "operation",
+                    "operator": "str",
+                    "args": [
+                      "?c"
+                    ]
+                  },
+                  "\"^toto\"",
+                  "\"i\""
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "limit": 10,
+  "type": "query",
+  "prefixes": {
+    "owl": "http://www.w3.org/2002/07/owl#"
+  }
+}
