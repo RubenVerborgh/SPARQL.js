@@ -526,7 +526,12 @@ InlineData
       $1 = toVar($1);
       $$ = $3.map(function(v) { var o = {}; o[$1] = v; return o; })
     }
-    | '(' VAR* ')' '{' DataBlockValueList* '}'
+    |
+    NIL '{' NIL* '}'
+    {
+      $$ = $3.map(function() { return {}; })
+    }
+    | '(' VAR+ ')' '{' DataBlockValueList* '}'
     {
       var length = $2.length;
       $2 = $2.map(toVar);
@@ -546,7 +551,7 @@ DataBlockValue
     | 'UNDEF' -> undefined
     ;
 DataBlockValueList
-    : '(' DataBlockValue* ')' -> $2
+    : '(' DataBlockValue+ ')' -> $2
     ;
 Update
     : (Update1 ';' Prologue)* Update1 (';' Prologue)? -> { type: 'update', updates: appendTo($1, $2) }
