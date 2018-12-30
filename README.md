@@ -30,15 +30,6 @@ var generatedQuery = generator.stringify(parsedQuery);
 $ sparql-to-json query.sparql
 ```
 
-### Browser
-Through [browserify](http://browserify.org/):
-```bash
-$ cd SPARQL.js
-$ npm install
-$ browserify sparql.js -s sparqljs -i fs -i path -i _process > sparqljs-browser.js
-$ uglifyjs sparqljs-browser.js -c -m > sparqljs-browser-min.js
-```
-
 ## Representation
 Queries are represented in a JSON structure. The most easy way to get acquainted with this structure is to try the examples in the `queries` folder through `sparql-to-json`. All examples of the [SPARQL 1.1 specification](http://www.w3.org/TR/sparql11-query/) have been included, in case you wonder how a specific syntactical construct is represented.
 
