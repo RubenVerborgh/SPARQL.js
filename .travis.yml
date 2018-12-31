@@ -2,10 +2,11 @@ language: node_js
 node_js:
  - "4"
  - "6"
+ - "8"
+ - "10"
  - "node"
-script:
-  - npm run-script build
-  - npm test
-cache:
-  directories:
-    - node_modules
+
+before_script:
+  - npm run build
+
+cache: npm
