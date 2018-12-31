@@ -19,6 +19,10 @@
   },
   "main": "sparql.js",
   "bin": "bin/sparql-to-json",
+  "files": [
+    "sparql.js",
+    "lib/*.js"
+  ],
   "scripts": {
     "build": "./node_modules/.bin/jison lib/sparql.jison -p slr -o lib/SparqlParser.js",
     "test": "./node_modules/.bin/mocha"
