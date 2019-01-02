@@ -37,11 +37,6 @@
     "chai": "4.1.x",
     "pre-commit": "~1.2.2"
   },
-  "browser": {
-    "_process": false,
-    "fs": false,
-    "path": false
-  },
   "pre-commit": [
     "build",
     "test"
