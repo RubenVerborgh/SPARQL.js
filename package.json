@@ -21,7 +21,8 @@
   "bin": "bin/sparql-to-json",
   "files": [
     "sparql.js",
-    "lib/*.js"
+    "lib/*.js",
+    "bin/*"
   ],
   "scripts": {
     "build": "./node_modules/.bin/jison lib/sparql.jison -p slr -o lib/SparqlParser.js",
