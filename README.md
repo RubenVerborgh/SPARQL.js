@@ -77,7 +77,7 @@ And here is the same query in JSON:
 }
 ```
 
-The representation of triples is the same as in [N3.js 0.x](https://github.com/rdfjs/N3.js/blob/v0.11.3/README.md#triple-representation), but will [switch to RDF/JS representation](https://github.com/rdfjs/N3.js/blob/v0.11.3/README.md#triple-representation) in the future.
+The representation of triples is the same as in [N3.js 0.x](https://github.com/rdfjs/N3.js/blob/v0.11.3/README.md#triple-representation), but will [switch to RDF/JS representation](http://rdf.js.org/) in the future.
 
 ## Installation
 ```bash
