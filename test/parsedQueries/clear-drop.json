@@ -2,8 +2,32 @@
   "type": "update",
   "updates": [
     {
+      "type": "create",
+      "silent": true,
+      "graph": {
+        "type": "graph",
+        "name": "ex:graph"
+      }
+    },
+    {
+      "type": "create",
+      "silent": false,
+      "graph": {
+        "type": "graph",
+        "name": "ex:graph"
+      }
+    },
+    {
       "type": "clear",
       "silent": true,
+      "graph": {
+        "type": "graph",
+        "name": "ex:graph"
+      }
+    },
+    {
+      "type": "clear",
+      "silent": false,
       "graph": {
         "type": "graph",
         "name": "ex:graph"
@@ -33,6 +57,14 @@
     {
       "type": "drop",
       "silent": true,
+      "graph": {
+        "type": "graph",
+        "name": "ex:graph"
+      }
+    },
+    {
+      "type": "drop",
+      "silent": false,
       "graph": {
         "type": "graph",
         "name": "ex:graph"
@@ -59,6 +91,7 @@
         "all": true
       }
     }
+
   ],
   "prefixes": {}
 }

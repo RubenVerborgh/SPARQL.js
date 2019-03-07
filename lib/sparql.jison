@@ -560,7 +560,7 @@ Update1
     : 'LOAD' 'SILENT'? iri IntoGraphClause? -> extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })
     | ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: lowercase($1), silent: !!$2, graph: $3 }
     | ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: lowercase($1), silent: !!$2, source: $3, destination: $5 }
-    | 'CREATE' 'SILENT'? 'GRAPH' iri -> { type: 'create', silent: !!$2, graph: $3 }
+    | 'CREATE' 'SILENT'? 'GRAPH' iri -> { type: 'create', silent: !!$2, graph: { type: 'graph', name: $4 } }
     | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: $2 }
     | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: $2 }
     | 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: $2 }
