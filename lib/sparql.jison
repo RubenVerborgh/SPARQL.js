@@ -89,8 +89,7 @@
   function toVar(variable) {
     if (variable) {
       var first = variable[0];
-      if (first === '?') return variable;
-      if (first === '$') return '?' + variable.substr(1);
+      if (first === '?' || first === '$') return Parser.factory.variable(variable.substr(1));
     }
     return variable;
   }
@@ -141,7 +140,7 @@
 
   // Creates a literal with the given value and type
   function createLiteral(value, type) {
-    return '"' + value + '"^^' + type;
+    return Parser.factory.literal(value, Parser.factory.namedNode(type));
   }
 
   // Creates a triple with the given subject, predicate, and object
@@ -815,14 +814,14 @@ Literal
     | DOUBLE  -> createLiteral(lowercase($1), XSD_DOUBLE)
     | NumericLiteralPositive
     | NumericLiteralNegative
-    | 'true'  -> XSD_TRUE
-    | 'false' -> XSD_FALSE
+    | 'true'  -> createLiteral('true', XSD_BOOLEAN)
+    | 'false' -> createLiteral('false', XSD_BOOLEAN)
     ;
 String
-    : STRING_LITERAL1 -> unescapeString($1, 1)
-    | STRING_LITERAL2 -> unescapeString($1, 1)
-    | STRING_LITERAL_LONG1 -> unescapeString($1, 3)
-    | STRING_LITERAL_LONG2 -> unescapeString($1, 3)
+    : STRING_LITERAL1 -> Parser.factory.literal(unescapeString($1, 1))
+    | STRING_LITERAL2 -> Parser.factory.literal(unescapeString($1, 1))
+    | STRING_LITERAL_LONG1 -> Parser.factory.literal(unescapeString($1, 3))
+    | STRING_LITERAL_LONG2 -> Parser.factory.literal(unescapeString($1, 3))
     ;
 NumericLiteralPositive
     : INTEGER_POSITIVE -> createLiteral($1.substr(1), XSD_INTEGER)
@@ -835,19 +834,21 @@ NumericLiteralNegative
     | DOUBLE_NEGATIVE  -> createLiteral(lowercase($1), XSD_DOUBLE)
     ;
 iri
-    : IRIREF -> resolveIRI($1)
+    : IRIREF -> Parser.factory.namedNode(resolveIRI($1))
     | PNAME_LN
     {
       var namePos = $1.indexOf(':'),
           prefix = $1.substr(0, namePos),
           expansion = Parser.prefixes[prefix];
       if (!expansion) throw new Error('Unknown prefix: ' + prefix);
-      $$ = resolveIRI(expansion + $1.substr(namePos + 1));
+      var uriString = resolveIRI(expansion + $1.substr(namePos + 1));
+      $$ = Parser.factory.namedNode(uriString);
     }
     | PNAME_NS
     {
       $1 = $1.substr(0, $1.length - 1);
       if (!($1 in Parser.prefixes)) throw new Error('Unknown prefix: ' + $1);
-      $$ = resolveIRI(Parser.prefixes[$1]);
+      var uriString = resolveIRI(Parser.prefixes[$1]);
+      $$ = Parser.factory.namedNode(uriString);
     }
     ;
