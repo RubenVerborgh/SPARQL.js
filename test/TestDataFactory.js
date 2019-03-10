@@ -22,35 +22,13 @@ function blankNode(name) {
 }
 
 // ### Creates a literal
-function literal(value, languageOrDataType) {
-  // Create a language-tagged string
-  if (typeof languageOrDataType === 'string')
-    return value + '@' + languageOrDataType.toLowerCase();
-
-  // Create a datatyped literal
-  var datatype = languageOrDataType && languageOrDataType.value || '';
-  if (!datatype) {
-    switch (typeof value) {
-    // Convert a boolean
-    case 'boolean':
-      datatype = xsd.boolean;
-      break;
-    // Convert an integer or double
-    case 'number':
-      if (Number.isFinite(value))
-        datatype = Number.isInteger(value) ? xsd.integer : xsd.double;
-      else {
-        datatype = xsd.double;
-        if (!Number.isNaN(value))
-          value = value > 0 ? 'INF' : '-INF';
-      }
-      break;
-    // No datatype, so convert a plain string
-    default:
-      return value;
-    }
+function literal(value, tag) {
+  if (tag) {
+    if (tag.length < 10) // hacky "heuristic" for test purposes only
+      return value + '@' + tag; // language tag
+    return '"' + value + '"' + '^^' + tag; // typed literal
   }
-  return '"' + value + '"^^' + datatype;
+  return value;
 }
 
 // ### Creates a variable
