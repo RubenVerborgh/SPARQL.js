@@ -5,6 +5,8 @@ var fs = require('fs'),
     expect = require('chai').expect,
     os = require('os');
 
+var factory = require('./TestDataFactory');
+
 var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 var unusedPrefixesPath = __dirname + '/../test/unusedPrefixes/';
@@ -24,7 +26,7 @@ describe('A SPARQL generator', function () {
     it('should correctly generate query "' + query + '"', function () {
       var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
       var genQuery = allPrefixesGenerator.stringify(parsedQuery);
-      expect(new SparqlParser().parse(genQuery)).to.deep.equal(parsedQuery);
+      expect(new SparqlParser(null, null, factory).parse(genQuery)).to.deep.equal(parsedQuery);
     });
   });
 
@@ -47,7 +49,7 @@ describe('A SPARQL generator', function () {
   });
 
   it('should use inherited prefixes', function () {
-    var parser = new SparqlParser({rdfs: 'http://www.w3.org/2000/01/rdf-schema#'});
+    var parser = new SparqlParser({rdfs: 'http://www.w3.org/2000/01/rdf-schema#'}, null, factory);
     var parsedQuery = parser.parse('SELECT * WHERE { ?s rdfs:label ?o }');
     var generatedQuery = defaultGenerator.stringify(parsedQuery);
     var expectedQuery =

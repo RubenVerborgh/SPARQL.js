@@ -13,9 +13,7 @@
       XSD_INTEGER  = XSD + 'integer',
       XSD_DECIMAL  = XSD + 'decimal',
       XSD_DOUBLE   = XSD + 'double',
-      XSD_BOOLEAN  = XSD + 'boolean',
-      XSD_TRUE =  '"true"^^'  + XSD_BOOLEAN,
-      XSD_FALSE = '"false"^^' + XSD_BOOLEAN;
+      XSD_BOOLEAN  = XSD + 'boolean';
 
   var base = '', basePath = '', baseRoot = '';
 
@@ -154,7 +152,7 @@
 
   // Creates a new blank node identifier
   function blank() {
-    return '_:b' + blankId++;
+    return Parser.factory.blankNode(blankId++);
   };
   var blankId = 0;
   Parser._resetBlanks = function () { blankId = 0; }

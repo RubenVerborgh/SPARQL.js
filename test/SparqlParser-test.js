@@ -3,11 +3,13 @@ var SparqlParser = require('../sparql').Parser;
 var fs = require('fs'),
     expect = require('chai').expect;
 
+var factory = require('./TestDataFactory');
+
 var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 
 describe('A SPARQL parser', function () {
-  var parser = new SparqlParser();
+  var parser = new SparqlParser(null, null, factory);
 
   // Ensure the same blank node identifiers are used in every test
   beforeEach(function () { parser._resetBlanks(); });
@@ -38,7 +40,7 @@ describe('A SPARQL parser', function () {
   });
 
   it('should preserve BGP and filter pattern order', function () {
-    var parser = new SparqlParser();
+    var parser = new SparqlParser(null, null, factory);
     var query = 'SELECT * { ?s ?p "1" . FILTER(true) . ?s ?p "2"  }';
     var groups = parser.parse(query).where;
     expect(groups[0].type).to.equal("bgp");
@@ -48,7 +50,7 @@ describe('A SPARQL parser', function () {
 
   describe('with pre-defined prefixes', function () {
     var prefixes = { a: 'ex:abc#', b: 'ex:def#' };
-    var parser = new SparqlParser(prefixes);
+    var parser = new SparqlParser(prefixes, null, factory);
 
     it('should use those prefixes', function () {
       var query = 'SELECT * { a:a b:b "" }';
@@ -76,7 +78,7 @@ describe('A SPARQL parser', function () {
   });
 
   describe('with pre-defined base IRI', function () {
-    var parser = new SparqlParser(null, 'http://ex.org/');
+    var parser = new SparqlParser(null, 'http://ex.org/', factory);
 
     it('should use the base IRI', function () {
       var query = 'SELECT * { <> <#b> "" }';
@@ -96,7 +98,7 @@ describe('A SPARQL parser', function () {
   });
 
   describe('with group collapsing disabled', function () {
-    var parser = new SparqlParser(null, null);
+    var parser = new SparqlParser(null, null, factory);
 
     it('should keep explicit pattern group', function () {
       var query = 'SELECT * WHERE { { ?s ?p ?o } ?a ?b ?c }';
