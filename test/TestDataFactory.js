@@ -1,16 +1,6 @@
 // ## TestDataFactory functions
 // Emulate old, pre-RDF/JS output (plain strings instead of Terms) to make tests pass
 
-var XSD  = 'http://www.w3.org/2001/XMLSchema#';
-
-const xsd = {
-    decimal: XSD + 'decimal',
-    boolean: XSD + 'boolean',
-    double:  XSD + 'double',
-    integer: XSD + 'integer',
-    string:  XSD + 'string',
-  };
-
 // ### Creates an IRI
 function namedNode(iri) {
   return iri;
