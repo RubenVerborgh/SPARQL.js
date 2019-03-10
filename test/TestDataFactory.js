@@ -25,7 +25,7 @@ function blankNode(name) {
 function literal(value, languageOrDataType) {
   // Create a language-tagged string
   if (typeof languageOrDataType === 'string')
-    return '"' + value + '"@' + languageOrDataType.toLowerCase();
+    return value + '@' + languageOrDataType.toLowerCase();
 
   // Create a datatyped literal
   var datatype = languageOrDataType && languageOrDataType.value || '';

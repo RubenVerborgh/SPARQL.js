@@ -137,8 +137,13 @@
   }
 
   // Creates a literal with the given value and type
-  function createLiteral(value, type) {
+  function createTypedLiteral(value, type) {
     return Parser.factory.literal(value, Parser.factory.namedNode(type));
+  }
+
+  // Creates a literal with the given value and language
+  function createLangLiteral(value, lang) {
+    return Parser.factory.literal(value, lang);
   }
 
   // Creates a triple with the given subject, predicate, and object
@@ -805,15 +810,15 @@ GroupConcatSeparator
     ;
 Literal
     : String
-    | String LANGTAG  -> $1 + lowercase($2)
-    | String '^^' iri -> $1 + '^^' + $3
-    | INTEGER -> createLiteral($1, XSD_INTEGER)
-    | DECIMAL -> createLiteral($1, XSD_DECIMAL)
-    | DOUBLE  -> createLiteral(lowercase($1), XSD_DOUBLE)
+    | String LANGTAG  -> createLangLiteral($1, lowercase($2.substr(1)))
+    | String '^^' iri -> createTypedLiteral($1, $3)
+    | INTEGER -> createTypedLiteral($1, XSD_INTEGER)
+    | DECIMAL -> createTypedLiteral($1, XSD_DECIMAL)
+    | DOUBLE  -> createTypedLiteral(lowercase($1), XSD_DOUBLE)
     | NumericLiteralPositive
     | NumericLiteralNegative
-    | 'true'  -> createLiteral('true', XSD_BOOLEAN)
-    | 'false' -> createLiteral('false', XSD_BOOLEAN)
+    | 'true'  -> createTypedLiteral('true', XSD_BOOLEAN)
+    | 'false' -> createTypedLiteral('false', XSD_BOOLEAN)
     ;
 String
     : STRING_LITERAL1 -> Parser.factory.literal(unescapeString($1, 1))
@@ -822,14 +827,14 @@ String
     | STRING_LITERAL_LONG2 -> Parser.factory.literal(unescapeString($1, 3))
     ;
 NumericLiteralPositive
-    : INTEGER_POSITIVE -> createLiteral($1.substr(1), XSD_INTEGER)
-    | DECIMAL_POSITIVE -> createLiteral($1.substr(1), XSD_DECIMAL)
-    | DOUBLE_POSITIVE  -> createLiteral($1.substr(1).toLowerCase(), XSD_DOUBLE)
+    : INTEGER_POSITIVE -> createTypedLiteral($1.substr(1), XSD_INTEGER)
+    | DECIMAL_POSITIVE -> createTypedLiteral($1.substr(1), XSD_DECIMAL)
+    | DOUBLE_POSITIVE  -> createTypedLiteral($1.substr(1).toLowerCase(), XSD_DOUBLE)
     ;
 NumericLiteralNegative
-    : INTEGER_NEGATIVE -> createLiteral($1, XSD_INTEGER)
-    | DECIMAL_NEGATIVE -> createLiteral($1, XSD_DECIMAL)
-    | DOUBLE_NEGATIVE  -> createLiteral(lowercase($1), XSD_DOUBLE)
+    : INTEGER_NEGATIVE -> createTypedLiteral($1, XSD_INTEGER)
+    | DECIMAL_NEGATIVE -> createTypedLiteral($1, XSD_DECIMAL)
+    | DOUBLE_NEGATIVE  -> createTypedLiteral(lowercase($1), XSD_DOUBLE)
     ;
 iri
     : IRIREF -> Parser.factory.namedNode(resolveIRI($1))
