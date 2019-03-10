@@ -16,7 +16,7 @@ function literal(value, tag) {
   if (tag) {
     if (tag.length < 10) // hacky "heuristic" for test purposes only
       return value + '@' + tag; // language tag
-    return '"' + value + '"' + '^^' + tag; // typed literal
+    return value + '^^' + tag; // typed literal
   }
   return value;
 }
