@@ -16,6 +16,8 @@ function literal(value, tag) {
   if (tag) {
     if (tag.length < 10) // hacky "heuristic" for test purposes only
       return value + '@' + tag; // language tag
+    if (tag === "http://www.w3.org/2001/XMLSchema#integer")
+      return '"' + value + '"' + '^^' + tag; // treat integers specially as does SparqlGenerator
     return value + '^^' + tag; // typed literal
   }
   return value;
