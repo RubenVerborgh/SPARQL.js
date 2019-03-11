@@ -821,10 +821,10 @@ Literal
     | 'false' -> createTypedLiteral('false', XSD_BOOLEAN)
     ;
 String
-    : STRING_LITERAL1 -> Parser.factory.literal(unescapeString($1, 1))
-    | STRING_LITERAL2 -> Parser.factory.literal(unescapeString($1, 1))
-    | STRING_LITERAL_LONG1 -> Parser.factory.literal(unescapeString($1, 3))
-    | STRING_LITERAL_LONG2 -> Parser.factory.literal(unescapeString($1, 3))
+    : STRING_LITERAL1 -> createTypedLiteral(unescapeString($1, 1))
+    | STRING_LITERAL2 -> createTypedLiteral(unescapeString($1, 1))
+    | STRING_LITERAL_LONG1 -> createTypedLiteral(unescapeString($1, 3))
+    | STRING_LITERAL_LONG2 -> createTypedLiteral(unescapeString($1, 3))
     ;
 NumericLiteralPositive
     : INTEGER_POSITIVE -> createTypedLiteral($1.substr(1), XSD_INTEGER)
