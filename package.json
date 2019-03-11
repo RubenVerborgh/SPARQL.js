@@ -48,8 +48,5 @@
   "pre-commit": [
     "build",
     "test"
-  ],
-  "dependencies": {
-    "n3": "^1.0.4"
-  }
+  ]
 }
