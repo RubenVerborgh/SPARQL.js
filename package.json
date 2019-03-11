@@ -3,6 +3,9 @@
   "version": "2.2.3",
   "description": "A parser for the SPARQL query language",
   "author": "Ruben Verborgh <ruben.verborgh@gmail.com>",
+  "dependencies": {
+    "n3": "1.x"
+  },
   "keywords": [
     "sparql",
     "rdf",
@@ -45,5 +48,8 @@
   "pre-commit": [
     "build",
     "test"
-  ]
+  ],
+  "dependencies": {
+    "n3": "^1.0.4"
+  }
 }
