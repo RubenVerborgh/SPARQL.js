@@ -391,8 +391,7 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 "GROUP_CONCAT"           return 'GROUP_CONCAT'
 "SEPARATOR"              return 'SEPARATOR'
 "^^"                     return '^^'
-"true"                   return 'true'
-"false"                  return 'false'
+"true"|"false"           return 'BOOLEAN'
 {IRIREF}                 return 'IRIREF'
 {PNAME_NS}               return 'PNAME_NS'
 {PNAME_LN}               return 'PNAME_LN'
@@ -817,8 +816,7 @@ Literal
     | DOUBLE  -> createTypedLiteral(lowercase($1), XSD_DOUBLE)
     | NumericLiteralPositive
     | NumericLiteralNegative
-    | 'true'  -> createTypedLiteral('true', XSD_BOOLEAN)
-    | 'false' -> createTypedLiteral('false', XSD_BOOLEAN)
+    | BOOLEAN -> createTypedLiteral($1, XSD_BOOLEAN)
     ;
 String
     : STRING_LITERAL1 -> unescapeString($1, 1)
