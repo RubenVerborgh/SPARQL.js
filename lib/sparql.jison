@@ -193,7 +193,7 @@
       });
     }
     catch (error) { return ''; }
-    return '"' + string + '"';
+    return string;
   }
 
   // Creates a list, collecting its (possibly blank) items and triples associated with those items
@@ -806,10 +806,10 @@ Aggregate
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression GroupConcatSeparator? ')'  -> expression($4, { type: 'aggregate', aggregation: lowercase($1), distinct: !!$3, separator: $5 || ' ' })
     ;
 GroupConcatSeparator
-    : ';' 'SEPARATOR' '=' String -> $4.substr(1, $4.length - 2)
+    : ';' 'SEPARATOR' '=' String -> $4
     ;
 Literal
-    : String
+    : String -> createTypedLiteral($1)
     | String LANGTAG  -> createLangLiteral($1, lowercase($2.substr(1)))
     | String '^^' iri -> createTypedLiteral($1, $3)
     | INTEGER -> createTypedLiteral($1, XSD_INTEGER)
@@ -821,10 +821,10 @@ Literal
     | 'false' -> createTypedLiteral('false', XSD_BOOLEAN)
     ;
 String
-    : STRING_LITERAL1 -> createTypedLiteral(unescapeString($1, 1))
-    | STRING_LITERAL2 -> createTypedLiteral(unescapeString($1, 1))
-    | STRING_LITERAL_LONG1 -> createTypedLiteral(unescapeString($1, 3))
-    | STRING_LITERAL_LONG2 -> createTypedLiteral(unescapeString($1, 3))
+    : STRING_LITERAL1 -> unescapeString($1, 1)
+    | STRING_LITERAL2 -> unescapeString($1, 1)
+    | STRING_LITERAL_LONG1 -> unescapeString($1, 3)
+    | STRING_LITERAL_LONG2 -> unescapeString($1, 3)
     ;
 NumericLiteralPositive
     : INTEGER_POSITIVE -> createTypedLiteral($1.substr(1), XSD_INTEGER)
