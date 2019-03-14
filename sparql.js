@@ -20,7 +20,7 @@ module.exports = {
     parser.parse = function () {
       Parser.base = baseIRI || '';
       Parser.prefixes = Object.create(prefixesCopy);
-      Parser.factory = factory || N3.DataFactory ;
+      Parser.factory = factory || N3.DataFactory;
       return Parser.prototype.parse.apply(parser, arguments);
     };
     parser._resetBlanks = Parser._resetBlanks;
