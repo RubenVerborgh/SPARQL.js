@@ -88,8 +88,7 @@ describe('A SPARQL parser', function () {
       var query = 'SELECT * { a:a b:b "" }';
       var result_json = '{"subject":{"termType":"NamedNode","value":"ex:abc#a"},"predicate":{"termType":"NamedNode","value":"ex:def#b"},"object":{"termType":"Literal","value":"","language":"","datatype":{"termType":"NamedNode","value":"http://www.w3.org/2001/XMLSchema#string"}}}';
 
-      expect(parseJSON(JSON.stringify(parser.parse(query).where[0].triples[0])))
-        .to.deep.equal(parseJSON(result_json));
+      expect(objectsEqual(parser.parse(query).where[0].triples[0], parseJSON(result_json)));
     });
 
     it('should allow temporarily overriding prefixes', function () {
