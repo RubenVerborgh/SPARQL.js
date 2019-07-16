@@ -671,7 +671,7 @@ VerbObjectList
 Verb
     : VAR -> toVar($1)
     | iri
-    | 'a' -> RDF_TYPE
+    | 'a' -> Parser.factory.namedNode(RDF_TYPE)
     ;
 ObjectList
     : (GraphNode ',')* GraphNode -> appendTo($1, $2)
@@ -701,7 +701,7 @@ PathEltOrInverse
     ;
 PathPrimary
     : iri
-    | 'a' -> RDF_TYPE
+    | 'a' -> Parser.factory.namedNode(RDF_TYPE)
     | '!' PathNegatedPropertySet -> path($1, [$2])
     | '(' Path ')' -> $2
     ;
@@ -712,7 +712,7 @@ PathNegatedPropertySet
     ;
 PathOneInPropertySet
     : iri
-    | 'a' -> RDF_TYPE
+    | 'a' -> Parser.factory.namedNode(RDF_TYPE)
     | '^' iri -> path($1, [$2])
     | '^' 'a' -> path($1, [RDF_TYPE])
     ;

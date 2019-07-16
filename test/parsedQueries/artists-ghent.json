@@ -6,7 +6,10 @@
         "termType": "Variable",
         "value": "person"
       },
-      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+      },
       "object": {
         "termType": "NamedNode",
         "value": "http://dbpedia.org/ontology/Artist"
@@ -50,7 +53,10 @@
             "termType": "Variable",
             "value": "person"
           },
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
           "object": {
             "termType": "NamedNode",
             "value": "http://dbpedia.org/ontology/Artist"
