@@ -3,41 +3,8 @@ var SparqlParser = require('../sparql').Parser;
 var fs = require('fs'),
     expect = require('chai').expect;
 
-var N3 = require("n3");
-
 var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
-
-// Test function which checks if object are equal, keeping into account how N3.DataFactory works
-function objectsEqual(one, two){
-  if (isPrimitive(one) || one === undefined){
-    return one === two;
-  }
-
-  if (one instanceof N3.DataFactory.internal.Term){
-    return one.equals(two);
-  } else if (two instanceof N3.DataFactory.internal.Term){
-    return two.equals(one);
-  } else {
-    if (Array.isArray(one) && Array.isArray(two)){
-      if (one.length !== two.length) return false;
-      for (let i = 0; i < one.length; i++){
-        if (! objectsEqual(one[i], two[i])) return false;
-      }
-    } else {
-      let keys_first = Object.keys(one);
-
-      for (key of keys_first){
-        if (! objectsEqual(one[key], two[key])) return false;
-      }
-    }
-    return true;
-  }
-}
-
-function isPrimitive(value){
-  return typeof value === "string" || typeof value === "number" || typeof value === "boolean";
-}
 
 describe('A SPARQL parser', function () {
   var parser = new SparqlParser(null, null, null);
