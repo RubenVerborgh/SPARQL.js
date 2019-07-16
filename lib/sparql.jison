@@ -541,7 +541,7 @@ InlineData
           throw Error('Inconsistent VALUES length');
         var valuesObject = {};
         for(var i = 0; i<length; i++)
-          valuesObject[$2[i]] = values[i];
+          valuesObject["?" + $2[i].value] = values[i];
         return valuesObject;
       });
     }
