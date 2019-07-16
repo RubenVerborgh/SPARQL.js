@@ -1,18 +1,20 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://data.example/"
-  },
   "queryType": "SELECT",
   "variables": [
     {
       "expression": {
-        "expression": "?size",
+        "expression": {
+          "termType": "Variable",
+          "value": "size"
+        },
         "type": "aggregate",
         "aggregation": "avg",
         "distinct": false
       },
-      "variable": "?asize"
+      "variable": {
+        "termType": "Variable",
+        "value": "asize"
+      }
     }
   ],
   "where": [
@@ -20,16 +22,28 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://data.example/size",
-          "object": "?size"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://data.example/size"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "size"
+          }
         }
       ]
     }
   ],
   "group": [
     {
-      "expression": "?x"
+      "expression": {
+        "termType": "Variable",
+        "value": "x"
+      }
     }
   ],
   "having": [
@@ -38,13 +52,28 @@
       "operator": ">",
       "args": [
         {
-          "expression": "?size",
+          "expression": {
+            "termType": "Variable",
+            "value": "size"
+          },
           "type": "aggregate",
           "aggregation": "avg",
           "distinct": false
         },
-        "\"10\"^^http://www.w3.org/2001/XMLSchema#integer"
+        {
+          "termType": "Literal",
+          "value": "10",
+          "language": "",
+          "datatype": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://data.example/"
+  }
 }

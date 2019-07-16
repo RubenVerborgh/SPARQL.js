@@ -1,45 +1,72 @@
 {
-  "group": [
-    {
-      "expression": "?s"
-    }
-  ],
-  "prefixes": {},
   "queryType": "SELECT",
-  "type": "query",
   "variables": [
-    "?s",
     {
-      "expression": {
-        "expression": "?p",
-        "type": "aggregate",
-        "aggregation": "group_concat",
-        "separator": " ",
-        "distinct": false
-      },
-      "variable": "?plist"
+      "termType": "Variable",
+      "value": "s"
     },
     {
       "expression": {
-        "expression": "?p",
+        "expression": {
+          "termType": "Variable",
+          "value": "p"
+        },
         "type": "aggregate",
         "aggregation": "group_concat",
-        "separator": ",\"/",
-        "distinct": true
+        "distinct": false,
+        "separator": " "
       },
-      "variable": "?plist2"
+      "variable": {
+        "termType": "Variable",
+        "value": "plist"
+      }
+    },
+    {
+      "expression": {
+        "expression": {
+          "termType": "Variable",
+          "value": "p"
+        },
+        "type": "aggregate",
+        "aggregation": "group_concat",
+        "distinct": true,
+        "separator": ",\"/"
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "plist2"
+      }
     }
   ],
   "where": [
     {
+      "type": "bgp",
       "triples": [
         {
-          "object": "?c",
-          "predicate": "?p",
-          "subject": "?s"
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "c"
+          }
         }
-      ],
-      "type": "bgp"
+      ]
     }
-  ]
+  ],
+  "group": [
+    {
+      "expression": {
+        "termType": "Variable",
+        "value": "s"
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
 }

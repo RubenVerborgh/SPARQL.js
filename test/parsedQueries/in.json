@@ -1,6 +1,4 @@
 {
-  "type": "query",
-  "prefixes": {},
   "queryType": "SELECT",
   "variables": [
     "*"
@@ -10,9 +8,18 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?a",
-          "predicate": "?b",
-          "object": "?c"
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "b"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "c"
+          }
         }
       ]
     },
@@ -22,11 +29,38 @@
         "type": "operation",
         "operator": "in",
         "args": [
-          "?a",
+          {
+            "termType": "Variable",
+            "value": "a"
+          },
           [
-            "\"1\"^^http://www.w3.org/2001/XMLSchema#integer",
-            "\"2\"^^http://www.w3.org/2001/XMLSchema#integer",
-            "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
+            {
+              "termType": "Literal",
+              "value": "1",
+              "language": "",
+              "datatype": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2001/XMLSchema#integer"
+              }
+            },
+            {
+              "termType": "Literal",
+              "value": "2",
+              "language": "",
+              "datatype": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2001/XMLSchema#integer"
+              }
+            },
+            {
+              "termType": "Literal",
+              "value": "3",
+              "language": "",
+              "datatype": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2001/XMLSchema#integer"
+              }
+            }
           ]
         ]
       }
@@ -37,14 +71,43 @@
         "type": "operation",
         "operator": "notin",
         "args": [
-          "?c",
+          {
+            "termType": "Variable",
+            "value": "c"
+          },
           [
-            "\"1\"^^http://www.w3.org/2001/XMLSchema#integer",
-            "\"2\"^^http://www.w3.org/2001/XMLSchema#integer",
-            "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
+            {
+              "termType": "Literal",
+              "value": "1",
+              "language": "",
+              "datatype": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2001/XMLSchema#integer"
+              }
+            },
+            {
+              "termType": "Literal",
+              "value": "2",
+              "language": "",
+              "datatype": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2001/XMLSchema#integer"
+              }
+            },
+            {
+              "termType": "Literal",
+              "value": "3",
+              "language": "",
+              "datatype": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2001/XMLSchema#integer"
+              }
+            }
           ]
         ]
       }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {}
 }

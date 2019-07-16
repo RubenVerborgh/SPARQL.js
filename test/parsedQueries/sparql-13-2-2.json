@@ -1,17 +1,22 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?name"
+    {
+      "termType": "Variable",
+      "value": "name"
+    }
   ],
   "from": {
     "default": [],
     "named": [
-      "http://example.org/alice",
-      "http://example.org/bob"
+      {
+        "termType": "NamedNode",
+        "value": "http://example.org/alice"
+      },
+      {
+        "termType": "NamedNode",
+        "value": "http://example.org/bob"
+      }
     ]
   },
   "where": [
@@ -19,11 +24,24 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?name"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/name"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "name"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

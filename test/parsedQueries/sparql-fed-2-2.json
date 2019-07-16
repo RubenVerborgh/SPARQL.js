@@ -1,13 +1,18 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?person",
-    "?interest",
-    "?known"
+    {
+      "termType": "Variable",
+      "value": "person"
+    },
+    {
+      "termType": "Variable",
+      "value": "interest"
+    },
+    {
+      "termType": "Variable",
+      "value": "known"
+    }
   ],
   "where": [
     {
@@ -17,9 +22,18 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?person",
-              "predicate": "http://xmlns.com/foaf/0.1/name",
-              "object": "?name"
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/name"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "name"
+              }
             }
           ]
         },
@@ -30,9 +44,18 @@
               "type": "bgp",
               "triples": [
                 {
-                  "subject": "?person",
-                  "predicate": "http://xmlns.com/foaf/0.1/interest",
-                  "object": "?interest"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "person"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://xmlns.com/foaf/0.1/interest"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "interest"
+                  }
                 }
               ]
             },
@@ -43,21 +66,40 @@
                   "type": "bgp",
                   "triples": [
                     {
-                      "subject": "?person",
-                      "predicate": "http://xmlns.com/foaf/0.1/knows",
-                      "object": "?known"
+                      "subject": {
+                        "termType": "Variable",
+                        "value": "person"
+                      },
+                      "predicate": {
+                        "termType": "NamedNode",
+                        "value": "http://xmlns.com/foaf/0.1/knows"
+                      },
+                      "object": {
+                        "termType": "Variable",
+                        "value": "known"
+                      }
                     }
                   ]
                 }
               ],
-              "name": "http://people2.example.org/sparql",
+              "name": {
+                "termType": "NamedNode",
+                "value": "http://people2.example.org/sparql"
+              },
               "silent": false
             }
           ]
         }
       ],
-      "name": "http://people.example.org/sparql",
+      "name": {
+        "termType": "NamedNode",
+        "value": "http://people.example.org/sparql"
+      },
       "silent": false
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

@@ -1,8 +1,4 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example/"
-  },
   "queryType": "SELECT",
   "variables": [
     "*"
@@ -12,18 +8,34 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?s",
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
           "predicate": {
             "type": "path",
             "pathType": "/",
             "items": [
-              "http://example/item",
-              "http://example/price"
+              {
+                "termType": "NamedNode",
+                "value": "http://example/item"
+              },
+              {
+                "termType": "NamedNode",
+                "value": "http://example/price"
+              }
             ]
           },
-          "object": "?x"
+          "object": {
+            "termType": "Variable",
+            "value": "x"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example/"
+  }
 }

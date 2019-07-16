@@ -1,11 +1,14 @@
 {
   "type": "update",
-  "prefixes": {},
   "updates": [
     {
       "type": "load",
       "silent": false,
-      "source": "http://www.w3.org/TR/skos-reference/skos.rdf"
+      "source": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/TR/skos-reference/skos.rdf"
+      }
     }
-  ]
+  ],
+  "prefixes": {}
 }

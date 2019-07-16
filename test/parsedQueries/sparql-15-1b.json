@@ -1,34 +1,58 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example.org/ns#",
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?name"
+    {
+      "termType": "Variable",
+      "value": "name"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?name"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/name"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "name"
+          }
         },
         {
-          "subject": "?x",
-          "predicate": "http://example.org/ns#empId",
-          "object": "?emp"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/ns#empId"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "emp"
+          }
         }
       ]
     }
   ],
   "order": [
     {
-      "expression": "?emp",
+      "expression": {
+        "termType": "Variable",
+        "value": "emp"
+      },
       "descending": true
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.org/ns#",
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

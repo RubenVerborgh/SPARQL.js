@@ -1,18 +1,29 @@
 {
-  "type": "query",
-  "prefixes": {},
   "queryType": "SELECT",
-  "variables": [ "*" ],
+  "variables": [
+    "*"
+  ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?s",
-          "predicate": "?p",
-          "object": "?o"
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {}
 }

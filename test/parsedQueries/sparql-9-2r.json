@@ -1,9 +1,4 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example/",
-    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  },
   "queryType": "SELECT",
   "variables": [
     "*"
@@ -13,7 +8,10 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "http://example/list",
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example/list"
+          },
           "predicate": {
             "type": "path",
             "pathType": "/",
@@ -22,15 +20,29 @@
                 "type": "path",
                 "pathType": "*",
                 "items": [
-                  "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"
+                  {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"
+                  }
                 ]
               },
-              "http://www.w3.org/1999/02/22-rdf-syntax-ns#first"
+              {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first"
+              }
             ]
           },
-          "object": "?element"
+          "object": {
+            "termType": "Variable",
+            "value": "element"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  }
 }

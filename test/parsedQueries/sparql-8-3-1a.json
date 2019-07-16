@@ -1,6 +1,4 @@
 {
-  "type": "query",
-  "prefixes": {},
   "queryType": "SELECT",
   "variables": [
     "*"
@@ -10,9 +8,18 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?s",
-          "predicate": "?p",
-          "object": "?o"
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o"
+          }
         }
       ]
     },
@@ -26,14 +33,25 @@
             "type": "bgp",
             "triples": [
               {
-                "subject": "?x",
-                "predicate": "?y",
-                "object": "?z"
+                "subject": {
+                  "termType": "Variable",
+                  "value": "x"
+                },
+                "predicate": {
+                  "termType": "Variable",
+                  "value": "y"
+                },
+                "object": {
+                  "termType": "Variable",
+                  "value": "z"
+                }
               }
             ]
           }
         ]
       }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {}
 }

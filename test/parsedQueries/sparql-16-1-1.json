@@ -1,32 +1,64 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?nameX",
-    "?nameY",
-    "?nickY"
+    {
+      "termType": "Variable",
+      "value": "nameX"
+    },
+    {
+      "termType": "Variable",
+      "value": "nameY"
+    },
+    {
+      "termType": "Variable",
+      "value": "nickY"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/knows",
-          "object": "?y"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/knows"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "y"
+          }
         },
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?nameX"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/name"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "nameX"
+          }
         },
         {
-          "subject": "?y",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?nameY"
+          "subject": {
+            "termType": "Variable",
+            "value": "y"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/name"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "nameY"
+          }
         }
       ]
     },
@@ -37,13 +69,26 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?y",
-              "predicate": "http://xmlns.com/foaf/0.1/nick",
-              "object": "?nickY"
+              "subject": {
+                "termType": "Variable",
+                "value": "y"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/nick"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "nickY"
+              }
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

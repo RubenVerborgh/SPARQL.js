@@ -1,14 +1,14 @@
 {
-  "type": "query",
-  "prefixes": {
-    "bsbm": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/",
-    "xsd": "http://www.w3.org/2001/XMLSchema#",
-    "dc": "http://purl.org/dc/elements/1.1/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?offer",
-    "?price"
+    {
+      "termType": "Variable",
+      "value": "offer"
+    },
+    {
+      "termType": "Variable",
+      "value": "price"
+    }
   ],
   "distinct": true,
   "where": [
@@ -16,29 +16,74 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?offer",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/product",
-          "object": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product186"
+          "subject": {
+            "termType": "Variable",
+            "value": "offer"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/product"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer5/Product186"
+          }
         },
         {
-          "subject": "?offer",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/vendor",
-          "object": "?vendor"
+          "subject": {
+            "termType": "Variable",
+            "value": "offer"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/vendor"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "vendor"
+          }
         },
         {
-          "subject": "?offer",
-          "predicate": "http://purl.org/dc/elements/1.1/publisher",
-          "object": "?vendor"
+          "subject": {
+            "termType": "Variable",
+            "value": "offer"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://purl.org/dc/elements/1.1/publisher"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "vendor"
+          }
         },
         {
-          "subject": "?vendor",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/country",
-          "object": "http://downlode.org/rdf/iso-3166/countries#US"
+          "subject": {
+            "termType": "Variable",
+            "value": "vendor"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/country"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://downlode.org/rdf/iso-3166/countries#US"
+          }
         },
         {
-          "subject": "?offer",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/deliveryDays",
-          "object": "?deliveryDays"
+          "subject": {
+            "termType": "Variable",
+            "value": "offer"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/deliveryDays"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "deliveryDays"
+          }
         }
       ]
     },
@@ -48,8 +93,19 @@
         "type": "operation",
         "operator": "<=",
         "args": [
-          "?deliveryDays",
-          "\"3\"^^http://www.w3.org/2001/XMLSchema#integer"
+          {
+            "termType": "Variable",
+            "value": "deliveryDays"
+          },
+          {
+            "termType": "Literal",
+            "value": "3",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
         ]
       }
     },
@@ -57,14 +113,32 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?offer",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/price",
-          "object": "?price"
+          "subject": {
+            "termType": "Variable",
+            "value": "offer"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/price"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "price"
+          }
         },
         {
-          "subject": "?offer",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/validTo",
-          "object": "?date"
+          "subject": {
+            "termType": "Variable",
+            "value": "offer"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/validTo"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "date"
+          }
         }
       ]
     },
@@ -74,8 +148,19 @@
         "type": "operation",
         "operator": ">",
         "args": [
-          "?date",
-          "\"2008-06-20T00:00:00\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+          {
+            "termType": "Variable",
+            "value": "date"
+          },
+          {
+            "termType": "Literal",
+            "value": "2008-06-20T00:00:00",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "[object Object]"
+            }
+          }
         ]
       }
     }
@@ -84,13 +169,19 @@
     {
       "expression": {
         "type": "functionCall",
-        "function": "http://www.w3.org/2001/XMLSchema#double",
+        "function": {
+          "termType": "NamedNode",
+          "value": "http://www.w3.org/2001/XMLSchema#double"
+        },
         "args": [
           {
             "type": "operation",
             "operator": "str",
             "args": [
-              "?price"
+              {
+                "termType": "Variable",
+                "value": "price"
+              }
             ]
           }
         ],
@@ -98,5 +189,11 @@
       }
     }
   ],
-  "limit": 10
+  "limit": 10,
+  "type": "query",
+  "prefixes": {
+    "bsbm": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dc": "http://purl.org/dc/elements/1.1/"
+  }
 }

@@ -1,8 +1,4 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "queryType": "SELECT",
   "variables": [
     "*"
@@ -12,21 +8,42 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/mbox",
-          "object": "mailto:alice@example"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/mbox"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "mailto:alice@example"
+          }
         },
         {
-          "subject": "?x",
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
           "predicate": {
             "type": "path",
             "pathType": "/",
             "items": [
-              "http://xmlns.com/foaf/0.1/knows",
-              "http://xmlns.com/foaf/0.1/knows"
+              {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/knows"
+              },
+              {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/knows"
+              }
             ]
           },
-          "object": "?y"
+          "object": {
+            "termType": "Variable",
+            "value": "y"
+          }
         }
       ]
     },
@@ -36,8 +53,14 @@
         "type": "operation",
         "operator": "!=",
         "args": [
-          "?x",
-          "?y"
+          {
+            "termType": "Variable",
+            "value": "x"
+          },
+          {
+            "termType": "Variable",
+            "value": "y"
+          }
         ]
       }
     },
@@ -45,11 +68,24 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?y",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?name"
+          "subject": {
+            "termType": "Variable",
+            "value": "y"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/name"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "name"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

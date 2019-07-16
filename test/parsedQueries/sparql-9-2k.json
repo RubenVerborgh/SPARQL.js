@@ -1,8 +1,4 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "queryType": "SELECT",
   "variables": [
     "*"
@@ -12,14 +8,32 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/knows",
-          "object": "?gen1"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/knows"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "gen1"
+          }
         },
         {
-          "subject": "?y",
-          "predicate": "http://xmlns.com/foaf/0.1/knows",
-          "object": "?gen1"
+          "subject": {
+            "termType": "Variable",
+            "value": "y"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/knows"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "gen1"
+          }
         }
       ]
     },
@@ -29,10 +43,20 @@
         "type": "operation",
         "operator": "!=",
         "args": [
-          "?x",
-          "?y"
+          {
+            "termType": "Variable",
+            "value": "x"
+          },
+          {
+            "termType": "Variable",
+            "value": "y"
+          }
         ]
       }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

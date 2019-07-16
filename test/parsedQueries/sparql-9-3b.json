@@ -1,8 +1,4 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example/"
-  },
   "queryType": "SELECT",
   "variables": [
     "*"
@@ -12,16 +8,38 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?s",
-          "predicate": "http://example/item",
-          "object": "?_a"
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example/item"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "_a"
+          }
         },
         {
-          "subject": "?_a",
-          "predicate": "http://example/price",
-          "object": "?x"
+          "subject": {
+            "termType": "Variable",
+            "value": "_a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example/price"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "x"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example/"
+  }
 }

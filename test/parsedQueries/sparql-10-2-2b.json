@@ -1,29 +1,50 @@
 {
-  "type": "query",
-  "prefixes": {
-    "dc": "http://purl.org/dc/elements/1.1/",
-    "": "http://example.org/book/",
-    "ns": "http://example.org/ns#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?book",
-    "?title",
-    "?price"
+    {
+      "termType": "Variable",
+      "value": "book"
+    },
+    {
+      "termType": "Variable",
+      "value": "title"
+    },
+    {
+      "termType": "Variable",
+      "value": "price"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?book",
-          "predicate": "http://purl.org/dc/elements/1.1/title",
-          "object": "?title"
+          "subject": {
+            "termType": "Variable",
+            "value": "book"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://purl.org/dc/elements/1.1/title"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "title"
+          }
         },
         {
-          "subject": "?book",
-          "predicate": "http://example.org/ns#price",
-          "object": "?price"
+          "subject": {
+            "termType": "Variable",
+            "value": "book"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/ns#price"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "price"
+          }
         }
       ]
     },
@@ -31,14 +52,29 @@
       "type": "values",
       "values": [
         {
-          "?title": "\"SPARQL Tutorial\"",
-          "?book": "{undefined}"
+          "?title": {
+            "termType": "Literal",
+            "value": "SPARQL Tutorial",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#string"
+            }
+          }
         },
         {
-          "?title": "{undefined}",
-          "?book": "http://example.org/book/book2"
+          "?book": {
+            "termType": "NamedNode",
+            "value": "http://example.org/book/book2"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "": "http://example.org/book/",
+    "ns": "http://example.org/ns#"
+  }
 }

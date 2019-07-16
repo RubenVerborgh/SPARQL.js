@@ -1,18 +1,22 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/",
-    "data": "http://example.org/foaf/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?nick"
+    {
+      "termType": "Variable",
+      "value": "nick"
+    }
   ],
   "from": {
     "default": [],
     "named": [
-      "http://example.org/foaf/aliceFoaf",
-      "http://example.org/foaf/bobFoaf"
+      {
+        "termType": "NamedNode",
+        "value": "http://example.org/foaf/aliceFoaf"
+      },
+      {
+        "termType": "NamedNode",
+        "value": "http://example.org/foaf/bobFoaf"
+      }
     ]
   },
   "where": [
@@ -23,19 +27,45 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?x",
-              "predicate": "http://xmlns.com/foaf/0.1/mbox",
-              "object": "mailto:bob@work.example"
+              "subject": {
+                "termType": "Variable",
+                "value": "x"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/mbox"
+              },
+              "object": {
+                "termType": "NamedNode",
+                "value": "mailto:bob@work.example"
+              }
             },
             {
-              "subject": "?x",
-              "predicate": "http://xmlns.com/foaf/0.1/nick",
-              "object": "?nick"
+              "subject": {
+                "termType": "Variable",
+                "value": "x"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/nick"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "nick"
+              }
             }
           ]
         }
       ],
-      "name": "http://example.org/foaf/bobFoaf"
+      "name": {
+        "termType": "NamedNode",
+        "value": "http://example.org/foaf/bobFoaf"
+      }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "data": "http://example.org/foaf/"
+  }
 }

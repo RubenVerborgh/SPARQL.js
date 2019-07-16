@@ -1,20 +1,37 @@
 {
-    "type": "query",
-    "queryType": "SELECT",
-    "variables": [
-        "?p"
-    ],
-    "where": [
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "p"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
         {
-            "type": "bgp",
-            "triples": [
-                {
-                    "subject": "?p",
-                    "predicate": "http://xmlns.com/foaf/0.1/name",
-                    "object": "\"York\ntest\"@en"
-                }
-            ]
+          "subject": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/name"
+          },
+          "object": {
+            "termType": "Literal",
+            "value": "York\ntest",
+            "language": "en",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+            }
+          }
         }
-    ],
-    "prefixes": {}
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
 }

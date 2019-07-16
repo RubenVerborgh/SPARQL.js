@@ -1,20 +1,34 @@
 {
   "type": "update",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "updates": [
     {
       "updateType": "insertdelete",
-      "graph": "http://example/addresses",
+      "graph": {
+        "termType": "NamedNode",
+        "value": "http://example/addresses"
+      },
       "delete": [
         {
           "type": "bgp",
           "triples": [
             {
-              "subject": "?person",
-              "predicate": "http://xmlns.com/foaf/0.1/givenName",
-              "object": "\"Bill\""
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/givenName"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "Bill",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
             }
           ]
         }
@@ -24,9 +38,23 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?person",
-              "predicate": "http://xmlns.com/foaf/0.1/givenName",
-              "object": "\"William\""
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/givenName"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "William",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
             }
           ]
         }
@@ -36,13 +64,30 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?person",
-              "predicate": "http://xmlns.com/foaf/0.1/givenName",
-              "object": "\"Bill\""
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/givenName"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "Bill",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

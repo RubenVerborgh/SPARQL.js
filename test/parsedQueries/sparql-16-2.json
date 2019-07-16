@@ -1,15 +1,19 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/",
-    "vcard": "http://www.w3.org/2001/vcard-rdf/3.0#"
-  },
   "queryType": "CONSTRUCT",
   "template": [
     {
-      "subject": "http://example.org/person#Alice",
-      "predicate": "http://www.w3.org/2001/vcard-rdf/3.0#FN",
-      "object": "?name"
+      "subject": {
+        "termType": "NamedNode",
+        "value": "http://example.org/person#Alice"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/vcard-rdf/3.0#FN"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "name"
+      }
     }
   ],
   "where": [
@@ -17,11 +21,25 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?name"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/name"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "name"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "vcard": "http://www.w3.org/2001/vcard-rdf/3.0#"
+  }
 }

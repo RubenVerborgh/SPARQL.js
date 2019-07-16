@@ -1,47 +1,102 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example.org/WMterms#",
-    "t": "http://example.org/types#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?aLabel1",
-    "?bLabel"
+    {
+      "termType": "Variable",
+      "value": "aLabel1"
+    },
+    {
+      "termType": "Variable",
+      "value": "bLabel"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?a",
-          "predicate": "http://example.org/WMterms#label",
-          "object": "?aLabel"
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/WMterms#label"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "aLabel"
+          }
         },
         {
-          "subject": "?a",
-          "predicate": "http://example.org/WMterms#weight",
-          "object": "?aWeight"
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/WMterms#weight"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "aWeight"
+          }
         },
         {
-          "subject": "?a",
-          "predicate": "http://example.org/WMterms#displacement",
-          "object": "?aDisp"
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/WMterms#displacement"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "aDisp"
+          }
         },
         {
-          "subject": "?b",
-          "predicate": "http://example.org/WMterms#label",
-          "object": "?bLabel"
+          "subject": {
+            "termType": "Variable",
+            "value": "b"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/WMterms#label"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "bLabel"
+          }
         },
         {
-          "subject": "?b",
-          "predicate": "http://example.org/WMterms#weight",
-          "object": "?bWeight"
+          "subject": {
+            "termType": "Variable",
+            "value": "b"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/WMterms#weight"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "bWeight"
+          }
         },
         {
-          "subject": "?b",
-          "predicate": "http://example.org/WMterms#displacement",
-          "object": "?bDisp"
+          "subject": {
+            "termType": "Variable",
+            "value": "b"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/WMterms#displacement"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "bDisp"
+          }
         }
       ]
     },
@@ -55,8 +110,14 @@
             "type": "operation",
             "operator": "sameterm",
             "args": [
-              "?aWeight",
-              "?bWeight"
+              {
+                "termType": "Variable",
+                "value": "aWeight"
+              },
+              {
+                "termType": "Variable",
+                "value": "bWeight"
+              }
             ]
           },
           {
@@ -67,8 +128,14 @@
                 "type": "operation",
                 "operator": "sameterm",
                 "args": [
-                  "?aDisp",
-                  "?bDisp"
+                  {
+                    "termType": "Variable",
+                    "value": "aDisp"
+                  },
+                  {
+                    "termType": "Variable",
+                    "value": "bDisp"
+                  }
                 ]
               }
             ]
@@ -76,5 +143,10 @@
         ]
       }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.org/WMterms#",
+    "t": "http://example.org/types#"
+  }
 }

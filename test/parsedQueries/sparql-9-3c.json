@@ -1,18 +1,20 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example/"
-  },
   "queryType": "SELECT",
   "variables": [
     {
       "expression": {
-        "expression": "?x",
+        "expression": {
+          "termType": "Variable",
+          "value": "x"
+        },
         "type": "aggregate",
         "aggregation": "sum",
         "distinct": false
       },
-      "variable": "?total"
+      "variable": {
+        "termType": "Variable",
+        "value": "total"
+      }
     }
   ],
   "where": [
@@ -20,18 +22,34 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "http://example/order",
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example/order"
+          },
           "predicate": {
             "type": "path",
             "pathType": "/",
             "items": [
-              "http://example/item",
-              "http://example/price"
+              {
+                "termType": "NamedNode",
+                "value": "http://example/item"
+              },
+              {
+                "termType": "NamedNode",
+                "value": "http://example/price"
+              }
             ]
           },
-          "object": "?x"
+          "object": {
+            "termType": "Variable",
+            "value": "x"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example/"
+  }
 }

@@ -1,16 +1,18 @@
 {
-  "type": "query",
-  "prefixes": {
-    "bsbm-inst": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/",
-    "bsbm": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/",
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?product",
-    "?label",
-    "?propertyTextual"
+    {
+      "termType": "Variable",
+      "value": "product"
+    },
+    {
+      "termType": "Variable",
+      "value": "label"
+    },
+    {
+      "termType": "Variable",
+      "value": "propertyTextual"
+    }
   ],
   "distinct": true,
   "where": [
@@ -24,34 +26,88 @@
               "type": "bgp",
               "triples": [
                 {
-                  "subject": "?product",
-                  "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-                  "object": "?label"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/2000/01/rdf-schema#label"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "label"
+                  }
                 },
                 {
-                  "subject": "?product",
-                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-                  "object": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductType140"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                  },
+                  "object": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductType140"
+                  }
                 },
                 {
-                  "subject": "?product",
-                  "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature",
-                  "object": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductFeature4373"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"
+                  },
+                  "object": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductFeature4373"
+                  }
                 },
                 {
-                  "subject": "?product",
-                  "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature",
-                  "object": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductFeature1475"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"
+                  },
+                  "object": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductFeature1475"
+                  }
                 },
                 {
-                  "subject": "?product",
-                  "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyTextual1",
-                  "object": "?propertyTextual"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyTextual1"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "propertyTextual"
+                  }
                 },
                 {
-                  "subject": "?product",
-                  "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1",
-                  "object": "?p1"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "p1"
+                  }
                 }
               ]
             },
@@ -61,8 +117,19 @@
                 "type": "operation",
                 "operator": ">",
                 "args": [
-                  "?p1",
-                  "\"160\"^^http://www.w3.org/2001/XMLSchema#integer"
+                  {
+                    "termType": "Variable",
+                    "value": "p1"
+                  },
+                  {
+                    "termType": "Literal",
+                    "value": "160",
+                    "language": "",
+                    "datatype": {
+                      "termType": "NamedNode",
+                      "value": "http://www.w3.org/2001/XMLSchema#integer"
+                    }
+                  }
                 ]
               }
             }
@@ -75,34 +142,88 @@
               "type": "bgp",
               "triples": [
                 {
-                  "subject": "?product",
-                  "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-                  "object": "?label"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/2000/01/rdf-schema#label"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "label"
+                  }
                 },
                 {
-                  "subject": "?product",
-                  "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-                  "object": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductType140"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                  },
+                  "object": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductType140"
+                  }
                 },
                 {
-                  "subject": "?product",
-                  "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature",
-                  "object": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductFeature4373"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"
+                  },
+                  "object": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductFeature4373"
+                  }
                 },
                 {
-                  "subject": "?product",
-                  "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature",
-                  "object": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductFeature4372"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"
+                  },
+                  "object": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/ProductFeature4372"
+                  }
                 },
                 {
-                  "subject": "?product",
-                  "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyTextual1",
-                  "object": "?propertyTextual"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyTextual1"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "propertyTextual"
+                  }
                 },
                 {
-                  "subject": "?product",
-                  "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2",
-                  "object": "?p2"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "product"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "p2"
+                  }
                 }
               ]
             },
@@ -112,8 +233,19 @@
                 "type": "operation",
                 "operator": ">",
                 "args": [
-                  "?p2",
-                  "\"77\"^^http://www.w3.org/2001/XMLSchema#integer"
+                  {
+                    "termType": "Variable",
+                    "value": "p2"
+                  },
+                  {
+                    "termType": "Literal",
+                    "value": "77",
+                    "language": "",
+                    "datatype": {
+                      "termType": "NamedNode",
+                      "value": "http://www.w3.org/2001/XMLSchema#integer"
+                    }
+                  }
                 ]
               }
             }
@@ -124,9 +256,19 @@
   ],
   "order": [
     {
-      "expression": "?label"
+      "expression": {
+        "termType": "Variable",
+        "value": "label"
+      }
     }
   ],
   "limit": 10,
-  "offset": 5
+  "offset": 5,
+  "type": "query",
+  "prefixes": {
+    "bsbm-inst": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/",
+    "bsbm": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  }
 }

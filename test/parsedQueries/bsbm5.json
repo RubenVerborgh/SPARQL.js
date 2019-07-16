@@ -1,14 +1,14 @@
 {
-  "type": "query",
-  "prefixes": {
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-    "bsbm": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?product",
-    "?productLabel"
+    {
+      "termType": "Variable",
+      "value": "product"
+    },
+    {
+      "termType": "Variable",
+      "value": "productLabel"
+    }
   ],
   "distinct": true,
   "where": [
@@ -16,9 +16,18 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?product",
-          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-          "object": "?productLabel"
+          "subject": {
+            "termType": "Variable",
+            "value": "product"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "productLabel"
+          }
         }
       ]
     },
@@ -28,8 +37,14 @@
         "type": "operation",
         "operator": "!=",
         "args": [
-          "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
-          "?product"
+          {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28"
+          },
+          {
+            "termType": "Variable",
+            "value": "product"
+          }
         ]
       }
     },
@@ -37,24 +52,60 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature",
-          "object": "?prodFeature"
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "prodFeature"
+          }
         },
         {
-          "subject": "?product",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature",
-          "object": "?prodFeature"
+          "subject": {
+            "termType": "Variable",
+            "value": "product"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productFeature"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "prodFeature"
+          }
         },
         {
-          "subject": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1",
-          "object": "?origProperty1"
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "origProperty1"
+          }
         },
         {
-          "subject": "?product",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1",
-          "object": "?simProperty1"
+          "subject": {
+            "termType": "Variable",
+            "value": "product"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric1"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "simProperty1"
+          }
         }
       ]
     },
@@ -68,13 +119,27 @@
             "type": "operation",
             "operator": "<",
             "args": [
-              "?simProperty1",
+              {
+                "termType": "Variable",
+                "value": "simProperty1"
+              },
               {
                 "type": "operation",
                 "operator": "+",
                 "args": [
-                  "?origProperty1",
-                  "\"120\"^^http://www.w3.org/2001/XMLSchema#integer"
+                  {
+                    "termType": "Variable",
+                    "value": "origProperty1"
+                  },
+                  {
+                    "termType": "Literal",
+                    "value": "120",
+                    "language": "",
+                    "datatype": {
+                      "termType": "NamedNode",
+                      "value": "http://www.w3.org/2001/XMLSchema#integer"
+                    }
+                  }
                 ]
               }
             ]
@@ -83,13 +148,27 @@
             "type": "operation",
             "operator": ">",
             "args": [
-              "?simProperty1",
+              {
+                "termType": "Variable",
+                "value": "simProperty1"
+              },
               {
                 "type": "operation",
                 "operator": "-",
                 "args": [
-                  "?origProperty1",
-                  "\"120\"^^http://www.w3.org/2001/XMLSchema#integer"
+                  {
+                    "termType": "Variable",
+                    "value": "origProperty1"
+                  },
+                  {
+                    "termType": "Literal",
+                    "value": "120",
+                    "language": "",
+                    "datatype": {
+                      "termType": "NamedNode",
+                      "value": "http://www.w3.org/2001/XMLSchema#integer"
+                    }
+                  }
                 ]
               }
             ]
@@ -101,14 +180,32 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2",
-          "object": "?origProperty2"
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/instances/dataFromProducer1/Product28"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "origProperty2"
+          }
         },
         {
-          "subject": "?product",
-          "predicate": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2",
-          "object": "?simProperty2"
+          "subject": {
+            "termType": "Variable",
+            "value": "product"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/productPropertyNumeric2"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "simProperty2"
+          }
         }
       ]
     },
@@ -122,13 +219,27 @@
             "type": "operation",
             "operator": "<",
             "args": [
-              "?simProperty2",
+              {
+                "termType": "Variable",
+                "value": "simProperty2"
+              },
               {
                 "type": "operation",
                 "operator": "+",
                 "args": [
-                  "?origProperty2",
-                  "\"170\"^^http://www.w3.org/2001/XMLSchema#integer"
+                  {
+                    "termType": "Variable",
+                    "value": "origProperty2"
+                  },
+                  {
+                    "termType": "Literal",
+                    "value": "170",
+                    "language": "",
+                    "datatype": {
+                      "termType": "NamedNode",
+                      "value": "http://www.w3.org/2001/XMLSchema#integer"
+                    }
+                  }
                 ]
               }
             ]
@@ -137,13 +248,27 @@
             "type": "operation",
             "operator": ">",
             "args": [
-              "?simProperty2",
+              {
+                "termType": "Variable",
+                "value": "simProperty2"
+              },
               {
                 "type": "operation",
                 "operator": "-",
                 "args": [
-                  "?origProperty2",
-                  "\"170\"^^http://www.w3.org/2001/XMLSchema#integer"
+                  {
+                    "termType": "Variable",
+                    "value": "origProperty2"
+                  },
+                  {
+                    "termType": "Literal",
+                    "value": "170",
+                    "language": "",
+                    "datatype": {
+                      "termType": "NamedNode",
+                      "value": "http://www.w3.org/2001/XMLSchema#integer"
+                    }
+                  }
                 ]
               }
             ]
@@ -154,8 +279,17 @@
   ],
   "order": [
     {
-      "expression": "?productLabel"
+      "expression": {
+        "termType": "Variable",
+        "value": "productLabel"
+      }
     }
   ],
-  "limit": 5
+  "limit": 5,
+  "type": "query",
+  "prefixes": {
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "bsbm": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/"
+  }
 }

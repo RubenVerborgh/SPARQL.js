@@ -1,15 +1,24 @@
 {
   "queryType": "SELECT",
   "variables": [
-    "?O12",
+    {
+      "termType": "Variable",
+      "value": "O12"
+    },
     {
       "expression": {
-        "expression": "?O1",
+        "expression": {
+          "termType": "Variable",
+          "value": "O1"
+        },
         "type": "aggregate",
         "aggregation": "count",
         "distinct": false
       },
-      "variable": "?C"
+      "variable": {
+        "termType": "Variable",
+        "value": "C"
+      }
     }
   ],
   "where": [
@@ -17,14 +26,32 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?S",
-          "predicate": "http://www.example.org/p",
-          "object": "?O1"
+          "subject": {
+            "termType": "Variable",
+            "value": "S"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.example.org/p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "O1"
+          }
         },
         {
-          "subject": "?S",
-          "predicate": "http://www.example.org/q",
-          "object": "?O2"
+          "subject": {
+            "termType": "Variable",
+            "value": "S"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.example.org/q"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "O2"
+          }
         }
       ]
     }
@@ -35,16 +62,28 @@
         "type": "operation",
         "operator": "+",
         "args": [
-          "?O1",
-          "?O2"
+          {
+            "termType": "Variable",
+            "value": "O1"
+          },
+          {
+            "termType": "Variable",
+            "value": "O2"
+          }
         ]
       },
-      "variable": "?O12"
+      "variable": {
+        "termType": "Variable",
+        "value": "O12"
+      }
     }
   ],
   "order": [
     {
-      "expression": "?O12"
+      "expression": {
+        "termType": "Variable",
+        "value": "O12"
+      }
     }
   ],
   "type": "query",

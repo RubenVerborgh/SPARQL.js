@@ -11,9 +11,15 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?c",
+              "subject": {
+                "termType": "Variable",
+                "value": "c"
+              },
               "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-              "object": "http://www.w3.org/2002/07/owl#Class"
+              "object": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2002/07/owl#Class"
+              }
             }
           ]
         }
@@ -33,7 +39,10 @@
                 "type": "operation",
                 "operator": "bound",
                 "args": [
-                  "?c"
+                  {
+                    "termType": "Variable",
+                    "value": "c"
+                  }
                 ]
               },
               {
@@ -44,11 +53,30 @@
                     "type": "operation",
                     "operator": "str",
                     "args": [
-                      "?c"
+                      {
+                        "termType": "Variable",
+                        "value": "c"
+                      }
                     ]
                   },
-                  "\"^toto\"",
-                  "\"i\""
+                  {
+                    "termType": "Literal",
+                    "value": "^toto",
+                    "language": "",
+                    "datatype": {
+                      "termType": "NamedNode",
+                      "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                  },
+                  {
+                    "termType": "Literal",
+                    "value": "i",
+                    "language": "",
+                    "datatype": {
+                      "termType": "NamedNode",
+                      "value": "http://www.w3.org/2001/XMLSchema#string"
+                    }
+                  }
                 ]
               }
             ]

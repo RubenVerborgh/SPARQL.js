@@ -1,22 +1,39 @@
 {
-  "type": "query",
-  "prefixes": {
-    "ent": "http://org.example.com/employees#"
-  },
   "queryType": "DESCRIBE",
   "variables": [
-    "?x"
+    {
+      "termType": "Variable",
+      "value": "x"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://org.example.com/employees#employeeId",
-          "object": "\"1234\""
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://org.example.com/employees#employeeId"
+          },
+          "object": {
+            "termType": "Literal",
+            "value": "1234",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#string"
+            }
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "ent": "http://org.example.com/employees#"
+  }
 }

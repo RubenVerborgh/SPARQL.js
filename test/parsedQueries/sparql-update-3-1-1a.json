@@ -1,8 +1,5 @@
 {
   "type": "update",
-  "prefixes": {
-    "dc": "http://purl.org/dc/elements/1.1/"
-  },
   "updates": [
     {
       "updateType": "insert",
@@ -11,18 +8,49 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "http://example/book1",
-              "predicate": "http://purl.org/dc/elements/1.1/title",
-              "object": "\"A new book\""
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example/book1"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.1/title"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "A new book",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
             },
             {
-              "subject": "http://example/book1",
-              "predicate": "http://purl.org/dc/elements/1.1/creator",
-              "object": "\"A.N.Other\""
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example/book1"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.1/creator"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "A.N.Other",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/"
+  }
 }

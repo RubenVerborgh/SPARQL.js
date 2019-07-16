@@ -5,8 +5,8 @@
   ],
   "where": [
     {
-      "patterns": [],
-      "type": "group"
+      "type": "group",
+      "patterns": []
     },
     {
       "type": "optional",
@@ -21,9 +21,18 @@
               "type": "bgp",
               "triples": [
                 {
-                  "subject": "?s",
-                  "predicate": "?p",
-                  "object": "?o"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "s"
+                  },
+                  "predicate": {
+                    "termType": "Variable",
+                    "value": "p"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "o"
+                  }
                 }
               ]
             }

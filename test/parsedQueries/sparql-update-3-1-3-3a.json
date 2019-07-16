@@ -1,8 +1,5 @@
 {
   "type": "update",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "updates": [
     {
       "updateType": "deletewhere",
@@ -11,18 +8,44 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?person",
-              "predicate": "http://xmlns.com/foaf/0.1/givenName",
-              "object": "\"Fred\""
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/givenName"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "Fred",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
             },
             {
-              "subject": "?person",
-              "predicate": "?property",
-              "object": "?value"
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "property"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "value"
+              }
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

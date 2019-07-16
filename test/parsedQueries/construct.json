@@ -1,12 +1,19 @@
 {
-  "type": "query",
-  "prefixes": {},
   "queryType": "CONSTRUCT",
   "template": [
     {
-      "subject": "?s",
-      "predicate": "?p",
-      "object": "?o"
+      "subject": {
+        "termType": "Variable",
+        "value": "s"
+      },
+      "predicate": {
+        "termType": "Variable",
+        "value": "p"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "o"
+      }
     }
   ],
   "where": [
@@ -14,11 +21,22 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?s",
-          "predicate": "?p",
-          "object": "?o"
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {}
 }

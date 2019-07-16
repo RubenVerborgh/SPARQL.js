@@ -1,9 +1,5 @@
 {
   "type": "update",
-  "prefixes": {
-    "dc": "http://purl.org/dc/elements/1.1/",
-    "xsd": "http://www.w3.org/2001/XMLSchema#"
-  },
   "updates": [
     {
       "updateType": "insertdelete",
@@ -12,9 +8,18 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?book",
-              "predicate": "?p",
-              "object": "?v"
+              "subject": {
+                "termType": "Variable",
+                "value": "book"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "v"
+              }
             }
           ]
         }
@@ -25,9 +30,18 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?book",
-              "predicate": "http://purl.org/dc/elements/1.1/date",
-              "object": "?date"
+              "subject": {
+                "termType": "Variable",
+                "value": "book"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.1/date"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "date"
+              }
             }
           ]
         },
@@ -37,8 +51,19 @@
             "type": "operation",
             "operator": ">",
             "args": [
-              "?date",
-              "\"1970-01-01T00:00:00-02:00\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+              {
+                "termType": "Variable",
+                "value": "date"
+              },
+              {
+                "termType": "Literal",
+                "value": "1970-01-01T00:00:00-02:00",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "[object Object]"
+                }
+              }
             ]
           }
         },
@@ -46,13 +71,26 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?book",
-              "predicate": "?p",
-              "object": "?v"
+              "subject": {
+                "termType": "Variable",
+                "value": "book"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "v"
+              }
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  }
 }

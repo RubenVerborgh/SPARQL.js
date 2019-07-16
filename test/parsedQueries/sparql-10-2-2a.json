@@ -1,25 +1,34 @@
 {
-  "type": "query",
-  "prefixes": {
-    "dc": "http://purl.org/dc/elements/1.1/",
-    "": "http://example.org/book/",
-    "ns": "http://example.org/ns#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?book",
-    "?title",
-    "?price"
+    {
+      "termType": "Variable",
+      "value": "book"
+    },
+    {
+      "termType": "Variable",
+      "value": "title"
+    },
+    {
+      "termType": "Variable",
+      "value": "price"
+    }
   ],
   "where": [
     {
       "type": "values",
       "values": [
         {
-          "?book": "http://example.org/book/book1"
+          "[object Object]": {
+            "termType": "NamedNode",
+            "value": "http://example.org/book/book1"
+          }
         },
         {
-          "?book": "http://example.org/book/book3"
+          "[object Object]": {
+            "termType": "NamedNode",
+            "value": "http://example.org/book/book3"
+          }
         }
       ]
     },
@@ -27,16 +36,40 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?book",
-          "predicate": "http://purl.org/dc/elements/1.1/title",
-          "object": "?title"
+          "subject": {
+            "termType": "Variable",
+            "value": "book"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://purl.org/dc/elements/1.1/title"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "title"
+          }
         },
         {
-          "subject": "?book",
-          "predicate": "http://example.org/ns#price",
-          "object": "?price"
+          "subject": {
+            "termType": "Variable",
+            "value": "book"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/ns#price"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "price"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "": "http://example.org/book/",
+    "ns": "http://example.org/ns#"
+  }
 }
