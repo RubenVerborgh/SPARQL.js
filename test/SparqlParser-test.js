@@ -24,7 +24,8 @@ describe('A SPARQL parser', function () {
       var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
       query = fs.readFileSync(queriesPath + query + '.sparql', 'utf8');
 
-      expect(objectsEqual(parser.parse(query), parsedQuery)).to.equal(true);
+      const parsed = parser.parse(query);
+      expect(objectsEqual(parsed, parsedQuery)).to.equal(true);
     });
   });
 

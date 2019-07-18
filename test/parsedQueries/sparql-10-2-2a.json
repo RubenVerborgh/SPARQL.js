@@ -19,13 +19,13 @@
       "type": "values",
       "values": [
         {
-          "[object Object]": {
+          "?book": {
             "termType": "NamedNode",
             "value": "http://example.org/book/book1"
           }
         },
         {
-          "[object Object]": {
+          "?book": {
             "termType": "NamedNode",
             "value": "http://example.org/book/book3"
           }

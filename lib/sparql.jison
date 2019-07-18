@@ -524,7 +524,6 @@ ValuesClause
 InlineData
     : VAR '{' DataBlockValue* '}'
     {
-      $1 = toVar($1);
       $$ = $3.map(function(v) { var o = {}; o[$1] = v; return o; })
     }
     |
