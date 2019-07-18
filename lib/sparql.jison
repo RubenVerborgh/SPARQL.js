@@ -206,8 +206,8 @@
 
     // Build an RDF list out of the items
     for (var i = 0, j = 0, l = listItems.length, listTriples = Array(l * 2); i < l;)
-      listTriples[j++] = triple(head, RDF_FIRST, listItems[i]),
-      listTriples[j++] = triple(head, RDF_REST,  head = ++i < l ? blank() : RDF_NIL);
+      listTriples[j++] = triple(head, Parser.factory.namedNode(RDF_FIRST), listItems[i]),
+      listTriples[j++] = triple(head, Parser.factory.namedNode(RDF_REST),  head = ++i < l ? blank() : Parser.factory.namedNode(RDF_NIL));
 
     // Return the list's identifier, its triples, and the triples associated with its items
     return { entity: list, triples: appendAllTo(listTriples, triples) };
@@ -716,7 +716,7 @@ PathOneInPropertySet
     : iri
     | 'a' -> Parser.factory.namedNode(RDF_TYPE)
     | '^' iri -> path($1, [$2])
-    | '^' 'a' -> path($1, [RDF_TYPE])
+    | '^' 'a' -> path($1, [Parser.factory.namedNode(RDF_TYPE)])
     ;
 TriplesNode
     : '(' GraphNode+ ')' -> createList($2)
@@ -740,7 +740,7 @@ VarOrTerm
     | Literal
     | BLANK_NODE_LABEL -> blank($1.replace(/^(_:)/,""));
     | ANON -> blank()
-    | NIL  -> RDF_NIL
+    | NIL  -> Parser.factory.namedNode(RDF_NIL)
     ;
 Expression
     : ConditionalAndExpression ExpressionTail* -> createOperationTree($1, $2)
