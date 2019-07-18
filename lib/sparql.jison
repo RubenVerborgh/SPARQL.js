@@ -810,7 +810,7 @@ GroupConcatSeparator
 Literal
     : String -> createTypedLiteral($1)
     | String LANGTAG  -> createLangLiteral($1, lowercase($2.substr(1)))
-    | String '^^' iri -> createTypedLiteral($1, $3)
+    | String '^^' iri -> createTypedLiteral($1, $3.value)
     | INTEGER -> createTypedLiteral($1, XSD_INTEGER)
     | DECIMAL -> createTypedLiteral($1, XSD_DECIMAL)
     | DOUBLE  -> createTypedLiteral(lowercase($1), XSD_DOUBLE)

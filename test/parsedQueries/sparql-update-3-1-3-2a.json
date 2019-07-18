@@ -68,7 +68,7 @@
                     "language": "",
                     "datatype": {
                       "termType": "NamedNode",
-                      "value": "[object Object]"
+                      "value": "http://www.w3.org/2001/XMLSchema#dateTime"
                     }
                   }
                 ]
