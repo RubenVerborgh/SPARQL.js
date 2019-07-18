@@ -10,10 +10,16 @@
         "termType": "NamedNode",
         "value": "http://www.w3.org/2001/vcard-rdf/3.0#N"
       },
-      "object": "_:v"
+      "object": {
+        "termType": "BlankNode",
+        "value": "v"
+      }
     },
     {
-      "subject": "_:v",
+      "subject": {
+        "termType": "BlankNode",
+        "value": "v"
+      },
       "predicate": {
         "termType": "NamedNode",
         "value": "http://www.w3.org/2001/vcard-rdf/3.0#givenName"
@@ -24,7 +30,10 @@
       }
     },
     {
-      "subject": "_:v",
+      "subject": {
+        "termType": "BlankNode",
+        "value": "v"
+      },
       "predicate": {
         "termType": "NamedNode",
         "value": "http://www.w3.org/2001/vcard-rdf/3.0#familyName"

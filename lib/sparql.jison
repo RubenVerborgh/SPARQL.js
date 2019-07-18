@@ -155,8 +155,11 @@
     return triple;
   }
 
-  // Creates a new blank node identifier
-  function blank() {
+  // Creates a new blank node
+  function blank(name) {
+    if (typeof name === 'string') {
+      return Parser.factory.blankNode(name);
+    }
     return Parser.factory.blankNode(blankId++);
   };
   var blankId = 0;
@@ -735,7 +738,7 @@ VarOrTerm
     : VAR -> toVar($1)
     | iri
     | Literal
-    | BLANK_NODE_LABEL
+    | BLANK_NODE_LABEL -> blank($1.replace(/^(_:)/,""));
     | ANON -> blank()
     | NIL  -> RDF_NIL
     ;
