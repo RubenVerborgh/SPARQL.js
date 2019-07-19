@@ -158,9 +158,9 @@
   // Creates a new blank node
   function blank(name) {
     if (typeof name === 'string') {
-      return Parser.factory.blankNode(name);
+      return Parser.factory.blankNode("e_" + name);
     }
-    return Parser.factory.blankNode(blankId++);
+    return Parser.factory.blankNode("g_" + blankId++);
   };
   var blankId = 0;
   Parser._resetBlanks = function () { blankId = 0; }

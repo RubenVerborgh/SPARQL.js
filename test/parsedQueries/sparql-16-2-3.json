@@ -4,7 +4,7 @@
     {
       "subject": {
         "termType": "BlankNode",
-        "value": "n3-3"
+        "value": "g_0"
       },
       "predicate": {
         "termType": "NamedNode",
@@ -23,7 +23,7 @@
         {
           "subject": {
             "termType": "BlankNode",
-            "value": "1"
+            "value": "g_1"
           },
           "predicate": {
             "termType": "NamedNode",
@@ -37,7 +37,7 @@
         {
           "subject": {
             "termType": "BlankNode",
-            "value": "1"
+            "value": "g_1"
           },
           "predicate": {
             "termType": "NamedNode",

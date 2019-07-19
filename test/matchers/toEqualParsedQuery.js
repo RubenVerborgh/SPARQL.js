@@ -3,7 +3,6 @@ const N3 = require("n3");
 
 function toEqualParsedQuery(received, expected) {
     const options = {
-        comment: 'Object.is equality',
         isNot: this.isNot,
         promise: this.promise,
     };

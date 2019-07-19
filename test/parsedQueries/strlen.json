@@ -29,7 +29,7 @@
         {
           "subject": {
             "termType": "BlankNode",
-            "value": "n3-5"
+            "value": "g_0"
           },
           "predicate": {
             "termType": "Variable",

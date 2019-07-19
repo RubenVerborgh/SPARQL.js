@@ -25,7 +25,9 @@ describe('A SPARQL generator', function () {
     if (!fs.existsSync(parsedQueryFile)) return;
 
     it('should correctly generate query "' + query + '"', function () {
-      var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
+      // In parsed query, replace "generated" prefixes with "existing" prefix because all blanknodes are named in the
+      // generated query.
+      var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8').replace(/g_/g, 'e_'));
       var genQuery = allPrefixesGenerator.stringify(parsedQuery);
 
       const parsed = new SparqlParser(null, null, null).parse(genQuery);

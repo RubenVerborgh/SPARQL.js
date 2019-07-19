@@ -12,13 +12,13 @@
       },
       "object": {
         "termType": "BlankNode",
-        "value": "v"
+        "value": "e_v"
       }
     },
     {
       "subject": {
         "termType": "BlankNode",
-        "value": "v"
+        "value": "e_v"
       },
       "predicate": {
         "termType": "NamedNode",
@@ -32,7 +32,7 @@
     {
       "subject": {
         "termType": "BlankNode",
-        "value": "v"
+        "value": "e_v"
       },
       "predicate": {
         "termType": "NamedNode",

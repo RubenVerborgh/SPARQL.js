@@ -30,6 +30,7 @@ describe('A SPARQL parser', function () {
       query = fs.readFileSync(queriesPath + query + '.sparql', 'utf8');
 
       const parsed = parser.parse(query);
+      // fs.writeFileSync(parsedQueryFile, JSON.stringify(parsed, null, "  "));
       expect(parsed).toEqualParsedQuery(parsedQuery);
     });
   });
