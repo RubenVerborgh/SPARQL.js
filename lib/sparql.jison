@@ -157,7 +157,8 @@
 
   // Creates a new blank node
   function blank(name) {
-    if (typeof name === 'string') {
+    if (typeof name === 'string') {  // Only use name if a name is given
+      if (name.startsWith("e_")) return Parser.factory.blankNode(name);
       return Parser.factory.blankNode("e_" + name);
     }
     return Parser.factory.blankNode("g_" + blankId++);
