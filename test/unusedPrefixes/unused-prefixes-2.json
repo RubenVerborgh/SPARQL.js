@@ -8,16 +8,31 @@
   },
   "queryType": "SELECT",
   "variables": [
-    "?title"
+    {
+      "termType": "Variable",
+      "value": "title"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "http://example.org/person/foo1/netWorth",
-          "predicate": "schema:value",
-          "object": "\"32\"^^http://www.w3.org/2001/XMLSchema#integer"
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.org/person/foo1/netWorth"
+          },"predicate": {
+            "termType": "NamedNode",
+            "value": "schema:value"
+          }, "object": {
+            "termType": "Literal",
+            "value": "32",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
         }
       ]
     }
