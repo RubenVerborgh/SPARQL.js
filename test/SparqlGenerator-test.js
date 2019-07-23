@@ -30,7 +30,7 @@ describe('A SPARQL generator', function () {
       var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8').replace(/g_/g, 'e_'));
       var genQuery = allPrefixesGenerator.stringify(parsedQuery);
 
-      const parsed = new SparqlParser(null, null, null).parse(genQuery);
+      const parsed = new SparqlParser().parse(genQuery);
       expect(parsed).toEqualParsedQuery(parsedQuery);
     });
   });
@@ -54,7 +54,7 @@ describe('A SPARQL generator', function () {
   });
 
   it('should use inherited prefixes', function () {
-    var parser = new SparqlParser({rdfs: 'http://www.w3.org/2000/01/rdf-schema#'}, null, null);
+    var parser = new SparqlParser({rdfs: 'http://www.w3.org/2000/01/rdf-schema#'});
     var parsedQuery = parser.parse('SELECT * WHERE { ?s rdfs:label ?o }');
     var generatedQuery = defaultGenerator.stringify(parsedQuery);
     var expectedQuery =

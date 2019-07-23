@@ -138,7 +138,10 @@
 
   // Creates a literal with the given value and type
   function createTypedLiteral(value, type) {
-    return Parser.factory.literal(value, Parser.factory.namedNode(type));
+    if (type && type.termType !== "NamedNode"){
+      type = Parser.factory.namedNode(type);
+    }
+    return Parser.factory.literal(value, type);
   }
 
   // Creates a literal with the given value and language
@@ -813,7 +816,7 @@ GroupConcatSeparator
 Literal
     : String -> createTypedLiteral($1)
     | String LANGTAG  -> createLangLiteral($1, lowercase($2.substr(1)))
-    | String '^^' iri -> createTypedLiteral($1, $3.value)
+    | String '^^' iri -> createTypedLiteral($1, $3)
     | INTEGER -> createTypedLiteral($1, XSD_INTEGER)
     | DECIMAL -> createTypedLiteral($1, XSD_DECIMAL)
     | DOUBLE  -> createTypedLiteral(lowercase($1), XSD_DOUBLE)
