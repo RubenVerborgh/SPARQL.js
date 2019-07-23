@@ -5,8 +5,7 @@
   "author": "Ruben Verborgh <ruben.verborgh@gmail.com>",
   "dependencies": {
     "expect": "^24.8.0",
-    "n3": "^1.0.4",
-    "rdf-string": "^1.3.1"
+    "n3": "^1.0.4"
   },
   "keywords": [
     "sparql",
