@@ -4,7 +4,6 @@
   "description": "A parser for the SPARQL query language",
   "author": "Ruben Verborgh <ruben.verborgh@gmail.com>",
   "dependencies": {
-    "expect": "^24.8.0",
     "n3": "^1.0.4"
   },
   "keywords": [
@@ -36,9 +35,9 @@
     "node": ">=8.0"
   },
   "devDependencies": {
+    "expect": "^24.8.0",
     "jison": "0.4.18",
     "mocha": "4.1.x",
-    "chai": "4.1.x",
     "pre-commit": "~1.2.2"
   },
   "browser": {
