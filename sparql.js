@@ -1,5 +1,6 @@
 var Parser = require('./lib/SparqlParser').Parser;
 var Generator = require('./lib/SparqlGenerator');
+var Wildcard = require("./lib/Wildcard").Wildcard;
 var N3 = require('n3');
 
 module.exports = {
@@ -27,4 +28,5 @@ module.exports = {
     return parser;
   },
   Generator: Generator,
+  Wildcard: Wildcard,
 };

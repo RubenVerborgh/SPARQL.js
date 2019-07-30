@@ -3,7 +3,7 @@
     SPARQL parser in the Jison parser generator format.
   */
 
-  var Wildcard = require('./Wildcard.js').Wildcard;
+  var Wildcard = require('./Wildcard').Wildcard;
 
   // Common namespaces and entities
   var RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
