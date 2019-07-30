@@ -1,7 +1,9 @@
 {
   "queryType": "SELECT",
   "variables": [
-    "*"
+    {
+      "termType": "Wildcard"
+    }
   ],
   "where": [
     {
@@ -14,7 +16,9 @@
         {
           "queryType": "SELECT",
           "variables": [
-            "*"
+            {
+              "termType": "Wildcard"
+            }
           ],
           "where": [
             {

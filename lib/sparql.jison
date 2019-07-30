@@ -3,6 +3,8 @@
     SPARQL parser in the Jison parser generator format.
   */
 
+  var Wildcard = require('./Wildcard.js').Wildcard;
+
   // Common namespaces and entities
   var RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
       RDF_TYPE  = RDF + 'type',
@@ -99,7 +101,7 @@
 
   // Creates an expression with the given type and attributes
   function expression(expr, attr) {
-    var expression = { expression: expr };
+    var expression = { expression: expr === '*'? new Wildcard() : expr };
     if (attr)
       for (var a in attr)
         expression[a] = attr[a];
@@ -472,7 +474,7 @@ SubSelect
     : SelectClause WhereClause SolutionModifier ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
     ;
 SelectClause
-    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
+    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? [new Wildcard()] : $3 }, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
     ;
 SelectClauseItem
     : VAR -> toVar($1)
@@ -483,7 +485,7 @@ ConstructQuery
     | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $5 = ($5 ? $5.triples : []) }, groupDatasets($2), { where: [ { type: 'bgp', triples: appendAllTo([], $5) } ] }, $7)
     ;
 DescribeQuery
-    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? ['*'] : $2.map(toVar) }, groupDatasets($3), $4, $5)
+    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? [new Wildcard()] : $2.map(toVar) }, groupDatasets($3), $4, $5)
     ;
 AskQuery
     : 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, groupDatasets($2), $3, $4)

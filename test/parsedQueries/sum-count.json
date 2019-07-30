@@ -33,7 +33,9 @@
     },
     {
       "expression": {
-        "expression": "*",
+        "expression": {
+          "termType": "Wildcard"
+        },
         "type": "aggregate",
         "aggregation": "count",
         "distinct": false
