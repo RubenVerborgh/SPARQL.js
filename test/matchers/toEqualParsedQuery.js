@@ -48,15 +48,17 @@ let objectsEqual = function (received, expected){
     } else if (expected instanceof N3.DataFactory.internal.Term){
         return expected.equals(received);
     } else {
-        if (Array.isArray(received) && Array.isArray(expected)){
+        if (Array.isArray(received)){
+            if (! Array.isArray(expected)) return false;
             if (received.length !== expected.length) return false;
             for (let i = 0; i < received.length; i++){
                 if (! objectsEqual(received[i], expected[i])) return false;
             }
-        } else {
+        } else { // received == object
+            if (isPrimitive(expected) || Array.isArray(expected)) return false;
             let keys_first = Object.keys(received);
 
-            for (key of keys_first){
+            for (let key of keys_first){
                 if (! objectsEqual(received[key], expected[key])) return false;
             }
         }
