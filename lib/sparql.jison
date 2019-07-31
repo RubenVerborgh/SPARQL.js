@@ -468,13 +468,21 @@ PrefixDecl
     }
     ;
 SelectQuery
-    : SelectClause DatasetClause* WhereClause SolutionModifier -> extend($1, groupDatasets($2), $3, $4)
+    : SelectClauseWildcard DatasetClause* WhereClause SolutionModifierNoGroup -> extend($1, groupDatasets($2), $3, $4)
+    | SelectClauseVars     DatasetClause* WhereClause SolutionModifier        -> extend($1, groupDatasets($2), $3, $4)
+    ;
+SelectClauseWildcard
+    : SelectClauseBase '*' -> extend($1, {variables: [new Wildcard()]})
+    ;
+SelectClauseVars
+    : SelectClauseBase SelectClauseItem+ -> extend($1, { variables: $2 })
+    ;
+SelectClauseBase
+    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? -> extend({ queryType: 'SELECT'}, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
     ;
 SubSelect
-    : SelectClause WhereClause SolutionModifier ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
-    ;
-SelectClause
-    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? [new Wildcard()] : $3 }, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
+    : SelectClauseWildcard WhereClause SolutionModifierNoGroup ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
+    | SelectClauseVars     WhereClause SolutionModifier        ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
     ;
 SelectClauseItem
     : VAR -> toVar($1)
@@ -497,7 +505,10 @@ WhereClause
     : 'WHERE'? GroupGraphPattern -> { where: $2.patterns }
     ;
 SolutionModifier
-    : GroupClause? HavingClause? OrderClause? LimitOffsetClauses? -> extend($1, $2, $3, $4)
+    : GroupClause? SolutionModifierNoGroup -> extend($1, $2)
+    ;
+SolutionModifierNoGroup
+    : HavingClause? OrderClause? LimitOffsetClauses? -> extend($1, $2, $3)
     ;
 GroupClause
     : 'GROUP' 'BY' GroupCondition+ -> { group: $3 }
