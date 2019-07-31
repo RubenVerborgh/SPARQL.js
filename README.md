@@ -21,7 +21,7 @@ var parsedQuery = parser.parse(
 
 // Regenerate a SPARQL query from a JSON object
 var SparqlGenerator = require('sparqljs').Generator;
-var generator = new SparqlGenerator();
+var generator = new SparqlGenerator({ /* prefixes, baseIRI, factory */ });
 parsedQuery.variables = ['?mickey'];
 var generatedQuery = generator.stringify(parsedQuery);
 ```
@@ -46,38 +46,79 @@ SELECT ?p ?c WHERE {
 And here is the same query in JSON:
 ```JSON
 {
-  "type": "query",
-  "prefixes": {
-    "dbpedia-owl": "http://dbpedia.org/ontology/"
-  },
   "queryType": "SELECT",
-  "variables": [ "?p", "?c" ],
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "p"
+    },
+    {
+      "termType": "Variable",
+      "value": "c"
+    }
+  ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?p",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-          "object": "http://dbpedia.org/ontology/Artist"
+          "subject": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/ontology/Artist"
+          }
         },
         {
-          "subject": "?p",
-          "predicate": "http://dbpedia.org/ontology/birthPlace",
-          "object": "?c"
+          "subject": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/ontology/birthPlace"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "c"
+          }
         },
         {
-          "subject": "?c",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "\"York\"@en"
+          "subject": {
+            "termType": "Variable",
+            "value": "c"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/name"
+          },
+          "object": {
+            "termType": "Literal",
+            "value": "York",
+            "language": "en",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+            }
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "dbpedia-owl": "http://dbpedia.org/ontology/"
+  }
 }
 ```
 
-The representation of triples is the same as in [N3.js 0.x](https://github.com/rdfjs/N3.js/blob/v0.11.3/README.md#triple-representation), but will [switch to RDF/JS representation](http://rdf.js.org/) in the future.
+The representation of triples uses the [RDF/JS representation](http://rdf.js.org/).
 
 ## Installation
 ```bash
