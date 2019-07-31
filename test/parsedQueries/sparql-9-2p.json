@@ -1,34 +1,54 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example/",
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "*"
+    {
+      "termType": "Wildcard"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "?p",
-          "object": "?v"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "v"
+          }
         },
         {
-          "subject": "?p",
+          "subject": {
+            "termType": "Variable",
+            "value": "p"
+          },
           "predicate": {
             "type": "path",
             "pathType": "*",
             "items": [
-              "http://www.w3.org/2000/01/rdf-schema#subPropertyOf"
+              {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2000/01/rdf-schema#subPropertyOf"
+              }
             ]
           },
-          "object": "http://example/property"
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://example/property"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  }
 }

@@ -2,8 +2,11 @@ var SparqlGenerator = require('../sparql').Generator;
 var SparqlParser = require('../sparql').Parser;
 
 var fs = require('fs'),
-    expect = require('chai').expect,
+    expect = require('expect'),
     os = require('os');
+
+var toEqualParsedQuery = require("../test/matchers/toEqualParsedQuery");
+expect.extend({toEqualParsedQuery});
 
 var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
@@ -22,9 +25,13 @@ describe('A SPARQL generator', function () {
     if (!fs.existsSync(parsedQueryFile)) return;
 
     it('should correctly generate query "' + query + '"', function () {
-      var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
+      // In parsed query, replace "generated" prefixes with "existing" prefix because all blanknodes in the
+      // generated query have explicit names.
+      var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8').replace(/g_/g, 'e_'));
       var genQuery = allPrefixesGenerator.stringify(parsedQuery);
-      expect(new SparqlParser().parse(genQuery)).to.deep.equal(parsedQuery);
+
+      const parsed = new SparqlParser().parse(genQuery);
+      expect(parsed).toEqualParsedQuery(parsedQuery);
     });
   });
 
@@ -42,7 +49,7 @@ describe('A SPARQL generator', function () {
       var expectedQuery = fs.readFileSync(generatedQueryFile, 'utf8')
         .split(os.EOL).join('\n');
       var generatedQuery = defaultGenerator.stringify(parsedQuery);
-      expect(generatedQuery + '\n').to.be.equal(expectedQuery);
+      expect(generatedQuery + '\n').toEqual(expectedQuery);
     });
   });
 
@@ -53,6 +60,6 @@ describe('A SPARQL generator', function () {
     var expectedQuery =
       'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n' +
       'SELECT * WHERE { ?s rdfs:label ?o. }';
-    expect(generatedQuery).to.be.equal(expectedQuery);
+    expect(generatedQuery).toEqual(expectedQuery);
   });
 });

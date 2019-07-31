@@ -1,14 +1,20 @@
 {
   "queryType": "SELECT",
   "variables": [
-    "?X"
+    {
+      "termType": "Variable",
+      "value": "X"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "http://example.org/A0",
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.org/A0"
+          },
           "predicate": {
             "type": "path",
             "pathType": "*",
@@ -17,19 +23,28 @@
                 "type": "path",
                 "pathType": "*",
                 "items": [
-                  "http://example.org/P"
+                  {
+                    "termType": "NamedNode",
+                    "value": "http://example.org/P"
+                  }
                 ]
               }
             ]
           },
-          "object": "?X"
+          "object": {
+            "termType": "Variable",
+            "value": "X"
+          }
         }
       ]
     }
   ],
   "order": [
     {
-      "expression": "?X"
+      "expression": {
+        "termType": "Variable",
+        "value": "X"
+      }
     }
   ],
   "type": "query",

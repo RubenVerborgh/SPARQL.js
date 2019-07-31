@@ -1,26 +1,39 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example.com/data/#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?x",
+    {
+      "termType": "Variable",
+      "value": "x"
+    },
     {
       "expression": {
         "type": "operation",
         "operator": "*",
         "args": [
           {
-            "expression": "?y",
+            "expression": {
+              "termType": "Variable",
+              "value": "y"
+            },
             "type": "aggregate",
             "aggregation": "min",
             "distinct": false
           },
-          "\"2\"^^http://www.w3.org/2001/XMLSchema#integer"
+          {
+            "termType": "Literal",
+            "value": "2",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
         ]
       },
-      "variable": "?min"
+      "variable": {
+        "termType": "Variable",
+        "value": "min"
+      }
     }
   ],
   "where": [
@@ -28,30 +41,58 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://example.com/data/#p",
-          "object": "?y"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/data/#p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "y"
+          }
         },
         {
-          "subject": "?x",
-          "predicate": "http://example.com/data/#q",
-          "object": "?z"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/data/#q"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "z"
+          }
         }
       ]
     }
   ],
   "group": [
     {
-      "expression": "?x"
+      "expression": {
+        "termType": "Variable",
+        "value": "x"
+      }
     },
     {
       "expression": {
         "type": "operation",
         "operator": "str",
         "args": [
-          "?z"
+          {
+            "termType": "Variable",
+            "value": "z"
+          }
         ]
       }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/data/#"
+  }
 }

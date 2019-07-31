@@ -1,22 +1,32 @@
 {
-  "type": "query",
-  "prefixes": {
-    "dc": "http://purl.org/dc/elements/1.1/",
-    "ns": "http://example.org/ns#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?title",
-    "?price"
+    {
+      "termType": "Variable",
+      "value": "title"
+    },
+    {
+      "termType": "Variable",
+      "value": "price"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://purl.org/dc/elements/1.1/title",
-          "object": "?title"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://purl.org/dc/elements/1.1/title"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "title"
+          }
         }
       ]
     },
@@ -27,9 +37,18 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?x",
-              "predicate": "http://example.org/ns#price",
-              "object": "?price"
+              "subject": {
+                "termType": "Variable",
+                "value": "x"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.org/ns#price"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "price"
+              }
             }
           ]
         },
@@ -39,12 +58,28 @@
             "type": "operation",
             "operator": "<",
             "args": [
-              "?price",
-              "\"30\"^^http://www.w3.org/2001/XMLSchema#integer"
+              {
+                "termType": "Variable",
+                "value": "price"
+              },
+              {
+                "termType": "Literal",
+                "value": "30",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#integer"
+                }
+              }
             ]
           }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "ns": "http://example.org/ns#"
+  }
 }

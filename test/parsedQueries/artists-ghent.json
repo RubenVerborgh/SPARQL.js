@@ -1,26 +1,47 @@
 {
-  "type": "query",
-  "prefixes": {
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-    "dbpedia": "http://dbpedia.org/resource/",
-    "dbpedia-owl": "http://dbpedia.org/ontology/"
-  },
   "queryType": "CONSTRUCT",
   "template": [
     {
-      "subject": "?person",
-      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-      "object": "http://dbpedia.org/ontology/Artist"
+      "subject": {
+        "termType": "Variable",
+        "value": "person"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+      },
+      "object": {
+        "termType": "NamedNode",
+        "value": "http://dbpedia.org/ontology/Artist"
+      }
     },
     {
-      "subject": "?person",
-      "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-      "object": "?name"
+      "subject": {
+        "termType": "Variable",
+        "value": "person"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2000/01/rdf-schema#label"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "name"
+      }
     },
     {
-      "subject": "?person",
-      "predicate": "http://dbpedia.org/ontology/birthPlace",
-      "object": "?city"
+      "subject": {
+        "termType": "Variable",
+        "value": "person"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://dbpedia.org/ontology/birthPlace"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "city"
+      }
     }
   ],
   "where": [
@@ -28,41 +49,120 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?person",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-          "object": "http://dbpedia.org/ontology/Artist"
+          "subject": {
+            "termType": "Variable",
+            "value": "person"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/ontology/Artist"
+          }
         },
         {
-          "subject": "?person",
-          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-          "object": "?name"
+          "subject": {
+            "termType": "Variable",
+            "value": "person"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "name"
+          }
         },
         {
-          "subject": "?person",
-          "predicate": "http://dbpedia.org/ontology/birthPlace",
-          "object": "?city"
+          "subject": {
+            "termType": "Variable",
+            "value": "person"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/ontology/birthPlace"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "city"
+          }
         },
         {
-          "subject": "?city",
-          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-          "object": "?cityName"
+          "subject": {
+            "termType": "Variable",
+            "value": "city"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "cityName"
+          }
         },
         {
-          "subject": "?city",
-          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-          "object": "\"Ghent\"@en"
+          "subject": {
+            "termType": "Variable",
+            "value": "city"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "object": {
+            "termType": "Literal",
+            "value": "Ghent",
+            "language": "en",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+            }
+          }
         },
         {
-          "subject": "?city",
-          "predicate": "http://dbpedia.org/ontology/country",
-          "object": "?country"
+          "subject": {
+            "termType": "Variable",
+            "value": "city"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/ontology/country"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "country"
+          }
         },
         {
-          "subject": "?country",
-          "predicate": "http://www.w3.org/2000/01/rdf-schema#label",
-          "object": "\"Belgium\"@en"
+          "subject": {
+            "termType": "Variable",
+            "value": "country"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "object": {
+            "termType": "Literal",
+            "value": "Belgium",
+            "language": "en",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+            }
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "dbpedia": "http://dbpedia.org/resource/",
+    "dbpedia-owl": "http://dbpedia.org/ontology/"
+  }
 }

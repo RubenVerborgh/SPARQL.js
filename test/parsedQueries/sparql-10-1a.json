@@ -1,44 +1,80 @@
 {
-  "type": "query",
-  "prefixes": {
-    "dc": "http://purl.org/dc/elements/1.1/",
-    "ns": "http://example.org/ns#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?title",
-    "?price"
+    {
+      "termType": "Variable",
+      "value": "title"
+    },
+    {
+      "termType": "Variable",
+      "value": "price"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://example.org/ns#price",
-          "object": "?p"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/ns#price"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "p"
+          }
         },
         {
-          "subject": "?x",
-          "predicate": "http://example.org/ns#discount",
-          "object": "?discount"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/ns#discount"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "discount"
+          }
         }
       ]
     },
     {
       "type": "bind",
-      "variable": "?price",
+      "variable": {
+        "termType": "Variable",
+        "value": "price"
+      },
       "expression": {
         "type": "operation",
         "operator": "*",
         "args": [
-          "?p",
+          {
+            "termType": "Variable",
+            "value": "p"
+          },
           {
             "type": "operation",
             "operator": "-",
             "args": [
-              "\"1\"^^http://www.w3.org/2001/XMLSchema#integer",
-              "?discount"
+              {
+                "termType": "Literal",
+                "value": "1",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#integer"
+                }
+              },
+              {
+                "termType": "Variable",
+                "value": "discount"
+              }
             ]
           }
         ]
@@ -50,8 +86,19 @@
         "type": "operation",
         "operator": "<",
         "args": [
-          "?price",
-          "\"20\"^^http://www.w3.org/2001/XMLSchema#integer"
+          {
+            "termType": "Variable",
+            "value": "price"
+          },
+          {
+            "termType": "Literal",
+            "value": "20",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
         ]
       }
     },
@@ -59,11 +106,25 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://purl.org/dc/elements/1.1/title",
-          "object": "?title"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://purl.org/dc/elements/1.1/title"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "title"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "ns": "http://example.org/ns#"
+  }
 }

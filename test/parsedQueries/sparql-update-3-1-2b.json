@@ -1,8 +1,5 @@
 {
   "type": "update",
-  "prefixes": {
-    "dc": "http://purl.org/dc/elements/1.1/"
-  },
   "updates": [
     {
       "updateType": "delete",
@@ -11,12 +8,29 @@
           "type": "graph",
           "triples": [
             {
-              "subject": "http://example/book1",
-              "predicate": "http://purl.org/dc/elements/1.1/title",
-              "object": "\"Fundamentals of Compiler Desing\""
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example/book1"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.1/title"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "Fundamentals of Compiler Desing",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
             }
           ],
-          "name": "http://example/bookStore"
+          "name": {
+            "termType": "NamedNode",
+            "value": "http://example/bookStore"
+          }
         }
       ]
     },
@@ -27,14 +41,34 @@
           "type": "graph",
           "triples": [
             {
-              "subject": "http://example/book1",
-              "predicate": "http://purl.org/dc/elements/1.1/title",
-              "object": "\"Fundamentals of Compiler Design\""
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example/book1"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.1/title"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "Fundamentals of Compiler Design",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
             }
           ],
-          "name": "http://example/bookStore"
+          "name": {
+            "termType": "NamedNode",
+            "value": "http://example/bookStore"
+          }
         }
       ]
     }
-  ]
+  ],
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/"
+  }
 }

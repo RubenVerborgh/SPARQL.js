@@ -1,28 +1,46 @@
 {
-  "type": "query",
-  "prefixes": {
-    "void": "http://rdfs.org/ns/void#",
-    "dc": "http://purl.org/dc/elements/1.1/",
-    "doap": "http://usefulinc.com/ns/doap#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?service",
-    "?projectName"
+    {
+      "termType": "Variable",
+      "value": "service"
+    },
+    {
+      "termType": "Variable",
+      "value": "projectName"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?p",
-          "predicate": "http://purl.org/dc/elements/1.1/subject",
-          "object": "?projectSubject"
+          "subject": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://purl.org/dc/elements/1.1/subject"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "projectSubject"
+          }
         },
         {
-          "subject": "?p",
-          "predicate": "http://rdfs.org/ns/void#sparqlEndpoint",
-          "object": "?service"
+          "subject": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://rdfs.org/ns/void#sparqlEndpoint"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "service"
+          }
         }
       ]
     },
@@ -32,8 +50,19 @@
         "type": "operation",
         "operator": "regex",
         "args": [
-          "?projectSubject",
-          "\"remote\""
+          {
+            "termType": "Variable",
+            "value": "projectSubject"
+          },
+          {
+            "termType": "Literal",
+            "value": "remote",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#string"
+            }
+          }
         ]
       }
     },
@@ -44,15 +73,33 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?project",
-              "predicate": "http://usefulinc.com/ns/doap#name",
-              "object": "?projectName"
+              "subject": {
+                "termType": "Variable",
+                "value": "project"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://usefulinc.com/ns/doap#name"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "projectName"
+              }
             }
           ]
         }
       ],
-      "name": "?service",
+      "name": {
+        "termType": "Variable",
+        "value": "service"
+      },
       "silent": false
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "void": "http://rdfs.org/ns/void#",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "doap": "http://usefulinc.com/ns/doap#"
+  }
 }

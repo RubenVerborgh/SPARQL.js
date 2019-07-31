@@ -1,19 +1,24 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example.com/data/#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?g",
+    {
+      "termType": "Variable",
+      "value": "g"
+    },
     {
       "expression": {
-        "expression": "?p",
+        "expression": {
+          "termType": "Variable",
+          "value": "p"
+        },
         "type": "aggregate",
         "aggregation": "avg",
         "distinct": false
       },
-      "variable": "?avg"
+      "variable": {
+        "termType": "Variable",
+        "value": "avg"
+      }
     },
     {
       "expression": {
@@ -25,23 +30,40 @@
             "operator": "+",
             "args": [
               {
-                "expression": "?p",
+                "expression": {
+                  "termType": "Variable",
+                  "value": "p"
+                },
                 "type": "aggregate",
                 "aggregation": "min",
                 "distinct": false
               },
               {
-                "expression": "?p",
+                "expression": {
+                  "termType": "Variable",
+                  "value": "p"
+                },
                 "type": "aggregate",
                 "aggregation": "max",
                 "distinct": false
               }
             ]
           },
-          "\"2\"^^http://www.w3.org/2001/XMLSchema#integer"
+          {
+            "termType": "Literal",
+            "value": "2",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
         ]
       },
-      "variable": "?c"
+      "variable": {
+        "termType": "Variable",
+        "value": "c"
+      }
     }
   ],
   "where": [
@@ -49,16 +71,32 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?g",
-          "predicate": "http://example.com/data/#p",
-          "object": "?p"
+          "subject": {
+            "termType": "Variable",
+            "value": "g"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/data/#p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "p"
+          }
         }
       ]
     }
   ],
   "group": [
     {
-      "expression": "?g"
+      "expression": {
+        "termType": "Variable",
+        "value": "g"
+      }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/data/#"
+  }
 }

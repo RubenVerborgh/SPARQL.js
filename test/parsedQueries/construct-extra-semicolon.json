@@ -1,22 +1,52 @@
 {
-  "type": "query",
-  "prefixes": {},
   "queryType": "CONSTRUCT",
   "template": [
     {
-      "subject": "?s",
-      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-      "object": "http://example.org/ExampleThing"
+      "subject": {
+        "termType": "Variable",
+        "value": "s"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+      },
+      "object": {
+        "termType": "NamedNode",
+        "value": "http://example.org/ExampleThing"
+      }
     },
     {
-      "subject": "?s",
-      "predicate": "http://example.org/hasvalue",
-      "object": "\"value\""
+      "subject": {
+        "termType": "Variable",
+        "value": "s"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://example.org/hasvalue"
+      },
+      "object": {
+        "termType": "Literal",
+        "value": "value",
+        "language": "",
+        "datatype": {
+          "termType": "NamedNode",
+          "value": "http://www.w3.org/2001/XMLSchema#string"
+        }
+      }
     },
     {
-      "subject": "?s",
-      "predicate": "?p",
-      "object": "?o"
+      "subject": {
+        "termType": "Variable",
+        "value": "s"
+      },
+      "predicate": {
+        "termType": "Variable",
+        "value": "p"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "o"
+      }
     }
   ],
   "where": [
@@ -24,11 +54,22 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?s",
-          "predicate": "?p",
-          "object": "?o"
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {}
 }

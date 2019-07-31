@@ -1,38 +1,80 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?x",
-    "?name"
+    {
+      "termType": "Variable",
+      "value": "x"
+    },
+    {
+      "termType": "Variable",
+      "value": "name"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/mbox",
-          "object": "mailto:alice@example"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/mbox"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "mailto:alice@example"
+          }
         },
         {
-          "subject": "?x",
-          "predicate": "http://xmlns.com/foaf/0.1/knows",
-          "object": "?a1"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/knows"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "a1"
+          }
         },
         {
-          "subject": "?a1",
-          "predicate": "http://xmlns.com/foaf/0.1/knows",
-          "object": "?a2"
+          "subject": {
+            "termType": "Variable",
+            "value": "a1"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/knows"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "a2"
+          }
         },
         {
-          "subject": "?a2",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?name"
+          "subject": {
+            "termType": "Variable",
+            "value": "a2"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/name"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "name"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

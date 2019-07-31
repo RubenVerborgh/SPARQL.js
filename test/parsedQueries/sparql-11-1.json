@@ -1,18 +1,20 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://books.example/"
-  },
   "queryType": "SELECT",
   "variables": [
     {
       "expression": {
-        "expression": "?lprice",
+        "expression": {
+          "termType": "Variable",
+          "value": "lprice"
+        },
         "type": "aggregate",
         "aggregation": "sum",
         "distinct": false
       },
-      "variable": "?totalPrice"
+      "variable": {
+        "termType": "Variable",
+        "value": "totalPrice"
+      }
     }
   ],
   "where": [
@@ -20,26 +22,56 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?org",
-          "predicate": "http://books.example/affiliates",
-          "object": "?auth"
+          "subject": {
+            "termType": "Variable",
+            "value": "org"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://books.example/affiliates"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "auth"
+          }
         },
         {
-          "subject": "?auth",
-          "predicate": "http://books.example/writesBook",
-          "object": "?book"
+          "subject": {
+            "termType": "Variable",
+            "value": "auth"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://books.example/writesBook"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "book"
+          }
         },
         {
-          "subject": "?book",
-          "predicate": "http://books.example/price",
-          "object": "?lprice"
+          "subject": {
+            "termType": "Variable",
+            "value": "book"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://books.example/price"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "lprice"
+          }
         }
       ]
     }
   ],
   "group": [
     {
-      "expression": "?org"
+      "expression": {
+        "termType": "Variable",
+        "value": "org"
+      }
     }
   ],
   "having": [
@@ -48,13 +80,28 @@
       "operator": ">",
       "args": [
         {
-          "expression": "?lprice",
+          "expression": {
+            "termType": "Variable",
+            "value": "lprice"
+          },
           "type": "aggregate",
           "aggregation": "sum",
           "distinct": false
         },
-        "\"10\"^^http://www.w3.org/2001/XMLSchema#integer"
+        {
+          "termType": "Literal",
+          "value": "10",
+          "language": "",
+          "datatype": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://books.example/"
+  }
 }

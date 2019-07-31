@@ -1,6 +1,5 @@
 {
   "type": "update",
-  "prefixes": {},
   "updates": [
     {
       "type": "move",
@@ -11,8 +10,12 @@
       },
       "destination": {
         "type": "graph",
-        "name": "http://example.org/named"
+        "name": {
+          "termType": "NamedNode",
+          "value": "http://example.org/named"
+        }
       }
     }
-  ]
+  ],
+  "prefixes": {}
 }

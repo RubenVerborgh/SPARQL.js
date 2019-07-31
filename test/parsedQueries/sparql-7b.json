@@ -1,13 +1,14 @@
 {
-  "type": "query",
-  "prefixes": {
-    "dc10": "http://purl.org/dc/elements/1.0/",
-    "dc11": "http://purl.org/dc/elements/1.1/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?x",
-    "?y"
+    {
+      "termType": "Variable",
+      "value": "x"
+    },
+    {
+      "termType": "Variable",
+      "value": "y"
+    }
   ],
   "where": [
     {
@@ -17,9 +18,18 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?book",
-              "predicate": "http://purl.org/dc/elements/1.0/title",
-              "object": "?x"
+              "subject": {
+                "termType": "Variable",
+                "value": "book"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.0/title"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "x"
+              }
             }
           ]
         },
@@ -27,13 +37,27 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?book",
-              "predicate": "http://purl.org/dc/elements/1.1/title",
-              "object": "?y"
+              "subject": {
+                "termType": "Variable",
+                "value": "book"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.1/title"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "y"
+              }
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "dc10": "http://purl.org/dc/elements/1.0/",
+    "dc11": "http://purl.org/dc/elements/1.1/"
+  }
 }

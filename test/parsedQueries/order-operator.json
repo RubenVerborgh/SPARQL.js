@@ -1,16 +1,27 @@
 {
   "queryType": "SELECT",
   "variables": [
-    "*"
+    {
+      "termType": "Wildcard"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?s",
-          "predicate": "?p",
-          "object": "?o"
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o"
+          }
         }
       ]
     }
@@ -21,8 +32,19 @@
         "type": "operation",
         "operator": "+",
         "args": [
-          "?o",
-          "\"5\"^^http://www.w3.org/2001/XMLSchema#integer"
+          {
+            "termType": "Variable",
+            "value": "o"
+          },
+          {
+            "termType": "Literal",
+            "value": "5",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
         ]
       }
     }

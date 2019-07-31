@@ -1,9 +1,5 @@
 {
   "type": "update",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/",
-    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  },
   "updates": [
     {
       "updateType": "insertdelete",
@@ -12,17 +8,38 @@
           "type": "graph",
           "triples": [
             {
-              "subject": "?person",
-              "predicate": "http://xmlns.com/foaf/0.1/name",
-              "object": "?name"
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/name"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "name"
+              }
             },
             {
-              "subject": "?person",
-              "predicate": "http://xmlns.com/foaf/0.1/mbox",
-              "object": "?email"
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/mbox"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "email"
+              }
             }
           ],
-          "name": "http://example/addresses"
+          "name": {
+            "termType": "NamedNode",
+            "value": "http://example/addresses"
+          }
         }
       ],
       "delete": [],
@@ -34,9 +51,18 @@
               "type": "bgp",
               "triples": [
                 {
-                  "subject": "?person",
-                  "predicate": "http://xmlns.com/foaf/0.1/name",
-                  "object": "?name"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "person"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://xmlns.com/foaf/0.1/name"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "name"
+                  }
                 }
               ]
             },
@@ -47,18 +73,34 @@
                   "type": "bgp",
                   "triples": [
                     {
-                      "subject": "?person",
-                      "predicate": "http://xmlns.com/foaf/0.1/mbox",
-                      "object": "?email"
+                      "subject": {
+                        "termType": "Variable",
+                        "value": "person"
+                      },
+                      "predicate": {
+                        "termType": "NamedNode",
+                        "value": "http://xmlns.com/foaf/0.1/mbox"
+                      },
+                      "object": {
+                        "termType": "Variable",
+                        "value": "email"
+                      }
                     }
                   ]
                 }
               ]
             }
           ],
-          "name": "http://example/people"
+          "name": {
+            "termType": "NamedNode",
+            "value": "http://example/people"
+          }
         }
       ]
     }
-  ]
+  ],
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  }
 }

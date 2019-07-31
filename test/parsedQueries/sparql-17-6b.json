@@ -1,45 +1,103 @@
 {
-  "type": "query",
-  "prefixes": {
-    "aGeo": "http://example.org/geo#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?neighbor"
+    {
+      "termType": "Variable",
+      "value": "neighbor"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?a",
-          "predicate": "http://example.org/geo#placeName",
-          "object": "\"Grenoble\""
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/geo#placeName"
+          },
+          "object": {
+            "termType": "Literal",
+            "value": "Grenoble",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#string"
+            }
+          }
         },
         {
-          "subject": "?a",
-          "predicate": "http://example.org/geo#locationX",
-          "object": "?axLoc"
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/geo#locationX"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "axLoc"
+          }
         },
         {
-          "subject": "?a",
-          "predicate": "http://example.org/geo#locationY",
-          "object": "?ayLoc"
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/geo#locationY"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "ayLoc"
+          }
         },
         {
-          "subject": "?b",
-          "predicate": "http://example.org/geo#placeName",
-          "object": "?neighbor"
+          "subject": {
+            "termType": "Variable",
+            "value": "b"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/geo#placeName"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "neighbor"
+          }
         },
         {
-          "subject": "?b",
-          "predicate": "http://example.org/geo#locationX",
-          "object": "?bxLoc"
+          "subject": {
+            "termType": "Variable",
+            "value": "b"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/geo#locationX"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "bxLoc"
+          }
         },
         {
-          "subject": "?b",
-          "predicate": "http://example.org/geo#locationY",
-          "object": "?byLoc"
+          "subject": {
+            "termType": "Variable",
+            "value": "b"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/geo#locationY"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "byLoc"
+          }
         }
       ]
     },
@@ -51,18 +109,45 @@
         "args": [
           {
             "type": "functionCall",
-            "function": "http://example.org/geo#distance",
+            "function": {
+              "termType": "NamedNode",
+              "value": "http://example.org/geo#distance"
+            },
             "args": [
-              "?axLoc",
-              "?ayLoc",
-              "?bxLoc",
-              "?byLoc"
+              {
+                "termType": "Variable",
+                "value": "axLoc"
+              },
+              {
+                "termType": "Variable",
+                "value": "ayLoc"
+              },
+              {
+                "termType": "Variable",
+                "value": "bxLoc"
+              },
+              {
+                "termType": "Variable",
+                "value": "byLoc"
+              }
             ],
             "distinct": false
           },
-          "\"10\"^^http://www.w3.org/2001/XMLSchema#integer"
+          {
+            "termType": "Literal",
+            "value": "10",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
         ]
       }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "aGeo": "http://example.org/geo#"
+  }
 }

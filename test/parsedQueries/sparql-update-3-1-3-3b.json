@@ -1,8 +1,5 @@
 {
   "type": "update",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "updates": [
     {
       "updateType": "deletewhere",
@@ -11,30 +8,71 @@
           "type": "graph",
           "triples": [
             {
-              "subject": "?person",
-              "predicate": "http://xmlns.com/foaf/0.1/givenName",
-              "object": "\"Fred\""
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/givenName"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "Fred",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
             },
             {
-              "subject": "?person",
-              "predicate": "?property1",
-              "object": "?value1"
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "property1"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "value1"
+              }
             }
           ],
-          "name": "http://example.com/names"
+          "name": {
+            "termType": "NamedNode",
+            "value": "http://example.com/names"
+          }
         },
         {
           "type": "graph",
           "triples": [
             {
-              "subject": "?person",
-              "predicate": "?property2",
-              "object": "?value2"
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "property2"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "value2"
+              }
             }
           ],
-          "name": "http://example.com/addresses"
+          "name": {
+            "termType": "NamedNode",
+            "value": "http://example.com/addresses"
+          }
         }
       ]
     }
-  ]
+  ],
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

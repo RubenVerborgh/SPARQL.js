@@ -1,13 +1,14 @@
 {
-  "type": "query",
-  "prefixes": {
-    "dc10": "http://purl.org/dc/elements/1.0/",
-    "dc11": "http://purl.org/dc/elements/1.1/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?title",
-    "?author"
+    {
+      "termType": "Variable",
+      "value": "title"
+    },
+    {
+      "termType": "Variable",
+      "value": "author"
+    }
   ],
   "where": [
     {
@@ -17,14 +18,32 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?book",
-              "predicate": "http://purl.org/dc/elements/1.0/title",
-              "object": "?title"
+              "subject": {
+                "termType": "Variable",
+                "value": "book"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.0/title"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "title"
+              }
             },
             {
-              "subject": "?book",
-              "predicate": "http://purl.org/dc/elements/1.0/creator",
-              "object": "?author"
+              "subject": {
+                "termType": "Variable",
+                "value": "book"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.0/creator"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "author"
+              }
             }
           ]
         },
@@ -32,18 +51,41 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?book",
-              "predicate": "http://purl.org/dc/elements/1.1/title",
-              "object": "?title"
+              "subject": {
+                "termType": "Variable",
+                "value": "book"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.1/title"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "title"
+              }
             },
             {
-              "subject": "?book",
-              "predicate": "http://purl.org/dc/elements/1.1/creator",
-              "object": "?author"
+              "subject": {
+                "termType": "Variable",
+                "value": "book"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.1/creator"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "author"
+              }
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "dc10": "http://purl.org/dc/elements/1.0/",
+    "dc11": "http://purl.org/dc/elements/1.1/"
+  }
 }

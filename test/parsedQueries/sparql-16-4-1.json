@@ -1,8 +1,11 @@
 {
-  "type": "query",
-  "prefixes": {},
   "queryType": "DESCRIBE",
   "variables": [
-    "http://example.org/"
-  ]
+    {
+      "termType": "NamedNode",
+      "value": "http://example.org/"
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
 }

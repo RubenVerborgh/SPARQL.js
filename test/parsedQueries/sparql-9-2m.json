@@ -1,19 +1,19 @@
 {
-  "type": "query",
-  "base": "http://example.org/",
-  "prefixes": {
-    "ex": "http://example.org/#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "*"
+    {
+      "termType": "Wildcard"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?ancestor",
+          "subject": {
+            "termType": "Variable",
+            "value": "ancestor"
+          },
           "predicate": {
             "type": "path",
             "pathType": "+",
@@ -22,15 +22,29 @@
                 "type": "path",
                 "pathType": "|",
                 "items": [
-                  "http://example.org/#motherOf",
-                  "http://example.org/#fatherOf"
+                  {
+                    "termType": "NamedNode",
+                    "value": "http://example.org/#motherOf"
+                  },
+                  {
+                    "termType": "NamedNode",
+                    "value": "http://example.org/#fatherOf"
+                  }
                 ]
               }
             ]
           },
-          "object": "http://example.org/#me"
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://example.org/#me"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "base": "http://example.org/",
+  "prefixes": {
+    "ex": "http://example.org/#"
+  }
 }

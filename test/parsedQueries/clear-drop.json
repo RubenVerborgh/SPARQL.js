@@ -6,7 +6,10 @@
       "silent": true,
       "graph": {
         "type": "graph",
-        "name": "ex:graph"
+        "name": {
+          "termType": "NamedNode",
+          "value": "ex:graph"
+        }
       }
     },
     {
@@ -14,7 +17,10 @@
       "silent": false,
       "graph": {
         "type": "graph",
-        "name": "ex:graph"
+        "name": {
+          "termType": "NamedNode",
+          "value": "ex:graph"
+        }
       }
     },
     {
@@ -22,7 +28,10 @@
       "silent": true,
       "graph": {
         "type": "graph",
-        "name": "ex:graph"
+        "name": {
+          "termType": "NamedNode",
+          "value": "ex:graph"
+        }
       }
     },
     {
@@ -30,7 +39,10 @@
       "silent": false,
       "graph": {
         "type": "graph",
-        "name": "ex:graph"
+        "name": {
+          "termType": "NamedNode",
+          "value": "ex:graph"
+        }
       }
     },
     {
@@ -59,7 +71,10 @@
       "silent": true,
       "graph": {
         "type": "graph",
-        "name": "ex:graph"
+        "name": {
+          "termType": "NamedNode",
+          "value": "ex:graph"
+        }
       }
     },
     {
@@ -67,7 +82,10 @@
       "silent": false,
       "graph": {
         "type": "graph",
-        "name": "ex:graph"
+        "name": {
+          "termType": "NamedNode",
+          "value": "ex:graph"
+        }
       }
     },
     {
@@ -91,7 +109,6 @@
         "all": true
       }
     }
-
   ],
   "prefixes": {}
 }

@@ -1,25 +1,47 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/",
-    "vcard": "http://www.w3.org/2001/vcard-rdf/3.0#"
-  },
   "queryType": "CONSTRUCT",
   "template": [
     {
-      "subject": "?x",
-      "predicate": "http://www.w3.org/2001/vcard-rdf/3.0#N",
-      "object": "_:v"
+      "subject": {
+        "termType": "Variable",
+        "value": "x"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/vcard-rdf/3.0#N"
+      },
+      "object": {
+        "termType": "BlankNode",
+        "value": "e_v"
+      }
     },
     {
-      "subject": "_:v",
-      "predicate": "http://www.w3.org/2001/vcard-rdf/3.0#givenName",
-      "object": "?gname"
+      "subject": {
+        "termType": "BlankNode",
+        "value": "e_v"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/vcard-rdf/3.0#givenName"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "gname"
+      }
     },
     {
-      "subject": "_:v",
-      "predicate": "http://www.w3.org/2001/vcard-rdf/3.0#familyName",
-      "object": "?fname"
+      "subject": {
+        "termType": "BlankNode",
+        "value": "e_v"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/2001/vcard-rdf/3.0#familyName"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "fname"
+      }
     }
   ],
   "where": [
@@ -30,9 +52,18 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?x",
-              "predicate": "http://xmlns.com/foaf/0.1/firstname",
-              "object": "?gname"
+              "subject": {
+                "termType": "Variable",
+                "value": "x"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/firstname"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "gname"
+              }
             }
           ]
         },
@@ -40,9 +71,18 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?x",
-              "predicate": "http://xmlns.com/foaf/0.1/givenname",
-              "object": "?gname"
+              "subject": {
+                "termType": "Variable",
+                "value": "x"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/givenname"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "gname"
+              }
             }
           ]
         }
@@ -55,9 +95,18 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?x",
-              "predicate": "http://xmlns.com/foaf/0.1/surname",
-              "object": "?fname"
+              "subject": {
+                "termType": "Variable",
+                "value": "x"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/surname"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "fname"
+              }
             }
           ]
         },
@@ -65,13 +114,27 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?x",
-              "predicate": "http://xmlns.com/foaf/0.1/family_name",
-              "object": "?fname"
+              "subject": {
+                "termType": "Variable",
+                "value": "x"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/family_name"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "fname"
+              }
             }
           ]
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "vcard": "http://www.w3.org/2001/vcard-rdf/3.0#"
+  }
 }

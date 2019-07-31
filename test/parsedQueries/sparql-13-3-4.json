@@ -1,28 +1,50 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/",
-    "dc": "http://purl.org/dc/elements/1.1/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?name",
-    "?mbox",
-    "?date"
+    {
+      "termType": "Variable",
+      "value": "name"
+    },
+    {
+      "termType": "Variable",
+      "value": "mbox"
+    },
+    {
+      "termType": "Variable",
+      "value": "date"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?g",
-          "predicate": "http://purl.org/dc/elements/1.1/publisher",
-          "object": "?name"
+          "subject": {
+            "termType": "Variable",
+            "value": "g"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://purl.org/dc/elements/1.1/publisher"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "name"
+          }
         },
         {
-          "subject": "?g",
-          "predicate": "http://purl.org/dc/elements/1.1/date",
-          "object": "?date"
+          "subject": {
+            "termType": "Variable",
+            "value": "g"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://purl.org/dc/elements/1.1/date"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "date"
+          }
         }
       ]
     },
@@ -33,19 +55,45 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "?person",
-              "predicate": "http://xmlns.com/foaf/0.1/name",
-              "object": "?name"
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/name"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "name"
+              }
             },
             {
-              "subject": "?person",
-              "predicate": "http://xmlns.com/foaf/0.1/mbox",
-              "object": "?mbox"
+              "subject": {
+                "termType": "Variable",
+                "value": "person"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/mbox"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "mbox"
+              }
             }
           ]
         }
       ],
-      "name": "?g"
+      "name": {
+        "termType": "Variable",
+        "value": "g"
+      }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "dc": "http://purl.org/dc/elements/1.1/"
+  }
 }

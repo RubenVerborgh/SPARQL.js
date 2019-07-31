@@ -1,34 +1,54 @@
 {
   "queryType": "SELECT",
   "variables": [
-    "?s",
-    "?o"
+    {
+      "termType": "Variable",
+      "value": "s"
+    },
+    {
+      "termType": "Variable",
+      "value": "o"
+    }
   ],
   "where": [
     {
       "type": "group",
       "patterns": [
         {
-          "type": "query",
           "queryType": "SELECT",
           "variables": [
-            "*"
+            {
+              "termType": "Wildcard"
+            }
           ],
           "where": [
             {
               "type": "bgp",
               "triples": [
                 {
-                  "subject": "?s",
-                  "predicate": "?p",
-                  "object": "?o"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "s"
+                  },
+                  "predicate": {
+                    "termType": "Variable",
+                    "value": "p"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "o"
+                  }
                 }
               ]
             }
           ],
+          "type": "query",
           "values": [
             {
-              "?o": "http://example.org/b"
+              "?o": {
+                "termType": "NamedNode",
+                "value": "http://example.org/b"
+              }
             }
           ]
         }

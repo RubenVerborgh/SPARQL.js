@@ -3,6 +3,8 @@
     SPARQL parser in the Jison parser generator format.
   */
 
+  var Wildcard = require('./Wildcard').Wildcard;
+
   // Common namespaces and entities
   var RDF = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
       RDF_TYPE  = RDF + 'type',
@@ -13,9 +15,7 @@
       XSD_INTEGER  = XSD + 'integer',
       XSD_DECIMAL  = XSD + 'decimal',
       XSD_DOUBLE   = XSD + 'double',
-      XSD_BOOLEAN  = XSD + 'boolean',
-      XSD_TRUE =  '"true"^^'  + XSD_BOOLEAN,
-      XSD_FALSE = '"false"^^' + XSD_BOOLEAN;
+      XSD_BOOLEAN  = XSD + 'boolean';
 
   var base = '', basePath = '', baseRoot = '';
 
@@ -89,8 +89,7 @@
   function toVar(variable) {
     if (variable) {
       var first = variable[0];
-      if (first === '?') return variable;
-      if (first === '$') return '?' + variable.substr(1);
+      if (first === '?' || first === '$') return Parser.factory.variable(variable.substr(1));
     }
     return variable;
   }
@@ -102,7 +101,7 @@
 
   // Creates an expression with the given type and attributes
   function expression(expr, attr) {
-    var expression = { expression: expr };
+    var expression = { expression: expr === '*'? new Wildcard() : expr };
     if (attr)
       for (var a in attr)
         expression[a] = attr[a];
@@ -140,8 +139,16 @@
   }
 
   // Creates a literal with the given value and type
-  function createLiteral(value, type) {
-    return '"' + value + '"^^' + type;
+  function createTypedLiteral(value, type) {
+    if (type && type.termType !== 'NamedNode'){
+      type = Parser.factory.namedNode(type);
+    }
+    return Parser.factory.literal(value, type);
+  }
+
+  // Creates a literal with the given value and language
+  function createLangLiteral(value, lang) {
+    return Parser.factory.literal(value, lang);
   }
 
   // Creates a triple with the given subject, predicate, and object
@@ -153,9 +160,13 @@
     return triple;
   }
 
-  // Creates a new blank node identifier
-  function blank() {
-    return '_:b' + blankId++;
+  // Creates a new blank node
+  function blank(name) {
+    if (typeof name === 'string') {  // Only use name if a name is given
+      if (name.startsWith('e_')) return Parser.factory.blankNode(name);
+      return Parser.factory.blankNode('e_' + name);
+    }
+    return Parser.factory.blankNode('g_' + blankId++);
   };
   var blankId = 0;
   Parser._resetBlanks = function () { blankId = 0; }
@@ -191,7 +202,7 @@
       });
     }
     catch (error) { return ''; }
-    return '"' + string + '"';
+    return string;
   }
 
   // Creates a list, collecting its (possibly blank) items and triples associated with those items
@@ -201,8 +212,8 @@
 
     // Build an RDF list out of the items
     for (var i = 0, j = 0, l = listItems.length, listTriples = Array(l * 2); i < l;)
-      listTriples[j++] = triple(head, RDF_FIRST, listItems[i]),
-      listTriples[j++] = triple(head, RDF_REST,  head = ++i < l ? blank() : RDF_NIL);
+      listTriples[j++] = triple(head, Parser.factory.namedNode(RDF_FIRST), listItems[i]),
+      listTriples[j++] = triple(head, Parser.factory.namedNode(RDF_REST),  head = ++i < l ? blank() : Parser.factory.namedNode(RDF_NIL));
 
     // Return the list's identifier, its triples, and the triples associated with its items
     return { entity: list, triples: appendAllTo(listTriples, triples) };
@@ -389,8 +400,7 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 "GROUP_CONCAT"           return 'GROUP_CONCAT'
 "SEPARATOR"              return 'SEPARATOR'
 "^^"                     return '^^'
-"true"                   return 'true'
-"false"                  return 'false'
+"true"|"false"           return 'BOOLEAN'
 {IRIREF}                 return 'IRIREF'
 {PNAME_NS}               return 'PNAME_NS'
 {PNAME_LN}               return 'PNAME_LN'
@@ -464,7 +474,7 @@ SubSelect
     : SelectClause WhereClause SolutionModifier ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
     ;
 SelectClause
-    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? ['*'] : $3 }, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
+    : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( SelectClauseItem+ | '*' ) -> extend({ queryType: 'SELECT', variables: $3 === '*' ? [new Wildcard()] : $3 }, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
     ;
 SelectClauseItem
     : VAR -> toVar($1)
@@ -475,7 +485,7 @@ ConstructQuery
     | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $5 = ($5 ? $5.triples : []) }, groupDatasets($2), { where: [ { type: 'bgp', triples: appendAllTo([], $5) } ] }, $7)
     ;
 DescribeQuery
-    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? ['*'] : $2.map(toVar) }, groupDatasets($3), $4, $5)
+    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? [new Wildcard()] : $2.map(toVar) }, groupDatasets($3), $4, $5)
     ;
 AskQuery
     : 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, groupDatasets($2), $3, $4)
@@ -523,7 +533,6 @@ ValuesClause
 InlineData
     : VAR '{' DataBlockValue* '}'
     {
-      $1 = toVar($1);
       $$ = $3.map(function(v) { var o = {}; o[$1] = v; return o; })
     }
     |
@@ -540,7 +549,7 @@ InlineData
           throw Error('Inconsistent VALUES length');
         var valuesObject = {};
         for(var i = 0; i<length; i++)
-          valuesObject[$2[i]] = values[i];
+          valuesObject['?' + $2[i].value] = values[i];
         return valuesObject;
       });
     }
@@ -670,7 +679,7 @@ VerbObjectList
 Verb
     : VAR -> toVar($1)
     | iri
-    | 'a' -> RDF_TYPE
+    | 'a' -> Parser.factory.namedNode(RDF_TYPE)
     ;
 ObjectList
     : (GraphNode ',')* GraphNode -> appendTo($1, $2)
@@ -700,7 +709,7 @@ PathEltOrInverse
     ;
 PathPrimary
     : iri
-    | 'a' -> RDF_TYPE
+    | 'a' -> Parser.factory.namedNode(RDF_TYPE)
     | '!' PathNegatedPropertySet -> path($1, [$2])
     | '(' Path ')' -> $2
     ;
@@ -711,9 +720,9 @@ PathNegatedPropertySet
     ;
 PathOneInPropertySet
     : iri
-    | 'a' -> RDF_TYPE
+    | 'a' -> Parser.factory.namedNode(RDF_TYPE)
     | '^' iri -> path($1, [$2])
-    | '^' 'a' -> path($1, [RDF_TYPE])
+    | '^' 'a' -> path($1, [Parser.factory.namedNode(RDF_TYPE)])
     ;
 TriplesNode
     : '(' GraphNode+ ')' -> createList($2)
@@ -735,9 +744,9 @@ VarOrTerm
     : VAR -> toVar($1)
     | iri
     | Literal
-    | BLANK_NODE_LABEL
+    | BLANK_NODE_LABEL -> blank($1.replace(/^(_:)/,''));
     | ANON -> blank()
-    | NIL  -> RDF_NIL
+    | NIL  -> Parser.factory.namedNode(RDF_NIL)
     ;
 Expression
     : ConditionalAndExpression ExpressionTail* -> createOperationTree($1, $2)
@@ -804,19 +813,18 @@ Aggregate
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression GroupConcatSeparator? ')'  -> expression($4, { type: 'aggregate', aggregation: lowercase($1), distinct: !!$3, separator: $5 || ' ' })
     ;
 GroupConcatSeparator
-    : ';' 'SEPARATOR' '=' String -> $4.substr(1, $4.length - 2)
+    : ';' 'SEPARATOR' '=' String -> $4
     ;
 Literal
-    : String
-    | String LANGTAG  -> $1 + lowercase($2)
-    | String '^^' iri -> $1 + '^^' + $3
-    | INTEGER -> createLiteral($1, XSD_INTEGER)
-    | DECIMAL -> createLiteral($1, XSD_DECIMAL)
-    | DOUBLE  -> createLiteral(lowercase($1), XSD_DOUBLE)
+    : String -> createTypedLiteral($1)
+    | String LANGTAG  -> createLangLiteral($1, lowercase($2.substr(1)))
+    | String '^^' iri -> createTypedLiteral($1, $3)
+    | INTEGER -> createTypedLiteral($1, XSD_INTEGER)
+    | DECIMAL -> createTypedLiteral($1, XSD_DECIMAL)
+    | DOUBLE  -> createTypedLiteral(lowercase($1), XSD_DOUBLE)
     | NumericLiteralPositive
     | NumericLiteralNegative
-    | 'true'  -> XSD_TRUE
-    | 'false' -> XSD_FALSE
+    | BOOLEAN -> createTypedLiteral($1, XSD_BOOLEAN)
     ;
 String
     : STRING_LITERAL1 -> unescapeString($1, 1)
@@ -825,29 +833,31 @@ String
     | STRING_LITERAL_LONG2 -> unescapeString($1, 3)
     ;
 NumericLiteralPositive
-    : INTEGER_POSITIVE -> createLiteral($1.substr(1), XSD_INTEGER)
-    | DECIMAL_POSITIVE -> createLiteral($1.substr(1), XSD_DECIMAL)
-    | DOUBLE_POSITIVE  -> createLiteral($1.substr(1).toLowerCase(), XSD_DOUBLE)
+    : INTEGER_POSITIVE -> createTypedLiteral($1.substr(1), XSD_INTEGER)
+    | DECIMAL_POSITIVE -> createTypedLiteral($1.substr(1), XSD_DECIMAL)
+    | DOUBLE_POSITIVE  -> createTypedLiteral($1.substr(1).toLowerCase(), XSD_DOUBLE)
     ;
 NumericLiteralNegative
-    : INTEGER_NEGATIVE -> createLiteral($1, XSD_INTEGER)
-    | DECIMAL_NEGATIVE -> createLiteral($1, XSD_DECIMAL)
-    | DOUBLE_NEGATIVE  -> createLiteral(lowercase($1), XSD_DOUBLE)
+    : INTEGER_NEGATIVE -> createTypedLiteral($1, XSD_INTEGER)
+    | DECIMAL_NEGATIVE -> createTypedLiteral($1, XSD_DECIMAL)
+    | DOUBLE_NEGATIVE  -> createTypedLiteral(lowercase($1), XSD_DOUBLE)
     ;
 iri
-    : IRIREF -> resolveIRI($1)
+    : IRIREF -> Parser.factory.namedNode(resolveIRI($1))
     | PNAME_LN
     {
       var namePos = $1.indexOf(':'),
           prefix = $1.substr(0, namePos),
           expansion = Parser.prefixes[prefix];
       if (!expansion) throw new Error('Unknown prefix: ' + prefix);
-      $$ = resolveIRI(expansion + $1.substr(namePos + 1));
+      var uriString = resolveIRI(expansion + $1.substr(namePos + 1));
+      $$ = Parser.factory.namedNode(uriString);
     }
     | PNAME_NS
     {
       $1 = $1.substr(0, $1.length - 1);
       if (!($1 in Parser.prefixes)) throw new Error('Unknown prefix: ' + $1);
-      $$ = resolveIRI(Parser.prefixes[$1]);
+      var uriString = resolveIRI(Parser.prefixes[$1]);
+      $$ = Parser.factory.namedNode(uriString);
     }
     ;

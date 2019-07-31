@@ -1,20 +1,27 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example.com/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "*"
+    {
+      "termType": "Wildcard"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
-          "predicate": "http://example.com/p",
-          "object": "?n"
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "n"
+          }
         }
       ]
     },
@@ -31,9 +38,18 @@
                 "type": "bgp",
                 "triples": [
                   {
-                    "subject": "?x",
-                    "predicate": "http://example.com/q",
-                    "object": "?m"
+                    "subject": {
+                      "termType": "Variable",
+                      "value": "x"
+                    },
+                    "predicate": {
+                      "termType": "NamedNode",
+                      "value": "http://example.com/q"
+                    },
+                    "object": {
+                      "termType": "Variable",
+                      "value": "m"
+                    }
                   }
                 ]
               },
@@ -43,8 +59,14 @@
                   "type": "operation",
                   "operator": "=",
                   "args": [
-                    "?n",
-                    "?m"
+                    {
+                      "termType": "Variable",
+                      "value": "n"
+                    },
+                    {
+                      "termType": "Variable",
+                      "value": "m"
+                    }
                   ]
                 }
               }
@@ -53,5 +75,9 @@
         ]
       }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/"
+  }
 }

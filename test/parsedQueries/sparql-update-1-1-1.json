@@ -1,8 +1,5 @@
 {
   "type": "update",
-  "prefixes": {
-    "dc": "http://purl.org/dc/elements/1.1/"
-  },
   "updates": [
     {
       "updateType": "insertdelete",
@@ -11,9 +8,23 @@
           "type": "bgp",
           "triples": [
             {
-              "subject": "http://example/egbook",
-              "predicate": "http://purl.org/dc/elements/1.1/title",
-              "object": "\"This is an example title\""
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example/egbook"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.1/title"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "This is an example title",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
             }
           ]
         }
@@ -21,5 +32,8 @@
       "delete": [],
       "where": []
     }
-  ]
+  ],
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/"
+  }
 }

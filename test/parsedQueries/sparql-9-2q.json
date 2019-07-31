@@ -1,18 +1,19 @@
 {
-  "type": "query",
-  "prefixes": {
-    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "*"
+    {
+      "termType": "Wildcard"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?x",
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
           "predicate": {
             "type": "path",
             "pathType": "!",
@@ -21,21 +22,34 @@
                 "type": "path",
                 "pathType": "|",
                 "items": [
-                  "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+                  {
+                    "termType": "NamedNode",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                  },
                   {
                     "type": "path",
                     "pathType": "^",
                     "items": [
-                      "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                      {
+                        "termType": "NamedNode",
+                        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                      }
                     ]
                   }
                 ]
               }
             ]
           },
-          "object": "?y"
+          "object": {
+            "termType": "Variable",
+            "value": "y"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  }
 }

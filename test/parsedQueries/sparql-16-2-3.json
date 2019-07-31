@@ -1,15 +1,19 @@
 {
-  "type": "query",
-  "prefixes": {
-    "foaf": "http://xmlns.com/foaf/0.1/",
-    "site": "http://example.org/stats#"
-  },
   "queryType": "CONSTRUCT",
   "template": [
     {
-      "subject": "_:b0",
-      "predicate": "http://xmlns.com/foaf/0.1/name",
-      "object": "?name"
+      "subject": {
+        "termType": "BlankNode",
+        "value": "g_0"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://xmlns.com/foaf/0.1/name"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "name"
+      }
     }
   ],
   "where": [
@@ -17,23 +21,49 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "_:b1",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "?name"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_1"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/name"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "name"
+          }
         },
         {
-          "subject": "_:b1",
-          "predicate": "http://example.org/stats#hits",
-          "object": "?hits"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_1"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.org/stats#hits"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "hits"
+          }
         }
       ]
     }
   ],
   "order": [
     {
-      "expression": "?hits",
+      "expression": {
+        "termType": "Variable",
+        "value": "hits"
+      },
       "descending": true
     }
   ],
-  "limit": 2
+  "limit": 2,
+  "type": "query",
+  "prefixes": {
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "site": "http://example.org/stats#"
+  }
 }

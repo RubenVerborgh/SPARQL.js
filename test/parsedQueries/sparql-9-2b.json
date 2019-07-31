@@ -1,31 +1,45 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example/",
-    "dc": "http://purl.org/dc/elements/1.1/",
-    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
-  },
   "queryType": "SELECT",
   "variables": [
-    "*"
+    {
+      "termType": "Wildcard"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "http://example/book1",
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example/book1"
+          },
           "predicate": {
             "type": "path",
             "pathType": "|",
             "items": [
-              "http://purl.org/dc/elements/1.1/title",
-              "http://www.w3.org/2000/01/rdf-schema#label"
+              {
+                "termType": "NamedNode",
+                "value": "http://purl.org/dc/elements/1.1/title"
+              },
+              {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2000/01/rdf-schema#label"
+              }
             ]
           },
-          "object": "?displayString"
+          "object": {
+            "termType": "Variable",
+            "value": "displayString"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example/",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  }
 }

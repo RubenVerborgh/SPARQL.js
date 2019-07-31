@@ -1,39 +1,59 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://people.example/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?y",
-    "?minName"
+    {
+      "termType": "Variable",
+      "value": "y"
+    },
+    {
+      "termType": "Variable",
+      "value": "minName"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "http://people.example/alice",
-          "predicate": "http://people.example/knows",
-          "object": "?y"
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://people.example/alice"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://people.example/knows"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "y"
+          }
         }
       ]
     },
     {
+      "type": "group",
       "patterns": [
         {
-          "type": "query",
           "queryType": "SELECT",
           "variables": [
-            "?y",
+            {
+              "termType": "Variable",
+              "value": "y"
+            },
             {
               "expression": {
-                "expression": "?name",
+                "expression": {
+                  "termType": "Variable",
+                  "value": "name"
+                },
                 "type": "aggregate",
                 "aggregation": "min",
                 "distinct": false
               },
-              "variable": "?minName"
+              "variable": {
+                "termType": "Variable",
+                "value": "minName"
+              }
             }
           ],
           "where": [
@@ -41,21 +61,37 @@
               "type": "bgp",
               "triples": [
                 {
-                  "subject": "?y",
-                  "predicate": "http://people.example/name",
-                  "object": "?name"
+                  "subject": {
+                    "termType": "Variable",
+                    "value": "y"
+                  },
+                  "predicate": {
+                    "termType": "NamedNode",
+                    "value": "http://people.example/name"
+                  },
+                  "object": {
+                    "termType": "Variable",
+                    "value": "name"
+                  }
                 }
               ]
             }
           ],
           "group": [
             {
-              "expression": "?y"
+              "expression": {
+                "termType": "Variable",
+                "value": "y"
+              }
             }
-          ]
+          ],
+          "type": "query"
         }
-      ],
-      "type": "group"
+      ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://people.example/"
+  }
 }

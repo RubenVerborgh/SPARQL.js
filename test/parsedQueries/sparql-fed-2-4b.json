@@ -1,23 +1,35 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://example.org/",
-    "foaf": "http://xmlns.com/foaf/0.1/"
-  },
   "queryType": "SELECT",
   "variables": [
-    "?s"
+    {
+      "termType": "Variable",
+      "value": "s"
+    }
   ],
   "where": [
     {
       "type": "bgp",
       "triples": [
         {
-          "subject": "?s",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-          "object": "http://xmlns.com/foaf/0.1/Person"
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://xmlns.com/foaf/0.1/Person"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.org/",
+    "foaf": "http://xmlns.com/foaf/0.1/"
+  }
 }

@@ -1,18 +1,20 @@
 {
-  "type": "query",
-  "prefixes": {
-    "": "http://data.example/"
-  },
   "queryType": "SELECT",
   "variables": [
     {
       "expression": {
-        "expression": "?y",
+        "expression": {
+          "termType": "Variable",
+          "value": "y"
+        },
         "type": "aggregate",
         "aggregation": "avg",
         "distinct": false
       },
-      "variable": "?avg"
+      "variable": {
+        "termType": "Variable",
+        "value": "avg"
+      }
     }
   ],
   "where": [
@@ -20,21 +22,46 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?a",
-          "predicate": "http://data.example/x",
-          "object": "?x"
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://data.example/x"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "x"
+          }
         },
         {
-          "subject": "?a",
-          "predicate": "http://data.example/y",
-          "object": "?y"
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://data.example/y"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "y"
+          }
         }
       ]
     }
   ],
   "group": [
     {
-      "expression": "?x"
+      "expression": {
+        "termType": "Variable",
+        "value": "x"
+      }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://data.example/"
+  }
 }

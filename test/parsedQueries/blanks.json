@@ -1,38 +1,89 @@
 {
-  "type": "query",
-  "base": "ex:",
-  "prefixes": {},
   "queryType": "CONSTRUCT",
   "template": [
     {
-      "subject": "?s0",
-      "predicate": "?p0",
-      "object": "_:b1"
+      "subject": {
+        "termType": "Variable",
+        "value": "s0"
+      },
+      "predicate": {
+        "termType": "Variable",
+        "value": "p0"
+      },
+      "object": {
+        "termType": "BlankNode",
+        "value": "g_1"
+      }
     },
     {
-      "subject": "_:b1",
-      "predicate": "ex:a0",
-      "object": "_:b0"
+      "subject": {
+        "termType": "BlankNode",
+        "value": "g_1"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "ex:a0"
+      },
+      "object": {
+        "termType": "BlankNode",
+        "value": "g_0"
+      }
     },
     {
-      "subject": "_:b0",
-      "predicate": "ex:b0",
-      "object": "ex:c0"
+      "subject": {
+        "termType": "BlankNode",
+        "value": "g_0"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "ex:b0"
+      },
+      "object": {
+        "termType": "NamedNode",
+        "value": "ex:c0"
+      }
     },
     {
-      "subject": "_:b3",
-      "predicate": "?p0",
-      "object": "?o0"
+      "subject": {
+        "termType": "BlankNode",
+        "value": "g_3"
+      },
+      "predicate": {
+        "termType": "Variable",
+        "value": "p0"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "o0"
+      }
     },
     {
-      "subject": "_:b3",
-      "predicate": "ex:a0",
-      "object": "_:b2"
+      "subject": {
+        "termType": "BlankNode",
+        "value": "g_3"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "ex:a0"
+      },
+      "object": {
+        "termType": "BlankNode",
+        "value": "g_2"
+      }
     },
     {
-      "subject": "_:b2",
-      "predicate": "ex:b0",
-      "object": "ex:c0"
+      "subject": {
+        "termType": "BlankNode",
+        "value": "g_2"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "ex:b0"
+      },
+      "object": {
+        "termType": "NamedNode",
+        "value": "ex:c0"
+      }
     }
   ],
   "where": [
@@ -40,106 +91,289 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?s1",
-          "predicate": "?p1",
-          "object": "_:b4"
+          "subject": {
+            "termType": "Variable",
+            "value": "s1"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p1"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_4"
+          }
         },
         {
-          "subject": "?s1",
-          "predicate": "?p1",
-          "object": "ex:a1"
+          "subject": {
+            "termType": "Variable",
+            "value": "s1"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p1"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:a1"
+          }
         },
         {
-          "subject": "?s1",
-          "predicate": "?q1",
-          "object": "ex:b1"
+          "subject": {
+            "termType": "Variable",
+            "value": "s1"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "q1"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:b1"
+          }
         },
         {
-          "subject": "?s1",
-          "predicate": "?q1",
-          "object": "ex:c1"
+          "subject": {
+            "termType": "Variable",
+            "value": "s1"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "q1"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:c1"
+          }
         },
         {
-          "subject": "_:b5",
-          "predicate": "?p2",
-          "object": "?o2"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_5"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p2"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o2"
+          }
         },
         {
-          "subject": "?s3",
-          "predicate": "?p3",
-          "object": "_:b6"
+          "subject": {
+            "termType": "Variable",
+            "value": "s3"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p3"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_6"
+          }
         },
         {
-          "subject": "_:b6",
-          "predicate": "ex:a3",
-          "object": "ex:b3"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_6"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:a3"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:b3"
+          }
         },
         {
-          "subject": "?s4",
-          "predicate": "?p4",
-          "object": "_:b7"
+          "subject": {
+            "termType": "Variable",
+            "value": "s4"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p4"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_7"
+          }
         },
         {
-          "subject": "_:b7",
-          "predicate": "ex:a4",
-          "object": "ex:b4"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_7"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:a4"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:b4"
+          }
         },
         {
-          "subject": "_:b7",
-          "predicate": "ex:c4",
-          "object": "ex:d4"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_7"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:c4"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:d4"
+          }
         },
         {
-          "subject": "_:b7",
-          "predicate": "ex:c4",
-          "object": "ex:e4"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_7"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:c4"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:e4"
+          }
         },
         {
-          "subject": "?s5",
-          "predicate": "?p5",
-          "object": "_:b9"
+          "subject": {
+            "termType": "Variable",
+            "value": "s5"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p5"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_9"
+          }
         },
         {
-          "subject": "_:b9",
-          "predicate": "ex:a5",
-          "object": "_:b8"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_9"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:a5"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_8"
+          }
         },
         {
-          "subject": "_:b8",
-          "predicate": "ex:b5",
-          "object": "ex:c5"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_8"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:b5"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:c5"
+          }
         },
         {
-          "subject": "_:b11",
-          "predicate": "?p6",
-          "object": "?o6"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_11"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p6"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o6"
+          }
         },
         {
-          "subject": "_:b11",
-          "predicate": "ex:a6",
-          "object": "_:b10"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_11"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:a6"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_10"
+          }
         },
         {
-          "subject": "_:b10",
-          "predicate": "ex:b6",
-          "object": "ex:c6"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_10"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:b6"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:c6"
+          }
         },
         {
-          "subject": "_:b12",
-          "predicate": "ex:a7",
-          "object": "ex:b7"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_12"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:a7"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:b7"
+          }
         },
         {
-          "subject": "_:b12",
-          "predicate": "ex:c7",
-          "object": "ex:d7"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_12"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:c7"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:d7"
+          }
         },
         {
-          "subject": "_:b12",
-          "predicate": "ex:c7",
-          "object": "ex:e7"
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_12"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "ex:c7"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "ex:e7"
+          }
         }
       ]
     }
-  ]
+  ],
+  "type": "query",
+  "base": "ex:",
+  "prefixes": {}
 }

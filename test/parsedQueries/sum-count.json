@@ -1,36 +1,49 @@
 {
-  "type": "query",
-  "prefixes": {
-    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  },
   "queryType": "SELECT",
   "variables": [
     {
       "expression": {
-        "expression": "?val",
+        "expression": {
+          "termType": "Variable",
+          "value": "val"
+        },
         "type": "aggregate",
         "aggregation": "sum",
         "distinct": false
       },
-      "variable": "?sum"
+      "variable": {
+        "termType": "Variable",
+        "value": "sum"
+      }
     },
     {
       "expression": {
-        "expression": "?a",
+        "expression": {
+          "termType": "Variable",
+          "value": "a"
+        },
         "type": "aggregate",
         "aggregation": "count",
         "distinct": false
       },
-      "variable": "?count"
+      "variable": {
+        "termType": "Variable",
+        "value": "count"
+      }
     },
     {
       "expression": {
-        "expression": "*",
+        "expression": {
+          "termType": "Wildcard"
+        },
         "type": "aggregate",
         "aggregation": "count",
         "distinct": false
       },
-      "variable": "?countAll"
+      "variable": {
+        "termType": "Variable",
+        "value": "countAll"
+      }
     }
   ],
   "where": [
@@ -38,16 +51,32 @@
       "type": "bgp",
       "triples": [
         {
-          "subject": "?a",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value",
-          "object": "?val"
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "val"
+          }
         }
       ]
     }
   ],
   "group": [
     {
-      "expression": "?a"
+      "expression": {
+        "termType": "Variable",
+        "value": "a"
+      }
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  }
 }
