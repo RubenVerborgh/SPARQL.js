@@ -6,7 +6,7 @@ var fs = require('fs'),
     os = require('os');
 
 var toEqualParsedQuery = require("../test/matchers/toEqualParsedQuery");
-expect.extend({toEqualParsedQuery,});
+expect.extend({toEqualParsedQuery});
 
 var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';

@@ -140,7 +140,7 @@
 
   // Creates a literal with the given value and type
   function createTypedLiteral(value, type) {
-    if (type && type.termType !== "NamedNode"){
+    if (type && type.termType !== 'NamedNode'){
       type = Parser.factory.namedNode(type);
     }
     return Parser.factory.literal(value, type);
@@ -163,10 +163,10 @@
   // Creates a new blank node
   function blank(name) {
     if (typeof name === 'string') {  // Only use name if a name is given
-      if (name.startsWith("e_")) return Parser.factory.blankNode(name);
-      return Parser.factory.blankNode("e_" + name);
+      if (name.startsWith('e_')) return Parser.factory.blankNode(name);
+      return Parser.factory.blankNode('e_' + name);
     }
-    return Parser.factory.blankNode("g_" + blankId++);
+    return Parser.factory.blankNode('g_' + blankId++);
   };
   var blankId = 0;
   Parser._resetBlanks = function () { blankId = 0; }
@@ -549,7 +549,7 @@ InlineData
           throw Error('Inconsistent VALUES length');
         var valuesObject = {};
         for(var i = 0; i<length; i++)
-          valuesObject["?" + $2[i].value] = values[i];
+          valuesObject['?' + $2[i].value] = values[i];
         return valuesObject;
       });
     }
@@ -744,7 +744,7 @@ VarOrTerm
     : VAR -> toVar($1)
     | iri
     | Literal
-    | BLANK_NODE_LABEL -> blank($1.replace(/^(_:)/,""));
+    | BLANK_NODE_LABEL -> blank($1.replace(/^(_:)/,''));
     | ANON -> blank()
     | NIL  -> Parser.factory.namedNode(RDF_NIL)
     ;
