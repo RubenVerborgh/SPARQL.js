@@ -1,6 +1,6 @@
 {
   "name": "sparqljs",
-  "version": "2.2.3",
+  "version": "3.0.0-beta.0",
   "description": "A parser for the SPARQL query language",
   "author": "Ruben Verborgh <ruben.verborgh@gmail.com>",
   "dependencies": {
