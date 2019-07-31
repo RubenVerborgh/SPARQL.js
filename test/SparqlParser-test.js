@@ -56,7 +56,7 @@ describe('A SPARQL parser', function () {
 
   describe('with pre-defined prefixes', function () {
     var prefixes = { a: 'ex:abc#', b: 'ex:def#' };
-    var parser = new SparqlParser(prefixes);
+    var parser = new SparqlParser({ prefixes });
 
     it('should use those prefixes', function () {
       var query = 'SELECT * { a:a b:b "" }';
@@ -100,7 +100,7 @@ describe('A SPARQL parser', function () {
   });
 
   describe('with pre-defined base IRI', function () {
-    var parser = new SparqlParser(null, 'http://ex.org/');
+    var parser = new SparqlParser({ baseIRI: 'http://ex.org/' });
 
     it('should use the base IRI', function () {
       var query = 'SELECT * { <> <#b> "" }';

@@ -9,7 +9,7 @@ module.exports = {
    * @param prefixes { [prefix: string]: string }
    * @param baseIRI string
    */
-  Parser: function (prefixes, baseIRI, factory) {
+  Parser: function ({ prefixes, baseIRI, factory } = {}) {
     // Create a copy of the prefixes
     var prefixesCopy = {};
     for (var prefix in prefixes || {})

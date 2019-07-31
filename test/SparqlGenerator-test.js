@@ -14,7 +14,7 @@ var unusedPrefixesPath = __dirname + '/../test/unusedPrefixes/';
 
 describe('A SPARQL generator', function () {
   var defaultGenerator = new SparqlGenerator();
-  var allPrefixesGenerator = new SparqlGenerator({allPrefixes: true});
+  var allPrefixesGenerator = new SparqlGenerator({ allPrefixes: true });
 
   var queries = fs.readdirSync(queriesPath);
   queries = queries.map(function (q) { return q.replace(/\.sparql$/, ''); });
@@ -54,7 +54,8 @@ describe('A SPARQL generator', function () {
   });
 
   it('should use inherited prefixes', function () {
-    var parser = new SparqlParser({rdfs: 'http://www.w3.org/2000/01/rdf-schema#'});
+    var prefixes = { rdfs: 'http://www.w3.org/2000/01/rdf-schema#' };
+    var parser = new SparqlParser({ prefixes });
     var parsedQuery = parser.parse('SELECT * WHERE { ?s rdfs:label ?o }');
     var generatedQuery = defaultGenerator.stringify(parsedQuery);
     var expectedQuery =
