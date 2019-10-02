@@ -10,4 +10,10 @@ node_js:
 before_script:
   - npm run build
 
-cache: npm
+script:
+  - npm test
+  - npm run spec
+cache:
+ - npm
+ - directories:
+   - .rdf-test-suite-cache

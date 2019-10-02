@@ -1,0 +1,22 @@
+{
+  "applicationBugsUrl": "https://github.com/RubenVerborgh/SPARQL.js/issues",
+  "applicationDescription": "A parser for the SPARQL query language in JavaScript.",
+  "applicationNameFull": "sparqljs",
+  "applicationNameNpm": "sparqljs",
+  "applicationHomepageUrl": "https://github.com/RubenVerborgh/SPARQL.js",
+  "applicationBlogUrl": "https://ruben.verborgh.org/blog/",
+  "applicationUri": "https://www.npmjs.com/package/sparqljs/",
+  "authors": [
+    {
+      "homepage": "https://ruben.verborgh.org/",
+      "name": "Ruben Verborgh <ruben.verborgh@gmail.com>",
+      "uri": "https://ruben.verborgh.org/profile/#me"
+    }
+  ],
+  "licenseUri": "http://opensource.org/licenses/MIT",
+  "reportUri": null,
+  "specificationUris": [
+    "http://www.w3.org/TR/sparql11-query/",
+    "http://www.w3.org/TR/sparql11-update/"
+  ]
+}
