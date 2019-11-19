@@ -121,11 +121,14 @@
   }
 
   // Group datasets by default and named
-  function groupDatasets(fromClauses) {
-    var defaults = [], named = [], l = fromClauses.length, fromClause;
+  function groupDatasets(fromClauses, groupName) {
+    var defaults = [], named = [], l = fromClauses.length, fromClause, group = {};
+    if (!l)
+      return null;
     for (var i = 0; i < l && (fromClause = fromClauses[i]); i++)
       (fromClause.named ? named : defaults).push(fromClause.iri);
-    return l ? { from: { default: defaults, named: named } } : null;
+    group[groupName || 'from'] = { default: defaults, named: named };
+    return group;
   }
 
   // Converts the number to a string
@@ -584,8 +587,8 @@ Update1
     | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: $2 }
     | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: $2 }
     | 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: $2 }
-    | WithClause? InsertClause DeleteClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { insert: $2 || [] }, { delete: $3 || [] }, groupDatasets($4), { where: $6.patterns })
-    | WithClause? DeleteClause InsertClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { delete: $2 || [] }, { insert: $3 || [] }, groupDatasets($4), { where: $6.patterns })
+    | WithClause? InsertClause DeleteClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { insert: $2 || [] }, { delete: $3 || [] }, groupDatasets($4, 'using'), { where: $6.patterns })
+    | WithClause? DeleteClause InsertClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { delete: $2 || [] }, { insert: $3 || [] }, groupDatasets($4, 'using'), { where: $6.patterns })
     ;
 DeleteClause
     : 'DELETE' QuadPattern -> $2
