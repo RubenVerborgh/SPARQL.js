@@ -1,5 +1,5 @@
 const diff = require('jest-diff');
-const N3 = require("n3");
+const { Term } = require('n3');
 
 function toEqualParsedQuery(received, expected) {
     const options = {
@@ -37,15 +37,15 @@ function toEqualParsedQuery(received, expected) {
 }
 
 
-// Test function which checks if object are equal, keeping into account how N3.DataFactory works
+// Test function which checks if object are equal
 let objectsEqual = function (received, expected){
     if (isPrimitive(received) || received === undefined){
         return received === expected;
     }
 
-    if (received instanceof N3.DataFactory.internal.Term){
+    if (received instanceof Term){
         return received.equals(expected);
-    } else if (expected instanceof N3.DataFactory.internal.Term){
+    } else if (expected instanceof Term){
         return expected.equals(received);
     } else {
         if (Array.isArray(received)){
