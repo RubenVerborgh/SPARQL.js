@@ -25,8 +25,9 @@
     "bin/*"
   ],
   "scripts": {
-    "build": "./node_modules/.bin/jison lib/sparql.jison -p slr -o lib/SparqlParser.js",
-    "test": "./node_modules/.bin/mocha",
+    "build": "jison lib/sparql.jison -p slr -o lib/SparqlParser.js",
+    "test": "mocha",
+    "prepublishOnly": "npm run build",
     "spec-base-query": "rdf-test-suite spec/parser.js http://w3c.github.io/rdf-tests/sparql11/data-sparql11/manifest-all.ttl -s http://www.w3.org/TR/sparql11-query/ -c .rdf-test-suite-cache/",
     "spec-base-update": "rdf-test-suite spec/parser.js http://w3c.github.io/rdf-tests/sparql11/data-sparql11/manifest-all.ttl -s http://www.w3.org/TR/sparql11-update/ -c .rdf-test-suite-cache/",
     "spec-earl-query": "npm run spec-base-query --silent -- -o earl -p spec/earl-meta.json > spec/earl-query.ttl",
