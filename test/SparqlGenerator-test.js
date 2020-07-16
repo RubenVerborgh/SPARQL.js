@@ -63,4 +63,13 @@ describe('A SPARQL generator', function () {
       'SELECT * WHERE { ?s rdfs:label ?o. }';
     expect(generatedQuery).toEqual(expectedQuery);
   });
+
+  it('should omit datatype for xsd:string literal if requested', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('SELECT * WHERE { ?s ?p "foo" }');
+    var generator = new SparqlGenerator({omitStringDatatype: true});
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery = 'SELECT * WHERE { ?s ?p "foo". }';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
 });
