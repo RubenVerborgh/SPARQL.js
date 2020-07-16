@@ -63,4 +63,24 @@ describe('A SPARQL generator', function () {
       'SELECT * WHERE { ?s rdfs:label ?o. }';
     expect(generatedQuery).toEqual(expectedQuery);
   });
+
+  it('should separate triples with same subject by semicolon', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('SELECT * WHERE { <t:s> <t:p1> <t:o1>; <t:p2> <t:o2> }');
+    var generatedQuery = defaultGenerator.stringify(parsedQuery);
+    var expectedQuery =
+      'SELECT * WHERE {\n' +
+      '  <t:s> <t:p1> <t:o1>;\n' +
+      '    <t:p2> <t:o2>.\n' +
+      '}';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
+
+  it('should separate triples with same subject and predicate by comma', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('SELECT * WHERE { <t:s> <t:p> <t:o1>, <t:o2> }');
+    var generatedQuery = defaultGenerator.stringify(parsedQuery);
+    var expectedQuery = 'SELECT * WHERE { <t:s> <t:p> <t:o1>, <t:o2>. }';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
 });
