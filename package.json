@@ -1,6 +1,6 @@
 {
   "name": "sparqljs",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "A parser for the SPARQL query language",
   "author": "Ruben Verborgh <ruben.verborgh@gmail.com>",
   "keywords": [
