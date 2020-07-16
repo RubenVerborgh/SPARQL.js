@@ -83,4 +83,13 @@ describe('A SPARQL generator', function () {
     var expectedQuery = 'SELECT * WHERE { <t:s> <t:p> <t:o1>, <t:o2>. }';
     expect(generatedQuery).toEqual(expectedQuery);
   });
+
+  it('should omit datatype for xsd:string literal if requested', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('SELECT * WHERE { ?s ?p "foo" }');
+    var generator = new SparqlGenerator();
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery = 'SELECT * WHERE { ?s ?p "foo". }';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
 });
