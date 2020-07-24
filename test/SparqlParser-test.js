@@ -13,7 +13,7 @@ var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 
 describe('A SPARQL parser', function () {
-  var parser = new SparqlParser();
+  var parser = new SparqlParser({ allowRdfStar: true });
 
   // Ensure the same blank node identifiers are used in every test
   beforeEach(function () { parser._resetBlanks(); });
@@ -187,6 +187,29 @@ describe('A SPARQL parser', function () {
       var result = '[{"type":"union","patterns":[{"type":"bgp","triples":[{"subject":{"termType":"Variable","value":"s"},"predicate":{"termType":"Variable","value":"p"},"object":{"termType":"Variable","value":"o"}}]},{"type":"bgp","triples":[{"subject":{"termType":"Variable","value":"a"},"predicate":{"termType":"Variable","value":"b"},"object":{"termType":"Variable","value":"c"}}]}]}]';
 
       expect(parser.parse(query).where).toEqualParsedQuery(parseJSON(result));
+    });
+  });
+
+  describe('without RDF* support enabled', function () {
+    var parser = new SparqlParser({ allowRdfStar: false });
+    const expectedErrorMessage = 'RDF* is not allowed without "allowRdfStar" flag set';
+
+    it('should throw an error on RDF* triple in projection', function () {
+      expect(() => parser.parse(
+        'SELECT (<< <ex:s> a <ex:o> >> as ?x) WHERE { }'
+      )).toThrow(expectedErrorMessage);
+    });
+
+    it('should throw an error on RDF* triple in BGP', function () {
+      expect(() => parser.parse(
+        'SELECT * WHERE { << ?s ?p ?o >> ?p2 ?o2 }'
+      )).toThrow(expectedErrorMessage);
+    });
+
+    it('should throw an error on RDF* triple in BIND', function () {
+      expect(() => parser.parse(
+        'SELECT * WHERE { BIND(<< <ex:s> <ex:p> 42 >> as ?x) }'
+      )).toThrow(expectedErrorMessage);
     });
   });
 });

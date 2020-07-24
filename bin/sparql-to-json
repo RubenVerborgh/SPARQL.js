@@ -16,5 +16,20 @@ source.setEncoding('utf8');
 source.on('data', function (data) { query += data; });
 source.on('end', function () {
   var parseTree = new SparqlParser().parse(query);
-  process.stdout.write(JSON.stringify(parseTree, null, '  ') + '\n');
+  function termReplacer(key, value) {
+    if (isQuad(value)) {
+      // Workaround for N3 Quad.toJSON() missing `termType` property
+      return {termType: 'Quad', ...value};
+    }
+    return value;
+  };
+  process.stdout.write(JSON.stringify(parseTree, termReplacer, '  ') + '\n');
 });
+
+function isQuad(value) {
+  return value && typeof value === 'object'
+    && !!value.subject
+    && !!value.predicate
+    && !!value.object
+    && !!value.graph;
+}
