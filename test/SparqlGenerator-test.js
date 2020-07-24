@@ -30,7 +30,7 @@ describe('A SPARQL generator', function () {
       var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8').replace(/g_/g, 'e_'));
       var genQuery = allPrefixesGenerator.stringify(parsedQuery);
 
-      const parsed = new SparqlParser().parse(genQuery);
+      const parsed = new SparqlParser({ allowRdfStar: true }).parse(genQuery);
       expect(parsed).toEqualParsedQuery(parsedQuery);
     });
   });
