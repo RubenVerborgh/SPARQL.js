@@ -266,6 +266,11 @@
     }
     return merged;
   }
+
+  // Return the id of an expression
+  function getIdOfExpression(expression) {
+    return expression.variable ? expression.variable.id : expression.id || expression.expression.id;
+  }
 %}
 
 %lex
@@ -472,7 +477,21 @@ PrefixDecl
     ;
 SelectQuery
     : SelectClauseWildcard DatasetClause* WhereClause SolutionModifierNoGroup -> extend($1, groupDatasets($2), $3, $4)
-    | SelectClauseVars     DatasetClause* WhereClause SolutionModifier        -> extend($1, groupDatasets($2), $3, $4)
+    | SelectClauseVars     DatasetClause* WhereClause SolutionModifier 
+    {
+      // If there is a group clause, check if all variables that are selected are in the grouped clause
+      if ($4.group) {
+        for (let selectVar of $1.variables) {
+          if (!selectVar.expression) {
+            const selectVarId = getIdOfExpression(selectVar);
+            if ($4.group.filter(groupVar => getIdOfExpression(groupVar) === selectVarId).length === 0) {
+              throw Error("select variable out of scope");
+            }
+          }
+        }
+      } 
+      return extend($1, groupDatasets($2), $3, $4);
+    }
     ;
 SelectClauseWildcard
     : SelectClauseBase '*' -> extend($1, {variables: [new Wildcard()]})
