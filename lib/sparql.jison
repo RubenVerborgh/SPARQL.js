@@ -312,7 +312,26 @@
         }
     }
     return stack;
-}
+  }
+
+  function getBindedVarsFromGroupGraphPattern(pattern) {
+    if (pattern.triples) {
+      const bindedVars = [];
+      for (let triple of pattern.triples) {
+        if (triple.subject.id.startsWith('?')) bindedVars.push(triple.subject.id);
+        if (triple.predicate.id.startsWith('?')) bindedVars.push(triple.predicate.id);
+        if (triple.object.id.startsWith('?')) bindedVars.push(triple.object.id);
+      }
+      return bindedVars;
+    } else if (pattern.patterns) {
+      let bindedVars = [];
+      for (let pat of pattern.patterns) {
+        bindedVars = bindedVars.concat(getBindedVarsFromGroupGraphPattern(pat));
+      }
+      return bindedVars;
+    }
+    return [];
+  }
 
   function allowsRdfStar(value) {
     if (!Parser.sparqlStar) {
@@ -706,7 +725,25 @@ TriplesTemplate
     ;
 GroupGraphPattern
     : '{' SubSelect '}' -> { type: 'group', patterns: [ $2 ] }
-    | '{' GroupGraphPatternSub '}' -> { type: 'group', patterns: $2 }
+    | '{' GroupGraphPatternSub '}'
+    {
+      // For every binding
+      for (let binding of $2.filter(el => el.type === "bind")) {
+        const index = $2.indexOf(binding);
+        let bindedVars = [];
+        //Collect all bounded variables before the binding
+        for (let el of $2.slice(0, index)) {
+          if (el.type === "group" || el.type === "bgp") {
+            bindedVars = bindedVars.concat(getBindedVarsFromGroupGraphPattern(el));
+          }
+        }
+        // If binding with a non-free variable, throw error
+        if (bindedVars.includes(binding.variable.id)) {
+          throw Error("Variable used to bind is already bound");
+        }
+      }
+      $$ = { type: 'group', patterns: $2 }
+    }
     ;
 GroupGraphPatternSub
     : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? unionAll([$1], $2) : unionAll($2)
