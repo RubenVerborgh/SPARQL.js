@@ -568,6 +568,16 @@ SelectQuery
           }
         }
       }
+      // Check if id of each AS-selected column is not yet bound by subquery
+      const subqueries = $3.where.filter(w => w.type === "query");
+      if (subqueries.length > 0) {
+        let selectedVarIds = $1.variables.filter(v => v.variable.id || undefined).map(v => v.variable.id);
+        let subqueryIds = subqueries.flatMap(sub => sub.variables).map(v => v.id || v.variable.id);
+        if (selectedVarIds.some(id => subqueryIds.indexOf(id) >= 0)) {
+          throw Error("Target id of 'AS' already used in subquery");
+        }
+      }
+      
       $$ = extend($1, groupDatasets($2), $3, $4)
     }
     ;
@@ -575,7 +585,16 @@ SelectClauseWildcard
     : SelectClauseBase '*' -> extend($1, {variables: [new Wildcard()]})
     ;
 SelectClauseVars
-    : SelectClauseBase SelectClauseItem+ -> extend($1, { variables: $2 })
+    : SelectClauseBase SelectClauseItem+
+    {
+      // Check if id of each selected column is different
+      let selectedVarIds = $2.map(v => v.id || v.variable.id);
+      if ((new Set(selectedVarIds)).size !== selectedVarIds.length) {
+        throw Error("Two or more of the resulting columns have the same name");
+      }
+
+      $$ = extend($1, { variables: $2 })
+    }
     ;
 SelectClauseBase
     : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? -> extend({ queryType: 'SELECT'}, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
