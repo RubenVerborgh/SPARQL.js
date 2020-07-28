@@ -302,6 +302,18 @@
     return variables;
   }
 
+  // Help function to flatten arrays
+  function flatten(input, depth = 1, stack = []) {
+    for (let item of input) {
+        if (item instanceof Array && depth > 0) {
+          flatten(item, depth - 1, stack);
+        } else {
+          stack.push(item);
+        }
+    }
+    return stack;
+}
+
 %}
 
 %lex
@@ -511,7 +523,7 @@ SelectQuery
     | SelectClauseVars     DatasetClause* WhereClause SolutionModifier
     {
       // Check for projection of ungrouped variable
-      const counts = $1.variables.map(vars => getAggregatesOfExpression(vars.expression)).flat()
+      const counts = flatten($1.variables.map(vars => getAggregatesOfExpression(vars.expression)))
         .filter(agg => agg.aggregation === "count");
       if (counts.length > 0 || $4.group) {
         for (const selectVar of $1.variables) {
