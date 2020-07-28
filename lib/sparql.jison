@@ -541,7 +541,7 @@ SelectQuery
           }
         }
       }
-      return extend($1, groupDatasets($2), $3, $4)
+      $$ = extend($1, groupDatasets($2), $3, $4)
     }
     ;
 SelectClauseWildcard
