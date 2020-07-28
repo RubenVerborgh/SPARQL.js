@@ -266,6 +266,42 @@
     }
     return merged;
   }
+
+  // Return the id of an expression
+  function getIdOfExpression(expression) {
+    return expression.variable ? expression.variable.id : expression.id || expression.expression.id;
+  }
+
+  // Get all "aggregate"'s from an expression
+  function getAggregatesOfExpression(expression) {
+    if (!expression) {
+      return [];
+    }
+    if (expression.type === 'aggregate') {
+      return [expression];
+    } else if (expression.type === "operation") {
+      let aggregates = [];
+      for (let arg of expression.args) {
+        aggregates = aggregates.concat(getAggregatesOfExpression(arg));
+      }
+      return aggregates;
+    }
+    return [];
+  } 
+
+  // Get all variables used in an operation
+  function getVariablesFromOperation(operation) {
+    let variables = [];
+    for (let arg of operation.args) {
+      if (arg.id) {
+        variables.push(arg);
+      } else if (arg.type === "operation") {
+        variables = variables.concat(getVariablesFromOperation(arg));
+      }
+    }
+    return variables;
+  }
+
 %}
 
 %lex
@@ -472,7 +508,29 @@ PrefixDecl
     ;
 SelectQuery
     : SelectClauseWildcard DatasetClause* WhereClause SolutionModifierNoGroup -> extend($1, groupDatasets($2), $3, $4)
-    | SelectClauseVars     DatasetClause* WhereClause SolutionModifier        -> extend($1, groupDatasets($2), $3, $4)
+    | SelectClauseVars     DatasetClause* WhereClause SolutionModifier
+    {
+      // Check for projection of ungrouped variable
+      const counts = $1.variables.map(vars => getAggregatesOfExpression(vars.expression)).flat()
+        .filter(agg => agg.aggregation === "count");
+      if (counts.length > 0 || $4.group) {
+        for (const selectVar of $1.variables) {
+          if (selectVar.id) {
+            if (!$4.group || !$4.group.map(groupVar => getIdOfExpression(groupVar)).includes(selectVar.id)) {
+              throw Error("Projection of ungrouped variable");
+            }
+          } else if (getAggregatesOfExpression(selectVar.expression).length === 0) {
+            const usedVars = getVariablesFromOperation(selectVar.expression);
+            for (const usedVar of usedVars) {
+              if (!$4.group.map(groupVar => getIdOfExpression(groupVar)).includes(usedVar.id)) {
+                throw Error("Use of ungrouped variable in projection of operation");
+              }
+            }
+          }
+        }
+      }
+      return extend($1, groupDatasets($2), $3, $4)
+    }
     ;
 SelectClauseWildcard
     : SelectClauseBase '*' -> extend($1, {variables: [new Wildcard()]})
