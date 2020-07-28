@@ -1,0 +1,63 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Quad",
+            "value": "",
+              "subject": {
+                "termType": "Quad",
+                "value": "",
+                "subject": {
+                  "termType": "Variable",
+                  "value": "s1"
+                },
+                "predicate": {
+                  "termType": "Variable",
+                  "value": "p1"
+                },
+                "object": {
+                  "termType": "Variable",
+                  "value": "o1"
+                },
+                "graph": {
+                  "termType": "DefaultGraph",
+                  "value": ""
+                }
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p2"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "o2"
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
+              }
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p3"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o3"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
+}
