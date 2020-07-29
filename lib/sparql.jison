@@ -587,8 +587,8 @@ SelectQuery
       // Check if id of each AS-selected column is not yet bound by subquery
       const subqueries = $3.where.filter(w => w.type === "query");
       if (subqueries.length > 0) {
-        let selectedVarIds = $1.variables.filter(v => v.variable.id || undefined).map(v => v.variable.id);
-        let subqueryIds = subqueries.flatMap(sub => sub.variables).map(v => v.id || v.variable.id);
+        const selectedVarIds = $1.variables.filter(v => v.variable.id || undefined).map(v => v.variable.id);
+        const subqueryIds = subqueries.flatMap(sub => sub.variables).map(v => v.id || v.variable.id);
         for (const selectVarId of selectedVarIds) {
           if (subqueryIds.indexOf(selectedVarId) >= 0) {
             throw Error("Target id of 'AS' (" + selectedVarId + ") already used in subquery");
@@ -766,13 +766,13 @@ GroupGraphPattern
     | '{' GroupGraphPatternSub '}'
     {
       // For every binding
-      for (let binding of $2.filter(el => el.type === "bind")) {
+      for (const binding of $2.filter(el => el.type === "bind")) {
         const index = $2.indexOf(binding);
         const boundVars = new Set();
         //Collect all bounded variables before the binding
         for (const el of $2.slice(0, index)) {
           if (el.type === "group" || el.type === "bgp") {
-            boundVars.add(...getBoundVarsFromGroupGraphPattern(el));
+            getBoundVarsFromGroupGraphPattern(el).forEach(boundVar => boundVars.add(boundVar));
           }
         }
         // If binding with a non-free variable, throw error
