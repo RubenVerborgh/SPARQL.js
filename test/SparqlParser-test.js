@@ -45,6 +45,27 @@ describe('A SPARQL parser', function () {
     expect(error.message).toContain('Parse error on line 1');
   });
 
+  it('should throw an error on a projection of ungrouped variable', function () {
+    var query = 'PREFIX : <http://www.example.org/> SELECT ?o WHERE { ?s ?p ?o } GROUP BY ?s', error = null;
+    try { parser.parse(query); }
+    catch (e) { error = e; }
+
+    expect(error).not.toBeUndefined();
+    expect(error).toBeInstanceOf(Error);
+    expect(error.message).toContain("Projection of ungrouped variable (?o)");
+  });
+
+  it('should throw an error on a use of an ungrouped variable for a projection of an operation', function () {
+    var query = 'PREFIX : <http://www.example.org/> SELECT ?o (?o + ?p AS ?c) WHERE { ?s ?p ?o } GROUP BY (?o)';
+    var error = null;
+    try { parser.parse(query); }
+    catch (e) { error = e; }
+
+    expect(error).not.toBeUndefined();
+    expect(error).toBeInstanceOf(Error);
+    expect(error.message).toContain("Use of ungrouped variable in projection of operation (?p)");
+  });
+
   it('should preserve BGP and filter pattern order', function () {
     var parser = new SparqlParser();
     var query = 'SELECT * { ?s ?p "1" . FILTER(true) . ?s ?p "2"  }';
