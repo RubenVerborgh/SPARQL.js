@@ -268,7 +268,7 @@
   }
 
   // Return the id of an expression
-  function getIdOfExpression(expression) {
+  function getExpressionId(expression) {
     return expression.variable ? expression.variable.id : expression.id || expression.expression.id;
   }
 
@@ -280,9 +280,9 @@
     if (expression.type === 'aggregate') {
       return [expression];
     } else if (expression.type === "operation") {
-      let aggregates = [];
+      const aggregates = [];
       for (let arg of expression.args) {
-        aggregates = aggregates.concat(getAggregatesOfExpression(arg));
+        aggregates.push(...getAggregatesOfExpression(arg));
       }
       return aggregates;
     }
@@ -291,21 +291,21 @@
 
   // Get all variables used in an operation
   function getVariablesFromOperation(operation) {
-    let variables = [];
-    for (let arg of operation.args) {
-      if (arg.id) {
-        variables.push(arg);
+    const variables = new Set();
+    for (const arg of operation.args) {
+      if (arg.termType === "Variable") {
+        variables.add(arg);
       } else if (arg.type === "operation") {
-        variables = variables.concat(getVariablesFromOperation(arg));
+        getVariablesFromOperation(arg).forEach(v => variables.add(v));
       }
     }
     return variables;
   }
 
-  // Help function to flatten arrays
+  // Helper function to flatten arrays
   function flatten(input, depth = 1, stack = []) {
-    for (let item of input) {
-        if (item instanceof Array && depth > 0) {
+    for (const item of input) {
+        if (depth > 0 && item instanceof Array) {
           flatten(item, depth - 1, stack);
         } else {
           stack.push(item);
@@ -524,18 +524,18 @@ SelectQuery
     {
       // Check for projection of ungrouped variable
       const counts = flatten($1.variables.map(vars => getAggregatesOfExpression(vars.expression)))
-        .filter(agg => agg.aggregation === "count");
-      if (counts.length > 0 || $4.group) {
+        .some(agg => agg.aggregation === "count");
+      if (counts || $4.group) {
         for (const selectVar of $1.variables) {
-          if (selectVar.id) {
-            if (!$4.group || !$4.group.map(groupVar => getIdOfExpression(groupVar)).includes(selectVar.id)) {
-              throw Error("Projection of ungrouped variable");
+          if (selectVar.termType === "Variable") {
+            if (!$4.group || !$4.group.map(groupVar => getExpressionId(groupVar)).includes(selectVar.id)) {
+              throw Error("Projection of ungrouped variable (" + selectVar.id + ")");
             }
           } else if (getAggregatesOfExpression(selectVar.expression).length === 0) {
             const usedVars = getVariablesFromOperation(selectVar.expression);
             for (const usedVar of usedVars) {
-              if (!$4.group.map(groupVar => getIdOfExpression(groupVar)).includes(usedVar.id)) {
-                throw Error("Use of ungrouped variable in projection of operation");
+              if (!$4.group.map(groupVar => getExpressionId(groupVar)).includes(usedVar.id)) {
+                throw Error("Use of ungrouped variable in projection of operation (" + usedVar.id + ")");
               }
             }
           }
