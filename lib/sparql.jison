@@ -314,23 +314,39 @@
     return stack;
   }
 
-  function getBindedVarsFromGroupGraphPattern(pattern) {
+  function isVariable(term) {
+    return term.termType === 'Variable';
+  }
+
+  function getBoundVarsFromGroupGraphPattern(pattern) {
     if (pattern.triples) {
-      const bindedVars = [];
-      for (let triple of pattern.triples) {
-        if (triple.subject.id.startsWith('?')) bindedVars.push(triple.subject.id);
-        if (triple.predicate.id.startsWith('?')) bindedVars.push(triple.predicate.id);
-        if (triple.object.id.startsWith('?')) bindedVars.push(triple.object.id);
+      const boundVars = [];
+      for (const triple of pattern.triples) {
+        if (isVariable(triple.subject)) boundVars.push(triple.subject.id);
+        if (isVariable(triple.predicate)) boundVars.push(triple.predicate.id);
+        if (isVariable(triple.object)) boundVars.push(triple.object.id);
       }
-      return bindedVars;
+      return boundVars;
     } else if (pattern.patterns) {
-      let bindedVars = [];
-      for (let pat of pattern.patterns) {
-        bindedVars = bindedVars.concat(getBindedVarsFromGroupGraphPattern(pat));
+      const boundVars = [];
+      for (const pat of pattern.patterns) {
+        boundVars.push(...getBoundVarsFromGroupGraphPattern(pat));
       }
-      return bindedVars;
+      return boundVars;
     }
     return [];
+  }
+
+  // Helper function to find duplicates in array
+  function getDuplicatesInArray(array) {
+    const sortedArray = array.slice().sort(); 
+    const duplicates = [];
+    for (let i = 0; i < sortedArray.length - 1; i++) {
+      if (sortedArray[i + 1] == sortedArray[i]) {
+        duplicates.push(sortedArray[i]);
+      }
+    }
+    return duplicates;
   }
 
   function allowsRdfStar(value) {
@@ -573,8 +589,10 @@ SelectQuery
       if (subqueries.length > 0) {
         let selectedVarIds = $1.variables.filter(v => v.variable.id || undefined).map(v => v.variable.id);
         let subqueryIds = subqueries.flatMap(sub => sub.variables).map(v => v.id || v.variable.id);
-        if (selectedVarIds.some(id => subqueryIds.indexOf(id) >= 0)) {
-          throw Error("Target id of 'AS' already used in subquery");
+        for (const selectVarId of selectedVarIds) {
+          if (subqueryIds.indexOf(selectedVarId) >= 0) {
+            throw Error("Target id of 'AS' (" + selectedVarId + ") already used in subquery");
+          }
         }
       }
       
@@ -588,9 +606,10 @@ SelectClauseVars
     : SelectClauseBase SelectClauseItem+
     {
       // Check if id of each selected column is different
-      let selectedVarIds = $2.map(v => v.id || v.variable.id);
-      if ((new Set(selectedVarIds)).size !== selectedVarIds.length) {
-        throw Error("Two or more of the resulting columns have the same name");
+      const selectedVarIds = $2.map(v => v.id || v.variable.id);
+      const duplicates = getDuplicatesInArray(selectedVarIds);
+      if (duplicates.length > 0) {
+        throw Error("Two or more of the resulting columns have the same name (" + duplicates[0] + ")");
       }
 
       $$ = extend($1, { variables: $2 })
@@ -749,15 +768,15 @@ GroupGraphPattern
       // For every binding
       for (let binding of $2.filter(el => el.type === "bind")) {
         const index = $2.indexOf(binding);
-        let bindedVars = [];
+        const boundVars = [];
         //Collect all bounded variables before the binding
-        for (let el of $2.slice(0, index)) {
+        for (const el of $2.slice(0, index)) {
           if (el.type === "group" || el.type === "bgp") {
-            bindedVars = bindedVars.concat(getBindedVarsFromGroupGraphPattern(el));
+            boundVars.push(...getBoundVarsFromGroupGraphPattern(el));
           }
         }
         // If binding with a non-free variable, throw error
-        if (bindedVars.includes(binding.variable.id)) {
+        if (boundVars.includes(binding.variable.id)) {
           throw Error("Variable used to bind is already bound");
         }
       }
