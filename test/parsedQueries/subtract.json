@@ -1,0 +1,39 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "bind",
+      "variable": {
+        "termType": "Variable",
+        "value": "b"
+      },
+      "expression": {
+        "type": "operation",
+        "operator": "-",
+        "args": [
+          {
+            "termType": "Variable",
+            "value": "a"
+          },
+          {
+            "termType": "Literal",
+            "value": "1",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
+}
