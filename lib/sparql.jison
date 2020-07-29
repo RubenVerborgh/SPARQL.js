@@ -315,7 +315,7 @@
 }
 
   function ifNotStrictMode(value) {
-    if (Parser.inStrictMode) {
+    if (Parser.strictMode) {
       throw new Error('SPARQL* is not allowed in strict mode');
     }
     return value;
