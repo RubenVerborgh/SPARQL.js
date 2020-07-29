@@ -1,0 +1,8 @@
+PREFIX ex: <http://example.com/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT * WHERE {
+    <<?s ?p ?o>> ex:author ex:Bob .
+    << ex:Moscow a ex:City >> ex:author ?person .
+    << _:b ex:x () >> ex:broken true .
+}

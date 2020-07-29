@@ -6,6 +6,8 @@
 The [SPARQL 1.1 Query Language](http://www.w3.org/TR/sparql11-query/) allows to query datasources of [RDF triples](http://www.w3.org/TR/rdf11-concepts/).
 SPARQL.js translates SPARQL into JSON and back,
 so you can parse and build SPARQL queries in your JavaScript applications.
+It also contains support for the [SPARQL*](https://blog.liu.se/olafhartig/2019/01/10/position-statement-rdf-star-and-sparql-star/) extension
+under the `sparqlStar` option.
 
 It fully supports the [SPARQL 1.1 specification](http://www.w3.org/TR/sparql11-query/), including [property paths](http://www.w3.org/TR/sparql11-query/#propertypaths), [federation](http://www.w3.org/TR/sparql11-federated-query/), and [updates](http://www.w3.org/TR/sparql11-update/).
 
@@ -21,14 +23,17 @@ var parsedQuery = parser.parse(
 
 // Regenerate a SPARQL query from a JSON object
 var SparqlGenerator = require('sparqljs').Generator;
-var generator = new SparqlGenerator({ /* prefixes, baseIRI, factory */ });
+var generator = new SparqlGenerator({ /* prefixes, baseIRI, factory, sparqlStar */ });
 parsedQuery.variables = ['?mickey'];
 var generatedQuery = generator.stringify(parsedQuery);
 ```
+Set `sparqlStar` to `true` to allow [SPARQL*](https://blog.liu.se/olafhartig/2019/01/10/position-statement-rdf-star-and-sparql-star/) syntax.
 ### Standalone
 ```bash
-$ sparql-to-json query.sparql
+$ sparql-to-json --strict query.sparql
 ```
+Parse [SPARQL*](https://blog.liu.se/olafhartig/2019/01/10/position-statement-rdf-star-and-sparql-star/) syntax by default.
+For pure [SPARQL 1.1](http://www.w3.org/TR/sparql11-query/), use the `--strict` flag.
 
 ## Representation
 Queries are represented in a JSON structure. The most easy way to get acquainted with this structure is to try the examples in the `queries` folder through `sparql-to-json`. All examples of the [SPARQL 1.1 specification](http://www.w3.org/TR/sparql11-query/) have been included, in case you wonder how a specific syntactical construct is represented.

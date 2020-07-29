@@ -1,0 +1,6 @@
+PREFIX ex: <http://example.com/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?spb (<<<<ex:Moscow a ex:City>> ex:author ex:b>> as ?author) WHERE {
+    ex:a ex:name ex:c
+}

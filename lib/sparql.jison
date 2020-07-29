@@ -287,7 +287,7 @@
       return aggregates;
     }
     return [];
-  } 
+  }
 
   // Get all variables used in an operation
   function getVariablesFromOperation(operation) {
@@ -314,6 +314,12 @@
     return stack;
 }
 
+  function allowsRdfStar(value) {
+    if (!Parser.sparqlStar) {
+      throw new Error('SPARQL* support is not enabled');
+    }
+    return value;
+  }
 %}
 
 %lex
@@ -413,6 +419,8 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 "MINUS"                  return 'MINUS'
 "UNION"                  return 'UNION'
 "FILTER"                 return 'FILTER'
+"<<"                     return '<<'
+">>"                     return '>>'
 ","                      return ','
 "a"                      return 'a'
 "|"                      return '|'
@@ -559,7 +567,7 @@ SubSelect
     ;
 SelectClauseItem
     : VAR -> toVar($1)
-    | '(' Expression 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
+    | '(' (Expression | ConstTriple) 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
     ;
 ConstructQuery
     : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, groupDatasets($3), $4, $5)
@@ -722,7 +730,7 @@ GraphPatternNotTriples
     | 'GRAPH' (VAR | iri) GroupGraphPattern -> extend($3, { type: 'graph', name: toVar($2) })
     | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> extend($4, { type: 'service', name: toVar($3), silent: !!$2 })
     | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
-    | 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
+    | 'BIND' '(' (Expression | ConstTriple) 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
     | ValuesClause
     ;
 Constraint
@@ -745,7 +753,7 @@ ConstructTriples
     : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> unionAll($1, [$2])
     ;
 TriplesSameSubject
-    : VarOrTerm PropertyListNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
+    : (VarOrTerm | VarTriple) PropertyListNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
     | TriplesNode PropertyList -> appendAllTo($2.map(function (t) { return extend(triple($1.entity), t); }), $1.triples) /* the subject is a blank node, possibly with more triples */
     ;
 PropertyList
@@ -769,7 +777,7 @@ ObjectList
     : (GraphNode ',')* GraphNode -> appendTo($1, $2)
     ;
 TriplesSameSubjectPath
-    : VarOrTerm PropertyListPathNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
+    : (VarOrTerm | VarTriple) PropertyListPathNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
     | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : appendAllTo($2.map(function (t) { return extend(triple($1.entity), t); }), $1.triples) /* the subject is a blank node, possibly with more triples */
     ;
 PropertyListPathNotEmpty
@@ -817,16 +825,25 @@ TriplesNodePath
     | '[' PropertyListPathNotEmpty ']' -> createAnonymousObject($2)
     ;
 GraphNode
-    : VarOrTerm -> { entity: $1, triples: [] } /* for consistency with TriplesNode */
+    : (VarOrTerm | VarTriple) -> { entity: $1, triples: [] } /* for consistency with TriplesNode */
     | TriplesNode
     ;
 GraphNodePath
-    : VarOrTerm -> { entity: $1, triples: [] } /* for consistency with TriplesNodePath */
+    : (VarOrTerm | VarTriple) -> { entity: $1, triples: [] } /* for consistency with TriplesNodePath */
     | TriplesNodePath
+    ;
+VarTriple
+    : '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> allowsRdfStar(Parser.factory.quad($2, $3, $4))
+    ;
+ConstTriple
+    : '<<' (ConstTriple | Term) Verb (ConstTriple | Term) '>>' -> allowsRdfStar(Parser.factory.quad($2, $3, $4))
     ;
 VarOrTerm
     : VAR -> toVar($1)
-    | iri
+    | Term
+    ;
+Term
+    : iri
     | Literal
     | BLANK_NODE_LABEL -> blank($1.replace(/^(_:)/,''));
     | ANON -> blank()

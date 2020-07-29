@@ -1,0 +1,59 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "spb"
+    }
+  ],
+  "where": [
+    {
+      "type": "bind",
+      "variable": {
+        "termType": "Variable",
+        "value": "spb"
+      },
+      "expression": {
+        "termType": "Quad",
+        "value": "",
+        "subject": {
+          "termType": "NamedNode",
+          "value": "http://example.com/a"
+        },
+        "predicate": {
+          "termType": "NamedNode",
+          "value": "http://example.com/b"
+        },
+        "object": {
+          "termType": "Quad",
+          "value": "",
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/SaintPetersburg"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://example.com/City"
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
+          }
+        },
+        "graph": {
+          "termType": "DefaultGraph",
+          "value": ""
+        }
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "ex": "http://example.com/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "spb"
+    },
+    {
+      "expression": {
+        "termType": "Quad",
+        "value": "",
+        "subject": {
+          "termType": "Quad",
+          "value": "",
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/Moscow"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://example.com/City"
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
+          }
+        },
+        "predicate": {
+          "termType": "NamedNode",
+          "value": "http://example.com/author"
+        },
+        "object": {
+          "termType": "NamedNode",
+          "value": "http://example.com/b"
+        },
+        "graph": {
+          "termType": "DefaultGraph",
+          "value": ""
+        }
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "author"
+      }
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/name"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://example.com/c"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "ex": "http://example.com/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  }
+}
