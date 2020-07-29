@@ -281,7 +281,7 @@
       return [expression];
     } else if (expression.type === "operation") {
       const aggregates = [];
-      for (let arg of expression.args) {
+      for (const arg of expression.args) {
         aggregates.push(...getAggregatesOfExpression(arg));
       }
       return aggregates;
