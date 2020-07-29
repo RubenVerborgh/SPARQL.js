@@ -131,7 +131,7 @@
     return group;
   }
 
-  // Converts the number to a string
+  // Converts the string to a number
   function toInt(string) {
     return parseInt(string, 10);
   }
@@ -855,7 +855,11 @@ AdditiveExpression
 AdditiveExpressionTail
     : ( '+' | '-' ) MultiplicativeExpression -> [$1, $2]
     | NumericLiteralPositive MultiplicativeExpressionTail* -> ['+', createOperationTree($1, $2)]
-    | NumericLiteralNegative MultiplicativeExpressionTail* -> ['-', createOperationTree($1.replace('-', ''), $2)]
+    | NumericLiteralNegative MultiplicativeExpressionTail*
+    {
+      var negatedLiteral = createTypedLiteral($1.value.replace('-', ''), $1.datatype);
+      $$ = ['-', createOperationTree(negatedLiteral, $2)];
+    }
     ;
 MultiplicativeExpression
     : UnaryExpression MultiplicativeExpressionTail* -> createOperationTree($1, $2)
