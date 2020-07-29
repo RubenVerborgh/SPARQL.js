@@ -26,7 +26,7 @@ module.exports = {
       Parser.base = baseIRI || '';
       Parser.prefixes = Object.create(prefixesCopy);
       Parser.factory = factory || N3.DataFactory;
-      Parser.strictMode = Boolean(strictMode);
+      Parser.strictMode = Boolean(strictMode) || typeof strictMode === "undefined";
       return Parser.prototype.parse.apply(parser, arguments);
     };
     parser._resetBlanks = Parser._resetBlanks;
