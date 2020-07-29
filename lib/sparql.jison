@@ -833,10 +833,10 @@ GraphNodePath
     | TriplesNodePath
     ;
 VarTriple
-    : '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> Parser.factory.quad($2, $3, $4)
+    : '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> requireRdfStar(Parser.factory.quad($2, $3, $4))
     ;
 ConstTriple
-    : '<<' (ConstTriple | Term) Verb (ConstTriple | Term) '>>' -> Parser.factory.quad($2, $3, $4)
+    : '<<' (ConstTriple | Term) Verb (ConstTriple | Term) '>>' -> requireRdfStar(Parser.factory.quad($2, $3, $4))
     ;
 VarOrTerm
     : VAR -> toVar($1)
