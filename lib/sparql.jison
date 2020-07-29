@@ -269,7 +269,7 @@
 
   // Return the id of an expression
   function getExpressionId(expression) {
-    return expression.variable ? expression.variable.id : expression.id || expression.expression.id;
+    return expression.variable ? expression.variable.value : expression.value || expression.expression.value;
   }
 
   // Get all "aggregate"'s from an expression
@@ -528,14 +528,14 @@ SelectQuery
       if (counts || $4.group) {
         for (const selectVar of $1.variables) {
           if (selectVar.termType === "Variable") {
-            if (!$4.group || !$4.group.map(groupVar => getExpressionId(groupVar)).includes(selectVar.id)) {
-              throw Error("Projection of ungrouped variable (" + selectVar.id + ")");
+            if (!$4.group || !$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(selectVar))) {
+              throw Error("Projection of ungrouped variable (?" + getExpressionId(selectVar) + ")");
             }
           } else if (getAggregatesOfExpression(selectVar.expression).length === 0) {
             const usedVars = getVariablesFromOperation(selectVar.expression);
             for (const usedVar of usedVars) {
-              if (!$4.group.map(groupVar => getExpressionId(groupVar)).includes(usedVar.id)) {
-                throw Error("Use of ungrouped variable in projection of operation (" + usedVar.id + ")");
+              if (!$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(usedVar))) {
+                throw Error("Use of ungrouped variable in projection of operation (?" + getExpressionId(usedVar) + ")");
               }
             }
           }
