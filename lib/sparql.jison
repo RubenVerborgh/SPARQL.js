@@ -768,16 +768,16 @@ GroupGraphPattern
       // For every binding
       for (let binding of $2.filter(el => el.type === "bind")) {
         const index = $2.indexOf(binding);
-        const boundVars = [];
+        const boundVars = new Set();
         //Collect all bounded variables before the binding
         for (const el of $2.slice(0, index)) {
           if (el.type === "group" || el.type === "bgp") {
-            boundVars.push(...getBoundVarsFromGroupGraphPattern(el));
+            boundVars.add(...getBoundVarsFromGroupGraphPattern(el));
           }
         }
         // If binding with a non-free variable, throw error
-        if (boundVars.includes(binding.variable.id)) {
-          throw Error("Variable used to bind is already bound");
+        if (boundVars.has(binding.variable.id)) {
+          throw Error("Variable used to bind is already bound (" + binding.variable.id + ")");
         }
       }
       $$ = { type: 'group', patterns: $2 }
