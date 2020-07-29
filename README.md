@@ -7,7 +7,7 @@ The [SPARQL 1.1 Query Language](http://www.w3.org/TR/sparql11-query/) allows to 
 SPARQL.js translates SPARQL into JSON and back,
 so you can parse and build SPARQL queries in your JavaScript applications.
 It also contains support for the [SPARQL*](https://blog.liu.se/olafhartig/2019/01/10/position-statement-rdf-star-and-sparql-star/) extension
-under the `strictMode` argument.
+under the `sparqlStar` option.
 
 It fully supports the [SPARQL 1.1 specification](http://www.w3.org/TR/sparql11-query/), including [property paths](http://www.w3.org/TR/sparql11-query/#propertypaths), [federation](http://www.w3.org/TR/sparql11-federated-query/), and [updates](http://www.w3.org/TR/sparql11-update/).
 
@@ -23,11 +23,11 @@ var parsedQuery = parser.parse(
 
 // Regenerate a SPARQL query from a JSON object
 var SparqlGenerator = require('sparqljs').Generator;
-var generator = new SparqlGenerator({ /* prefixes, baseIRI, factory, strictMode */ });
+var generator = new SparqlGenerator({ /* prefixes, baseIRI, factory, sparqlStar */ });
 parsedQuery.variables = ['?mickey'];
 var generatedQuery = generator.stringify(parsedQuery);
 ```
-set strictMode to false to disallow [SPARQL*](https://blog.liu.se/olafhartig/2019/01/10/position-statement-rdf-star-and-sparql-star/).
+Set `sparqlStar` to `true` to allow [SPARQL*](https://blog.liu.se/olafhartig/2019/01/10/position-statement-rdf-star-and-sparql-star/) syntax.
 ### Standalone
 ```bash
 $ sparql-to-json --strict query.sparql

@@ -314,9 +314,9 @@
     return stack;
 }
 
-  function ifNotStrictMode(value) {
-    if (Parser.strictMode) {
-      throw new Error('SPARQL* is not allowed in strict mode');
+  function allowsRdfStar(value) {
+    if (!Parser.sparqlStar) {
+      throw new Error('SPARQL* support is not enabled');
     }
     return value;
   }
@@ -833,10 +833,10 @@ GraphNodePath
     | TriplesNodePath
     ;
 VarTriple
-    : '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> ifNotStrictMode(Parser.factory.quad($2, $3, $4))
+    : '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> allowsRdfStar(Parser.factory.quad($2, $3, $4))
     ;
 ConstTriple
-    : '<<' (ConstTriple | Term) Verb (ConstTriple | Term) '>>' -> ifNotStrictMode(Parser.factory.quad($2, $3, $4))
+    : '<<' (ConstTriple | Term) Verb (ConstTriple | Term) '>>' -> allowsRdfStar(Parser.factory.quad($2, $3, $4))
     ;
 VarOrTerm
     : VAR -> toVar($1)
