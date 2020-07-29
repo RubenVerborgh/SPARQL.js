@@ -589,7 +589,7 @@ SelectQuery
       if (subqueries.length > 0) {
         const selectedVarIds = $1.variables.filter(v => v.variable.id || undefined).map(v => v.variable.id);
         const subqueryIds = subqueries.flatMap(sub => sub.variables).map(v => v.id || v.variable.id);
-        for (const selectVarId of selectedVarIds) {
+        for (const selectedVarId of selectedVarIds) {
           if (subqueryIds.indexOf(selectedVarId) >= 0) {
             throw Error("Target id of 'AS' (" + selectedVarId + ") already used in subquery");
           }

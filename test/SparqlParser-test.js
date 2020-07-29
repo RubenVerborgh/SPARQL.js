@@ -47,6 +47,7 @@ describe('A SPARQL parser', function () {
 
   it('should throw an error on a projection of ungrouped variable', function () {
     var query = 'PREFIX : <http://www.example.org/> SELECT ?o WHERE { ?s ?p ?o } GROUP BY ?s', error = null;
+    var error = null;
     try { parser.parse(query); }
     catch (e) { error = e; }
 
@@ -65,6 +66,28 @@ describe('A SPARQL parser', function () {
     expect(error).toBeInstanceOf(Error);
     expect(error.message).toContain("Use of ungrouped variable in projection of operation (?p)");
   });
+
+  it('should throw an error on an invalid bindscope', function () {
+    var query = "PREFIX : <http://www.example.org> SELECT * WHERE {{:s :p ?o . :s :q ?o1 .} BIND((1+?o) AS ?o1)}";
+    var error = null;
+    try { parser.parse(query); }
+    catch (e) { error = e; }
+
+    expect(error).not.toBeUndefined();
+    expect(error).toBeInstanceOf(Error);
+    expect(error.message).toContain("Variable used to bind is already bound (?o1)");
+  });
+
+  it('should throw an error on an invalid selectscope', function () {
+    var query = "SELECT (1 AS ?X ) { SELECT (2 AS ?X ) {} }";
+    var error = null;
+    try { parser.parse(query); }
+    catch (e) { error = e; }
+
+    expect(error).not.toBeUndefined();
+    expect(error).toBeInstanceOf(Error);
+    expect(error.message).toContain("Target id of 'AS' (?X) already used in subquery");
+  }); 
 
   it('should preserve BGP and filter pattern order', function () {
     var parser = new SparqlParser();
