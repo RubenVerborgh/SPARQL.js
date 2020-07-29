@@ -316,7 +316,7 @@
 
   function ifNotStrictMode(value) {
     if (Parser.inStrictMode) {
-      throw new Error('RDF* is not allowed in strict mode');
+      throw new Error('SPARQL* is not allowed in strict mode');
     }
     return value;
   }

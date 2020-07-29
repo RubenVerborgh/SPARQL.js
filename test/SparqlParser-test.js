@@ -192,7 +192,7 @@ describe('A SPARQL parser', function () {
 
   describe('without RDF* support enabled', function () {
     var parser = new SparqlParser({ inStrictMode: true });
-    const expectedErrorMessage = 'RDF* is not allowed in strict mode';
+    const expectedErrorMessage = 'SPARQL* is not allowed in strict mode';
 
     it('should throw an error on RDF* triple in projection', function () {
       expect(() => parser.parse(
