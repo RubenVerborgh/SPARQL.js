@@ -312,7 +312,42 @@
         }
     }
     return stack;
-}
+  }
+
+  function isVariable(term) {
+    return term.termType === 'Variable';
+  }
+
+  function getBoundVarsFromGroupGraphPattern(pattern) {
+    if (pattern.triples) {
+      const boundVars = [];
+      for (const triple of pattern.triples) {
+        if (isVariable(triple.subject)) boundVars.push(triple.subject.value);
+        if (isVariable(triple.predicate)) boundVars.push(triple.predicate.value);
+        if (isVariable(triple.object)) boundVars.push(triple.object.value);
+      }
+      return boundVars;
+    } else if (pattern.patterns) {
+      const boundVars = [];
+      for (const pat of pattern.patterns) {
+        boundVars.push(...getBoundVarsFromGroupGraphPattern(pat));
+      }
+      return boundVars;
+    }
+    return [];
+  }
+
+  // Helper function to find duplicates in array
+  function getDuplicatesInArray(array) {
+    const sortedArray = array.slice().sort(); 
+    const duplicates = [];
+    for (let i = 0; i < sortedArray.length - 1; i++) {
+      if (sortedArray[i + 1] == sortedArray[i]) {
+        duplicates.push(sortedArray[i]);
+      }
+    }
+    return duplicates;
+  }
 
   function allowsRdfStar(value) {
     if (!Parser.sparqlStar) {
@@ -549,6 +584,17 @@ SelectQuery
           }
         }
       }
+      // Check if id of each AS-selected column is not yet bound by subquery
+      const subqueries = $3.where.filter(w => w.type === "query");
+      if (subqueries.length > 0) {
+        const selectedVarIds = $1.variables.filter(v => v.variable.value || undefined).map(v => v.variable.value);
+        const subqueryIds = flatten(subqueries.map(sub => sub.variables)).map(v => v.value || v.variable.value);
+        for (const selectedVarId of selectedVarIds) {
+          if (subqueryIds.indexOf(selectedVarId) >= 0) {
+            throw Error("Target id of 'AS' (?" + selectedVarId + ") already used in subquery");
+          }
+        }
+      }
       $$ = extend($1, groupDatasets($2), $3, $4)
     }
     ;
@@ -556,7 +602,17 @@ SelectClauseWildcard
     : SelectClauseBase '*' -> extend($1, {variables: [new Wildcard()]})
     ;
 SelectClauseVars
-    : SelectClauseBase SelectClauseItem+ -> extend($1, { variables: $2 })
+    : SelectClauseBase SelectClauseItem+
+    {
+      // Check if id of each selected column is different
+      const selectedVarIds = $2.map(v => v.value || v.variable.value);
+      const duplicates = getDuplicatesInArray(selectedVarIds);
+      if (duplicates.length > 0) {
+        throw Error("Two or more of the resulting columns have the same name (?" + duplicates[0] + ")");
+      }
+
+      $$ = extend($1, { variables: $2 })
+    }
     ;
 SelectClauseBase
     : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? -> extend({ queryType: 'SELECT'}, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
@@ -706,7 +762,25 @@ TriplesTemplate
     ;
 GroupGraphPattern
     : '{' SubSelect '}' -> { type: 'group', patterns: [ $2 ] }
-    | '{' GroupGraphPatternSub '}' -> { type: 'group', patterns: $2 }
+    | '{' GroupGraphPatternSub '}'
+    {
+      // For every binding
+      for (const binding of $2.filter(el => el.type === "bind")) {
+        const index = $2.indexOf(binding);
+        const boundVars = new Set();
+        //Collect all bounded variables before the binding
+        for (const el of $2.slice(0, index)) {
+          if (el.type === "group" || el.type === "bgp") {
+            getBoundVarsFromGroupGraphPattern(el).forEach(boundVar => boundVars.add(boundVar));
+          }
+        }
+        // If binding with a non-free variable, throw error
+        if (boundVars.has(binding.variable.value)) {
+          throw Error("Variable used to bind is already bound (?" + binding.variable.value + ")");
+        }
+      }
+      $$ = { type: 'group', patterns: $2 }
+    }
     ;
 GroupGraphPatternSub
     : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? unionAll([$1], $2) : unionAll($2)
