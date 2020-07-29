@@ -10,10 +10,10 @@ module.exports = {
    *   prefixes?: { [prefix: string]: string },
    *   baseIRI?: string,
    *   factory?: import('rdf-js').DataFactory,
-   *   allowRdfStar?: boolean,
+   *   inStrictMode?: boolean,
    * }
    */
-  Parser: function ({ prefixes, baseIRI, factory, allowRdfStar } = {}) {
+  Parser: function ({ prefixes, baseIRI, factory, inStrictMode } = {}) {
     // Create a copy of the prefixes
     var prefixesCopy = {};
     for (var prefix in prefixes || {})
@@ -26,7 +26,7 @@ module.exports = {
       Parser.base = baseIRI || '';
       Parser.prefixes = Object.create(prefixesCopy);
       Parser.factory = factory || N3.DataFactory;
-      Parser.allowRdfStar = Boolean(allowRdfStar);
+      Parser.inStrictMode = Boolean(inStrictMode);
       return Parser.prototype.parse.apply(parser, arguments);
     };
     parser._resetBlanks = Parser._resetBlanks;

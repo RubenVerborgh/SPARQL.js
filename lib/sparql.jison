@@ -314,9 +314,9 @@
     return stack;
 }
 
-  function requireRdfStar(value) {
-    if (!Parser.allowRdfStar) {
-      throw new Error('RDF* is not allowed without "allowRdfStar" flag set');
+  function ifNotStrictMode(value) {
+    if (Parser.inStrictMode) {
+      throw new Error('RDF* is not allowed in strict mode');
     }
     return value;
   }
@@ -833,10 +833,10 @@ GraphNodePath
     | TriplesNodePath
     ;
 VarTriple
-    : '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> requireRdfStar(Parser.factory.quad($2, $3, $4))
+    : '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> ifNotStrictMode(Parser.factory.quad($2, $3, $4))
     ;
 ConstTriple
-    : '<<' (ConstTriple | Term) Verb (ConstTriple | Term) '>>' -> requireRdfStar(Parser.factory.quad($2, $3, $4))
+    : '<<' (ConstTriple | Term) Verb (ConstTriple | Term) '>>' -> ifNotStrictMode(Parser.factory.quad($2, $3, $4))
     ;
 VarOrTerm
     : VAR -> toVar($1)

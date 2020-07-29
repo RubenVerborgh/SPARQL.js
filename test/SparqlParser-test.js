@@ -13,7 +13,7 @@ var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 
 describe('A SPARQL parser', function () {
-  var parser = new SparqlParser({ allowRdfStar: true });
+  var parser = new SparqlParser({ inStrictMode: false });
 
   // Ensure the same blank node identifiers are used in every test
   beforeEach(function () { parser._resetBlanks(); });
@@ -191,8 +191,8 @@ describe('A SPARQL parser', function () {
   });
 
   describe('without RDF* support enabled', function () {
-    var parser = new SparqlParser({ allowRdfStar: false });
-    const expectedErrorMessage = 'RDF* is not allowed without "allowRdfStar" flag set';
+    var parser = new SparqlParser({ inStrictMode: true });
+    const expectedErrorMessage = 'RDF* is not allowed in strict mode';
 
     it('should throw an error on RDF* triple in projection', function () {
       expect(() => parser.parse(
