@@ -322,9 +322,9 @@
     if (pattern.triples) {
       const boundVars = [];
       for (const triple of pattern.triples) {
-        if (isVariable(triple.subject)) boundVars.push(triple.subject.id);
-        if (isVariable(triple.predicate)) boundVars.push(triple.predicate.id);
-        if (isVariable(triple.object)) boundVars.push(triple.object.id);
+        if (isVariable(triple.subject)) boundVars.push(triple.subject.value);
+        if (isVariable(triple.predicate)) boundVars.push(triple.predicate.value);
+        if (isVariable(triple.object)) boundVars.push(triple.object.value);
       }
       return boundVars;
     } else if (pattern.patterns) {
@@ -587,11 +587,11 @@ SelectQuery
       // Check if id of each AS-selected column is not yet bound by subquery
       const subqueries = $3.where.filter(w => w.type === "query");
       if (subqueries.length > 0) {
-        const selectedVarIds = $1.variables.filter(v => v.variable.id || undefined).map(v => v.variable.id);
-        const subqueryIds = flatten(subqueries.map(sub => sub.variables)).map(v => v.id || v.variable.id);
+        const selectedVarIds = $1.variables.filter(v => v.variable.value || undefined).map(v => v.variable.value);
+        const subqueryIds = flatten(subqueries.map(sub => sub.variables)).map(v => v.value || v.variable.value);
         for (const selectedVarId of selectedVarIds) {
           if (subqueryIds.indexOf(selectedVarId) >= 0) {
-            throw Error("Target id of 'AS' (" + selectedVarId + ") already used in subquery");
+            throw Error("Target id of 'AS' (?" + selectedVarId + ") already used in subquery");
           }
         }
       }
@@ -605,10 +605,10 @@ SelectClauseVars
     : SelectClauseBase SelectClauseItem+
     {
       // Check if id of each selected column is different
-      const selectedVarIds = $2.map(v => v.id || v.variable.id);
+      const selectedVarIds = $2.map(v => v.value || v.variable.value);
       const duplicates = getDuplicatesInArray(selectedVarIds);
       if (duplicates.length > 0) {
-        throw Error("Two or more of the resulting columns have the same name (" + duplicates[0] + ")");
+        throw Error("Two or more of the resulting columns have the same name (?" + duplicates[0] + ")");
       }
 
       $$ = extend($1, { variables: $2 })
@@ -775,8 +775,8 @@ GroupGraphPattern
           }
         }
         // If binding with a non-free variable, throw error
-        if (boundVars.has(binding.variable.id)) {
-          throw Error("Variable used to bind is already bound (" + binding.variable.id + ")");
+        if (boundVars.has(binding.variable.value)) {
+          throw Error("Variable used to bind is already bound (?" + binding.variable.value + ")");
         }
       }
       $$ = { type: 'group', patterns: $2 }
