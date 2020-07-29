@@ -588,14 +588,13 @@ SelectQuery
       const subqueries = $3.where.filter(w => w.type === "query");
       if (subqueries.length > 0) {
         const selectedVarIds = $1.variables.filter(v => v.variable.id || undefined).map(v => v.variable.id);
-        const subqueryIds = subqueries.flatMap(sub => sub.variables).map(v => v.id || v.variable.id);
+        const subqueryIds = flatten(subqueries.map(sub => sub.variables)).map(v => v.id || v.variable.id);
         for (const selectedVarId of selectedVarIds) {
           if (subqueryIds.indexOf(selectedVarId) >= 0) {
             throw Error("Target id of 'AS' (" + selectedVarId + ") already used in subquery");
           }
         }
       }
-      
       $$ = extend($1, groupDatasets($2), $3, $4)
     }
     ;
