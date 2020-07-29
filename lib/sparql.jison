@@ -339,7 +339,7 @@
 
   // Helper function to find duplicates in array
   function getDuplicatesInArray(array) {
-    const sortedArray = array.slice().sort(); 
+    const sortedArray = array.slice().sort();
     const duplicates = [];
     for (let i = 0; i < sortedArray.length - 1; i++) {
       if (sortedArray[i + 1] == sortedArray[i]) {
