@@ -623,7 +623,7 @@ SubSelect
     ;
 SelectClauseItem
     : VAR -> toVar($1)
-    | '(' (Expression | ConstTriple) 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
+    | '(' (Expression | VarTriple) 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
     ;
 ConstructQuery
     : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, groupDatasets($3), $4, $5)
@@ -705,6 +705,7 @@ InlineData
 DataBlockValue
     : iri
     | Literal
+    | ConstTriple
     | 'UNDEF' -> undefined
     ;
 DataBlockValueList
@@ -804,7 +805,7 @@ GraphPatternNotTriples
     | 'GRAPH' (VAR | iri) GroupGraphPattern -> extend($3, { type: 'graph', name: toVar($2) })
     | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> extend($4, { type: 'service', name: toVar($3), silent: !!$2 })
     | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
-    | 'BIND' '(' (Expression | ConstTriple) 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
+    | 'BIND' '(' (Expression | VarTriple) 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
     | ValuesClause
     ;
 Constraint

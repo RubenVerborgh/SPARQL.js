@@ -1,0 +1,67 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "expression": {
+        "termType": "Quad",
+        "subject": {
+          "termType": "Variable",
+          "value": "a"
+        },
+        "predicate": {
+          "termType": "Variable",
+          "value": "b"
+        },
+        "object": {
+          "termType": "Variable",
+          "value": "c"
+        },
+        "graph": {
+          "termType": "DefaultGraph",
+          "value": ""
+        }
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "x"
+      }
+    },
+    {
+      "termType": "Variable",
+      "value": "y"
+    }
+  ],
+  "where": [
+    {
+      "type": "bind",
+      "variable": {
+        "termType": "Variable",
+        "value": "y"
+      },
+      "expression": {
+        "termType": "Quad",
+        "subject": {
+          "termType": "Variable",
+          "value": "s"
+        },
+        "predicate": {
+          "termType": "Variable",
+          "value": "p"
+        },
+        "object": {
+          "termType": "Variable",
+          "value": "o"
+        },
+        "graph": {
+          "termType": "DefaultGraph",
+          "value": ""
+        }
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "ex": "http://example.com/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  }
+}
