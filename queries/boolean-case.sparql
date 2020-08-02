@@ -1,0 +1,10 @@
+SELECT * WHERE {
+    ?s ?p true .
+    ?s ?p True .
+    ?s ?p trUE .
+    ?s ?p TRUE .
+    ?s ?p false .
+    ?s ?p False .
+    ?s ?p falSE .
+    ?s ?p FALSE .
+}

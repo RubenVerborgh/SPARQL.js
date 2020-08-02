@@ -1003,7 +1003,7 @@ Literal
     | DOUBLE  -> createTypedLiteral(lowercase($1), XSD_DOUBLE)
     | NumericLiteralPositive
     | NumericLiteralNegative
-    | BOOLEAN -> createTypedLiteral($1, XSD_BOOLEAN)
+    | BOOLEAN -> createTypedLiteral($1.toLowerCase(), XSD_BOOLEAN)
     ;
 String
     : STRING_LITERAL1 -> unescapeString($1, 1)
