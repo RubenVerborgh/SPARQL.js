@@ -1,0 +1,6 @@
+PREFIX ex: <http://example.com/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT * WHERE {
+    << GRAPH ex:graph {<< GRAPH ex:graph {ex:Moscow a ex:City} >> a ex:City} >> ex:author ?person .
+}

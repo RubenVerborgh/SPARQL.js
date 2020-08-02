@@ -87,7 +87,7 @@ describe('A SPARQL parser', function () {
     expect(error).not.toBeUndefined();
     expect(error).toBeInstanceOf(Error);
     expect(error.message).toContain("Target id of 'AS' (?X) already used in subquery");
-  }); 
+  });
 
   it('should preserve BGP and filter pattern order', function () {
     var parser = new SparqlParser();

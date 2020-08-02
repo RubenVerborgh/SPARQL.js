@@ -907,10 +907,12 @@ GraphNodePath
     | TriplesNodePath
     ;
 VarTriple
-    : '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
+    : '<<' 'GRAPH' (VAR | iri) '{' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, toVar($3)))
+    | '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
     ;
 ConstTriple
-    : '<<' (ConstTriple | Term) Verb (ConstTriple | Term) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
+    : '<<' 'GRAPH' (VAR | iri) '{' (ConstTriple | Term) Verb (ConstTriple | Term) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, toVar($3)))
+    | '<<' (ConstTriple | Term) Verb (ConstTriple | Term) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
     ;
 VarOrTerm
     : VAR -> toVar($1)
