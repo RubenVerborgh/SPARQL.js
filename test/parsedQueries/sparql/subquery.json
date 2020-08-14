@@ -1,0 +1,52 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "x"
+    }
+  ],
+  "where": [
+    {
+      "queryType": "SELECT",
+      "variables": [
+        {
+          "termType": "Variable",
+          "value": "x"
+        },
+        {
+          "termType": "Variable",
+          "value": "p"
+        },
+        {
+          "termType": "Variable",
+          "value": "y"
+        }
+      ],
+      "where": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "x"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "y"
+              }
+            }
+          ]
+        }
+      ],
+      "type": "query"
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
+}
