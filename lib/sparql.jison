@@ -587,7 +587,7 @@ SelectQuery
       // Check if id of each AS-selected column is not yet bound by subquery
       const subqueries = $3.where.filter(w => w.type === "query");
       if (subqueries.length > 0) {
-        const selectedVarIds = $1.variables.filter(v => v.variable.value || undefined).map(v => v.variable.value);
+        const selectedVarIds = $1.variables.filter(v => v.variable && v.variable.value || undefined).map(v => v.variable.value);
         const subqueryIds = flatten(subqueries.map(sub => sub.variables)).map(v => v.value || v.variable.value);
         for (const selectedVarId of selectedVarIds) {
           if (subqueryIds.indexOf(selectedVarId) >= 0) {
