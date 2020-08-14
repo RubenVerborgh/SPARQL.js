@@ -15,9 +15,15 @@ var unusedPrefixesPath = __dirname + '/../test/unusedPrefixes/';
 describe('A SPARQL generator', function () {
   var defaultGenerator = new SparqlGenerator();
 
-  testQueries('sparql');
+  describe('in SPARQL mode', () => {
+    testQueries('sparql', { allPrefixes: true });
+    testQueries('sparqlstar', { allPrefixes: true, mustError: true });
+  });
 
-  testQueries('sparqlstar');
+  describe('in SPARQL* mode', () => {
+    testQueries('sparql', { allPrefixes: true, sparqlStar: true });
+    testQueries('sparqlstar', { allPrefixes: true, sparqlStar: true });
+  });
 
   var queriesWithUnusedPrefixes = fs.readdirSync(unusedPrefixesPath)
     .filter(function (query) { return query.endsWith('.json'); })
@@ -78,8 +84,8 @@ describe('A SPARQL generator', function () {
   });
 });
 
-function testQueries(directory) {
-  var generator = new SparqlGenerator({ allPrefixes: true });
+function testQueries(directory, settings) {
+  var generator = new SparqlGenerator(settings);
 
   var queries = fs.readdirSync(queriesPath + directory + '/');
   queries = queries.map(function (q) { return q.replace(/\.sparql$/, ''); });
@@ -89,14 +95,22 @@ function testQueries(directory) {
     var parsedQueryFile = parsedQueriesPath + directory + '/' + query + '.json';
     if (!fs.existsSync(parsedQueryFile)) return;
 
-    it('should correctly generate query "' + query + '"', function () {
-      // In parsed query, replace "generated" prefixes with "existing" prefix because all blanknodes in the
-      // generated query have explicit names.
-      var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8').replace(/g_/g, 'e_'));
-      var genQuery = generator.stringify(parsedQuery);
+    // In parsed query, replace "generated" prefixes with "existing" prefix
+    // because all blanknodes in the generated query have explicit names.
+    var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8').replace(/g_/g, 'e_'));
 
-      const parsed = new SparqlParser({ sparqlStar: true }).parse(genQuery);
-      expect(parsed).toEqualParsedQuery(parsedQuery);
-    });
+    if (settings.mustError) {
+      it('should error when generating query "' + query + '"', function () {
+        expect(() => generator.stringify(parsedQuery)).toThrow();
+      });
+    }
+    else {
+      it('should correctly generate query "' + query + '"', function () {
+        var genQuery = generator.stringify(parsedQuery);
+
+        const parsed = new SparqlParser({ sparqlStar: true }).parse(genQuery);
+        expect(parsed).toEqualParsedQuery(parsedQuery);
+      });
+    }
   });
 }
