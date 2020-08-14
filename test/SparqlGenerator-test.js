@@ -14,26 +14,10 @@ var unusedPrefixesPath = __dirname + '/../test/unusedPrefixes/';
 
 describe('A SPARQL generator', function () {
   var defaultGenerator = new SparqlGenerator();
-  var allPrefixesGenerator = new SparqlGenerator({ allPrefixes: true });
 
-  var queries = fs.readdirSync(queriesPath);
-  queries = queries.map(function (q) { return q.replace(/\.sparql$/, ''); });
-  queries.sort();
+  testQueries('sparql');
 
-  queries.forEach(function (query) {
-    var parsedQueryFile = parsedQueriesPath + query + '.json';
-    if (!fs.existsSync(parsedQueryFile)) return;
-
-    it('should correctly generate query "' + query + '"', function () {
-      // In parsed query, replace "generated" prefixes with "existing" prefix because all blanknodes in the
-      // generated query have explicit names.
-      var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8').replace(/g_/g, 'e_'));
-      var genQuery = allPrefixesGenerator.stringify(parsedQuery);
-
-      const parsed = new SparqlParser({ sparqlStar: true }).parse(genQuery);
-      expect(parsed).toEqualParsedQuery(parsedQuery);
-    });
-  });
+  testQueries('sparqlstar');
 
   var queriesWithUnusedPrefixes = fs.readdirSync(unusedPrefixesPath)
     .filter(function (query) { return query.endsWith('.json'); })
@@ -93,3 +77,26 @@ describe('A SPARQL generator', function () {
     expect(generatedQuery).toEqual(expectedQuery);
   });
 });
+
+function testQueries(directory) {
+  var generator = new SparqlGenerator({ allPrefixes: true });
+
+  var queries = fs.readdirSync(queriesPath + directory + '/');
+  queries = queries.map(function (q) { return q.replace(/\.sparql$/, ''); });
+  queries.sort();
+
+  queries.forEach(function (query) {
+    var parsedQueryFile = parsedQueriesPath + directory + '/' + query + '.json';
+    if (!fs.existsSync(parsedQueryFile)) return;
+
+    it('should correctly generate query "' + query + '"', function () {
+      // In parsed query, replace "generated" prefixes with "existing" prefix because all blanknodes in the
+      // generated query have explicit names.
+      var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8').replace(/g_/g, 'e_'));
+      var genQuery = generator.stringify(parsedQuery);
+
+      const parsed = new SparqlParser({ sparqlStar: true }).parse(genQuery);
+      expect(parsed).toEqualParsedQuery(parsedQuery);
+    });
+  });
+}

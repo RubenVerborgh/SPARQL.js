@@ -1,0 +1,74 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "predicate"
+    },
+    {
+      "termType": "Variable",
+      "value": "object"
+    }
+  ],
+  "where": [
+    {
+      "type": "union",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://dbpedia.org/resource/Barack_Obama"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "predicate"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "object"
+              }
+            }
+          ]
+        },
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "subject"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2002/07/owl#sameAs"
+              },
+              "object": {
+                "termType": "NamedNode",
+                "value": "http://dbpedia.org/resource/Barack_Obama"
+              }
+            },
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "subject"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "predicate"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "object"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
+}

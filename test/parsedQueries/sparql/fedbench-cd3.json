@@ -1,0 +1,96 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "president"
+    },
+    {
+      "termType": "Variable",
+      "value": "party"
+    },
+    {
+      "termType": "Variable",
+      "value": "page"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "president"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/ontology/President"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "president"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/ontology/nationality"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/resource/United_States"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "president"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/ontology/party"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "party"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://data.nytimes.com/elements/topicPage"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "page"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2002/07/owl#sameAs"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "president"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
+}

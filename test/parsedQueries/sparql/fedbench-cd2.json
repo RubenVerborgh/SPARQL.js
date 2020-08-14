@@ -1,0 +1,64 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "party"
+    },
+    {
+      "termType": "Variable",
+      "value": "page"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/resource/Barack_Obama"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/ontology/party"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "party"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://data.nytimes.com/elements/topicPage"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "page"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2002/07/owl#sameAs"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/resource/Barack_Obama"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
+}

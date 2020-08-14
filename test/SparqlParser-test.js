@@ -13,26 +13,19 @@ var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 
 describe('A SPARQL parser', function () {
-  var parser = new SparqlParser({ sparqlStar: true });
+  var parser = new SparqlParser();
 
   // Ensure the same blank node identifiers are used in every test
   beforeEach(function () { parser._resetBlanks(); });
 
-  var queries = fs.readdirSync(queriesPath);
-  queries = queries.map(function (q) { return q.replace(/\.sparql$/, ''); });
-  queries.sort();
+  describe('in SPARQL mode', () => {
+    testQueries('sparql', {});
+    testQueries('sparqlstar', { mustError: true });
+  });
 
-  queries.forEach(function (query) {
-    var parsedQueryFile = parsedQueriesPath + query + '.json';
-    if (!fs.existsSync(parsedQueryFile)) return;
-
-    it('should correctly parse query "' + query + '"', function () {
-      var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
-      query = fs.readFileSync(queriesPath + query + '.sparql', 'utf8');
-
-      const parsed = parser.parse(query);
-      expect(parsed).toEqualParsedQuery(parsedQuery);
-    });
+  describe('in SPARQL* mode', () => {
+    testQueries('sparql', { sparqlStar: true });
+    testQueries('sparqlstar', { sparqlStar: true });
   });
 
   it('should throw an error on an invalid query', function () {
@@ -90,7 +83,6 @@ describe('A SPARQL parser', function () {
   });
 
   it('should preserve BGP and filter pattern order', function () {
-    var parser = new SparqlParser();
     var query = 'SELECT * { ?s ?p "1" . FILTER(true) . ?s ?p "2"  }';
     var groups = parser.parse(query).where;
     expect(groups[0].type).toBe("bgp");
@@ -169,8 +161,6 @@ describe('A SPARQL parser', function () {
   });
 
   describe('with group collapsing disabled', function () {
-    var parser = new SparqlParser();
-
     it('should keep explicit pattern group', function () {
       var query = 'SELECT * WHERE { { ?s ?p ?o } ?a ?b ?c }';
       var result = ',"object":{"termType":"Variable","value":"c"}}]}]';
@@ -213,7 +203,7 @@ describe('A SPARQL parser', function () {
     });
   });
 
-  describe('without RDF* support enabled', function () {
+  describe('without SPARQL* support enabled', function () {
     var parser = new SparqlParser();
     const expectedErrorMessage = 'SPARQL* support is not enabled';
 
@@ -236,3 +226,30 @@ describe('A SPARQL parser', function () {
     });
   });
 });
+
+function testQueries(directory, settings) {
+  var parser = new SparqlParser(settings);
+
+  var queries = fs.readdirSync(queriesPath + directory + '/');
+  queries = queries.map(function (q) { return q.replace(/\.sparql$/, ''); });
+  queries.sort();
+
+  queries.forEach(function (query) {
+    var sparql = fs.readFileSync(queriesPath + directory + '/' + query + '.sparql', 'utf8');
+
+    var parsedQueryFile = parsedQueriesPath + directory + '/' + query + '.json';
+    if (settings.mustError || !fs.existsSync(parsedQueryFile)) {
+      it('should error when parsing query "' + query + '"', function () {
+        expect(() => parser.parse(sparql)).toThrow();
+      });
+    }
+    else {
+      it('should correctly parse query "' + query + '"', function () {
+        var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
+
+        const parsed = parser.parse(sparql);
+        expect(parsed).toEqualParsedQuery(parsedQuery);
+      });
+    }
+  });
+}

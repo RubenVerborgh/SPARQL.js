@@ -1,0 +1,65 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "insertdelete",
+      "delete": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "S"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "P"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "O"
+              }
+            }
+          ]
+        }
+      ],
+      "insert": [],
+      "where": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "S"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "P"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "O"
+              }
+            }
+          ]
+        },
+        {
+          "type": "filter",
+          "expression": {
+            "type": "operation",
+            "operator": "isblank",
+            "args": [
+              {
+                "termType": "Variable",
+                "value": "S"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "prefixes": {}
+}

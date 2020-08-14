@@ -1,0 +1,12 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "x"
+    }
+  ],
+  "where": [],
+  "type": "query",
+  "prefixes": {}
+}

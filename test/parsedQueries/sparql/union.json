@@ -1,0 +1,77 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "label"
+    }
+  ],
+  "where": [
+    {
+      "type": "union",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://dbpedia.org/resource/Belgium"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/2000/01/rdf-schema#label"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "label"
+              }
+            }
+          ]
+        },
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://dbpedia.org/resource/Belgium"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://dbpedia.org/property/commonName"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "label"
+              }
+            }
+          ]
+        },
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://dbpedia.org/resource/Belgium"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://xmlns.com/foaf/0.1/name"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "label"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "dbpedia": "http://dbpedia.org/resource/"
+  }
+}

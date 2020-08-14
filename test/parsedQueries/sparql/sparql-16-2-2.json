@@ -1,0 +1,120 @@
+{
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "subject": {
+        "termType": "Variable",
+        "value": "s"
+      },
+      "predicate": {
+        "termType": "Variable",
+        "value": "p"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "o"
+      }
+    }
+  ],
+  "where": [
+    {
+      "type": "graph",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "s"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "o"
+              }
+            }
+          ]
+        }
+      ],
+      "name": {
+        "termType": "Variable",
+        "value": "g"
+      }
+    },
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "g"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://purl.org/dc/elements/1.1/publisher"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "g"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://purl.org/dc/elements/1.1/date"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "date"
+          }
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": ">",
+        "args": [
+          {
+            "type": "functionCall",
+            "function": {
+              "termType": "NamedNode",
+              "value": "http://example.org/ns#customDate"
+            },
+            "args": [
+              {
+                "termType": "Variable",
+                "value": "date"
+              }
+            ],
+            "distinct": false
+          },
+          {
+            "termType": "Literal",
+            "value": "2005-02-28T00:00:00Z",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#dateTime"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "app": "http://example.org/ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  }
+}

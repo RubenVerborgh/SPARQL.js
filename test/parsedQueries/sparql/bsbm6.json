@@ -1,0 +1,76 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "product"
+    },
+    {
+      "termType": "Variable",
+      "value": "label"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "product"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "label"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "product"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/Product"
+          }
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "regex",
+        "args": [
+          {
+            "termType": "Variable",
+            "value": "label"
+          },
+          {
+            "termType": "Literal",
+            "value": "word",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#string"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "bsbm": "http://www4.wiwiss.fu-berlin.de/bizer/bsbm/v01/vocabulary/"
+  }
+}
