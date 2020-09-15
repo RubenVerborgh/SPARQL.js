@@ -289,16 +289,18 @@
     return [];
   }
 
-  // Get all variables used in an operation
-  function getVariablesFromOperation(operation) {
+  // Get all variables used in an expression
+  function getVariablesFromExpression(expression) {
     const variables = new Set();
-    for (const arg of operation.args) {
-      if (arg.termType === "Variable") {
-        variables.add(arg);
-      } else if (arg.type === "operation") {
-        getVariablesFromOperation(arg).forEach(v => variables.add(v));
+    const visitExpression = function (expr) {
+      if (!expr) { return; }
+      if (expr.termType === "Variable") {
+        variables.add(expr);
+      } else if (expr.type === "operation") {
+        expr.args.forEach(visitExpression);
       }
-    }
+    };
+    visitExpression(expression);
     return variables;
   }
 
@@ -575,7 +577,7 @@ SelectQuery
               throw Error("Projection of ungrouped variable (?" + getExpressionId(selectVar) + ")");
             }
           } else if (getAggregatesOfExpression(selectVar.expression).length === 0) {
-            const usedVars = getVariablesFromOperation(selectVar.expression);
+            const usedVars = getVariablesFromExpression(selectVar.expression);
             for (const usedVar of usedVars) {
               if (!$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(usedVar))) {
                 throw Error("Use of ungrouped variable in projection of operation (?" + getExpressionId(usedVar) + ")");

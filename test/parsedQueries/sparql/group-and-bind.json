@@ -1,0 +1,63 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "expression": {
+        "termType": "NamedNode",
+        "value": "http://www.example.org/foo"
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "foo"
+      }
+    },
+    {
+      "expression": {
+        "expression": {
+          "termType": "Variable",
+          "value": "outObject"
+        },
+        "type": "aggregate",
+        "aggregation": "count",
+        "distinct": false
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "out"
+      }
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.example.org/predicate"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "outObject"
+          }
+        }
+      ]
+    }
+  ],
+  "group": [
+    {
+      "expression": {
+        "termType": "Variable",
+        "value": "s"
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://www.example.org/"
+  }
+}
