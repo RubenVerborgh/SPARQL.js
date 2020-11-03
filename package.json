@@ -38,7 +38,7 @@
     "node": ">=8.0"
   },
   "dependencies": {
-    "n3": "^1.6.0"
+    "rdf-data-factory": "^1.0.4"
   },
   "devDependencies": {
     "expect": "^24.8.0",
