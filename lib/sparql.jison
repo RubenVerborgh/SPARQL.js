@@ -569,7 +569,7 @@ SelectQuery
     {
       // Check for projection of ungrouped variable
       const counts = flatten($1.variables.map(vars => getAggregatesOfExpression(vars.expression)))
-        .some(agg => agg.aggregation === "count");
+        .some(agg => agg.aggregation === "count" && !(agg.expression instanceof Wildcard));
       if (counts || $4.group) {
         for (const selectVar of $1.variables) {
           if (selectVar.termType === "Variable") {
