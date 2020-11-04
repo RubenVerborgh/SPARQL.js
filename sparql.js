@@ -1,7 +1,7 @@
 var Parser = require('./lib/SparqlParser').Parser;
 var Generator = require('./lib/SparqlGenerator');
 var Wildcard = require("./lib/Wildcard").Wildcard;
-var N3 = require('n3');
+var { DataFactory } = require('rdf-data-factory');
 
 module.exports = {
   /**
@@ -25,7 +25,7 @@ module.exports = {
     parser.parse = function () {
       Parser.base = baseIRI || '';
       Parser.prefixes = Object.create(prefixesCopy);
-      Parser.factory = factory || N3.DataFactory;
+      Parser.factory = factory || new DataFactory();
       Parser.sparqlStar = Boolean(sparqlStar);
       return Parser.prototype.parse.apply(parser, arguments);
     };

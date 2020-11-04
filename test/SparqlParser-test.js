@@ -1,7 +1,7 @@
 var SparqlParser = require('../sparql').Parser;
 
 var fs = require('fs');
-var DataFactory = require('n3').DataFactory;
+var { DataFactory } = require('rdf-data-factory');
 
 var expect = require("expect");
 var toEqualParsedQuery = require("../test/matchers/toEqualParsedQuery");
@@ -9,6 +9,7 @@ expect.extend({
   toEqualParsedQuery,
 });
 
+var dataFactory = new DataFactory();
 var queriesPath = __dirname + '/../queries/';
 var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 
@@ -96,25 +97,25 @@ describe('A SPARQL parser', function () {
 
     it('should use those prefixes', function () {
       var query = 'SELECT * { a:a b:b "" }';
-      var result_json = {subject: DataFactory.namedNode('ex:abc#a'),
-      predicate: DataFactory.namedNode('ex:def#b'),
-      object: DataFactory.literal("")};
+      var result_json = {subject: dataFactory.namedNode('ex:abc#a'),
+      predicate: dataFactory.namedNode('ex:def#b'),
+      object: dataFactory.literal("")};
 
       expect(parser.parse(query).where[0].triples[0]).toEqual(result_json);
     });
 
     it('should allow temporarily overriding prefixes', function () {
       var query = 'PREFIX a: <ex:xyz#> SELECT * { a:a b:b "" }';
-      var result = {subject: DataFactory.namedNode("ex:xyz#a"),
-        predicate:DataFactory.namedNode("ex:def#b"),
-        object: DataFactory.literal(""),
+      var result = {subject: dataFactory.namedNode("ex:xyz#a"),
+        predicate:dataFactory.namedNode("ex:def#b"),
+        object: dataFactory.literal(""),
       };
       expect(parser.parse(query).where[0].triples[0]).toEqualParsedQuery(result);
 
       var query2 = 'SELECT * { a:a b:b "" }';
-      var result2 = {subject: DataFactory.namedNode("ex:abc#a"),
-        predicate:DataFactory.namedNode("ex:def#b"),
-        object: DataFactory.literal(""),
+      var result2 = {subject: dataFactory.namedNode("ex:abc#a"),
+        predicate:dataFactory.namedNode("ex:def#b"),
+        object: dataFactory.literal(""),
       };
       expect(parser.parse(query2).where[0].triples[0]).toEqualParsedQuery(result2);
     });
@@ -125,9 +126,9 @@ describe('A SPARQL parser', function () {
 
     it('should not take over changes to the original prefixes', function () {
       var query = 'SELECT * { a:a b:b "" }';
-      var result = {subject: DataFactory.namedNode("ex:abc#a"),
-        predicate: DataFactory.namedNode("ex:def#b"),
-        object: DataFactory.literal("")
+      var result = {subject: dataFactory.namedNode("ex:abc#a"),
+        predicate: dataFactory.namedNode("ex:def#b"),
+        object: dataFactory.literal("")
       };
       prefixes.a = 'ex:xyz#';
 
@@ -141,9 +142,9 @@ describe('A SPARQL parser', function () {
     it('should use the base IRI', function () {
       var query = 'SELECT * { <> <#b> "" }';
       var result = '{"subject":{"termType":"NamedNode","value":"http://ex.org/"},"predicate":{"termType":"NamedNode","value":""},"object":{"termType":"Literal","value":"","language":"","datatype":{"termType":"NamedNode","value":"http://www.w3.org/2001/XMLSchema#string"}}}';
-      var result = {subject: DataFactory.namedNode("http://ex.org/"),
-        predicate: DataFactory.namedNode("http://ex.org/#b"),
-        object: DataFactory.literal("")
+      var result = {subject: dataFactory.namedNode("http://ex.org/"),
+        predicate: dataFactory.namedNode("http://ex.org/#b"),
+        object: dataFactory.literal("")
       };
 
       expect(parser.parse(query).where[0].triples[0]).toEqualParsedQuery(result);
@@ -172,9 +173,9 @@ describe('A SPARQL parser', function () {
               type: "bgp",
               triples: [
                 {
-                  subject: DataFactory.variable("s"),
-                  predicate: DataFactory.variable("p"),
-                  object: DataFactory.variable("o")
+                  subject: dataFactory.variable("s"),
+                  predicate: dataFactory.variable("p"),
+                  object: dataFactory.variable("o")
                 }
               ]
             }
@@ -184,9 +185,9 @@ describe('A SPARQL parser', function () {
           type: "bgp",
           triples: [
             {
-              subject: DataFactory.variable("a"),
-              predicate: DataFactory.variable("b"),
-              object: DataFactory.variable("c")
+              subject: dataFactory.variable("a"),
+              predicate: dataFactory.variable("b"),
+              object: dataFactory.variable("c")
             }
           ]
         }

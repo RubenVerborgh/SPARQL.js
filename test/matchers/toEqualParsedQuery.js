@@ -1,5 +1,6 @@
 const diff = require('jest-diff');
-const { Term } = require('n3');
+const {Wildcard} = require('../../lib/Wildcard');
+const {BlankNode, Variable, NamedNode, DefaultGraph, Quad} = require('rdf-data-factory');
 
 function toEqualParsedQuery(received, expected) {
     const options = {
@@ -43,9 +44,9 @@ let objectsEqual = function (received, expected){
         return received === expected;
     }
 
-    if (received instanceof Term){
+    if (isTerm(received)) {
         return received.equals(expected);
-    } else if (expected instanceof Term){
+    } else if (isTerm(expected)) {
         return expected.equals(received);
     } else {
         if (Array.isArray(received)){
@@ -65,6 +66,15 @@ let objectsEqual = function (received, expected){
         return true;
     }
 };
+
+function isTerm(value) {
+    return value instanceof DefaultGraph
+        || value instanceof NamedNode
+        || value instanceof BlankNode
+        || value instanceof Variable
+        || value instanceof Wildcard
+        || value instanceof Quad;
+}
 
 function isPrimitive(value){
     return typeof value === "string" || typeof value === "number" || typeof value === "boolean";
