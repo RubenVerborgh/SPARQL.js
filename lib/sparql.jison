@@ -61,7 +61,7 @@
       return iri;
     if (!Parser.base)
       throw new Error('Cannot resolve relative IRI ' + iri + ' because no base IRI was set.');
-    if (!base) {
+    if (base !== Parser.base) {
       base = Parser.base;
       basePath = base.replace(/[^\/:]*$/, '');
       baseRoot = base.match(/^(?:[a-z]+:\/*)?[^\/]*/)[0];
@@ -536,7 +536,7 @@ QueryOrUpdate
       $2 = $2 || {};
       if (Parser.base)
         $2.base = Parser.base;
-      Parser.base = base = basePath = baseRoot = '';
+      Parser.base = '';
       $2.prefixes = Parser.prefixes;
       Parser.prefixes = null;
       return $2;
@@ -551,7 +551,6 @@ BaseDecl
     : 'BASE' IRIREF
     {
       Parser.base = resolveIRI($2)
-      base = basePath = baseRoot = '';
     }
     ;
 PrefixDecl
