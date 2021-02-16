@@ -568,6 +568,7 @@ SelectQuery
     | SelectClauseVars     DatasetClause* WhereClause SolutionModifier
     {
       // Check for projection of ungrouped variable
+      if (Parser.skipUngroupedVariableCheck) return;
       const counts = flatten($1.variables.map(vars => getAggregatesOfExpression(vars.expression)))
         .some(agg => agg.aggregation === "count" && !(agg.expression instanceof Wildcard));
       if (counts || $4.group) {
