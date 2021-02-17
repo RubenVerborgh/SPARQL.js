@@ -34,6 +34,15 @@
     "spec-earl-update": "npm run spec-base-update --silent -- -o earl -p spec/earl-meta.json > spec/earl-update.ttl",
     "spec": "npm run spec-base-query -- && npm run spec-base-update -- -e"
   },
+  "mocha": {
+    "extension": [
+      "js"
+    ],
+    "recursive": true,
+    "require": [
+      "test/test-setup.js"
+    ]
+  },
   "engines": {
     "node": ">=8.0"
   },
