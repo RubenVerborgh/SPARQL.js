@@ -333,6 +333,16 @@ describe('A SPARQL parser', function () {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toContain('Detected reuse blank node across different INSERT DATA clauses');
     });
+
+    it('should not throw on comment between INSERT and DATA', function () {
+      var query = `INSERT
+# Comment
+DATA { GRAPH <ex:G> { <ex:s> <ex:p> 'o1', 'o2', 'o3' } }`, error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).toBeNull();
+    });
   });
 });
 

@@ -426,12 +426,14 @@ PLX                   {PERCENT}|{PN_LOCAL_ESC}
 PERCENT               "%"{HEX}{HEX}
 HEX                   [0-9A-Fa-f]
 PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|";"|"="|"/"|"?"|"#"|"@"|"%")
+COMMENT               "#"[^\n\r]*
+SPACES_COMMENTS       (\s+|{COMMENT})+
 
 %options flex case-insensitive
 
 %%
 
-\s+|"#"[^\n\r]*          /* ignore */
+\s+|{COMMENT}            /* ignore */
 "BASE"                   return 'BASE'
 "PREFIX"                 return 'PREFIX'
 "SELECT"                 return 'SELECT'
@@ -469,9 +471,9 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 "TO"                     return 'TO'
 "MOVE"                   return 'MOVE'
 "COPY"                   return 'COPY'
-"INSERT"\s+"DATA"        return 'INSERTDATA'
-"DELETE"\s+"DATA"        return 'DELETEDATA'
-"DELETE"\s+"WHERE"       return 'DELETEWHERE'
+"INSERT"{SPACES_COMMENTS}"DATA"  return 'INSERTDATA'
+"DELETE"{SPACES_COMMENTS}"DATA"  return 'DELETEDATA'
+"DELETE"{SPACES_COMMENTS}"WHERE" return 'DELETEWHERE'
 "WITH"                   return 'WITH'
 "DELETE"                 return 'DELETE'
 "INSERT"                 return 'INSERT'
