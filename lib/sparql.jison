@@ -178,6 +178,7 @@
   var escapeSequence = /\\u([a-fA-F0-9]{4})|\\U([a-fA-F0-9]{8})|\\(.)/g,
       escapeReplacements = { '\\': '\\', "'": "'", '"': '"',
                              't': '\t', 'b': '\b', 'n': '\n', 'r': '\r', 'f': '\f' },
+      partialSurrogatesWithoutEndpoint = /[\uD800-\uDBFF]([^\uDC00-\uDFFF]|$)/,
       fromCharCode = String.fromCharCode;
 
   // Translates escape codes in the string into their textual equivalent
@@ -205,6 +206,12 @@
       });
     }
     catch (error) { return ''; }
+
+    // Test for invalid unicode surrogate pairs
+    if (partialSurrogatesWithoutEndpoint.exec(string)) {
+      throw new Error('Invalid unicode codepoint of surrogate pair without corresponding codepoint in ' + string);
+    }
+
     return string;
   }
 

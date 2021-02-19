@@ -344,6 +344,26 @@ DATA { GRAPH <ex:G> { <ex:s> <ex:p> 'o1', 'o2', 'o3' } }`, error = null;
       expect(error).toBeNull();
     });
   });
+
+  it('should throw an error on unicode codepoint escaping in literal with partial surrogate pair', function () {
+    var query = "SELECT * WHERE { ?s <ex:p> '\uD800' }";
+    var error = null;
+    try { parser.parse(query); }
+    catch (e) { error = e; }
+
+    expect(error).not.toBeUndefined();
+    expect(error).toBeInstanceOf(Error);
+    expect(error.message).toContain("Invalid unicode codepoint of surrogate pair without corresponding codepoint");
+  });
+
+  it('should not throw an error on unicode codepoint escaping in literal with complete surrogate pair', function () {
+    var query = "SELECT * WHERE { ?s <ex:p> '\uD800\uDFFF' }";
+    var error = null;
+    try { parser.parse(query); }
+    catch (e) { error = e; }
+
+    expect(error).toBeNull();
+  });
 });
 
 function testQueries(directory, settings) {
