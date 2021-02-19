@@ -9,4 +9,7 @@ module.exports = {
   query: function() {
     return Promise.reject(new ErrorSkipped('Querying is not supported'));
   },
+  update: function() {
+    return Promise.reject(new ErrorSkipped('Updating is not supported'));
+  },
 };
