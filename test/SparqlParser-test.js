@@ -226,6 +226,76 @@ describe('A SPARQL parser', function () {
       )).toThrow(expectedErrorMessage);
     });
   });
+
+  describe('for update queries', () => {
+    it('should throw on blank nodes in DELETE clause', function () {
+      var query = 'DELETE { ?a <ex:knows> [] . } WHERE { ?a <ex:knows> "Alan" . }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal blank node in BGP');
+    });
+
+    it('should not throw on blank nodes in INSERT clause', function () {
+      var query = 'INSERT { ?a <ex:knows> [] . } WHERE { ?a <ex:knows> "Alan" . }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).toBeNull();
+    });
+
+    it('should throw on blank nodes in compact DELETE clause', function () {
+      var query = 'DELETE WHERE { _:a <ex:p> <ex:o> }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal blank node in BGP');
+    });
+
+    it('should throw on variables in DELETE DATA clause', function () {
+      var query = 'DELETE DATA { ?a <ex:p> <ex:o> }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal variable in BGP');
+    });
+
+    it('should throw on blank nodes in DELETE DATA clause', function () {
+      var query = 'DELETE DATA { _:a <ex:p> <ex:o> }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal blank node in BGP');
+    });
+
+    it('should throw on variables in DELETE DATA clause with GRAPH', function () {
+      var query = 'DELETE DATA { GRAPH ?a { <ex:s> <ex:p> <ex:o> } }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal variable in GRAPH');
+    });
+
+    it('should throw on variables in INSERT DATA clause', function () {
+      var query = 'INSERT DATA { ?a <ex:p> <ex:o> }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal variable in BGP');
+    });
+  });
 });
 
 function testQueries(directory, settings) {
