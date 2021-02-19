@@ -564,12 +564,45 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 QueryOrUpdate
     : Prologue ( Query | Update? ) EOF
     {
+      // Set parser options
       $2 = $2 || {};
       if (Parser.base)
         $2.base = Parser.base;
       Parser.base = base = basePath = baseRoot = '';
       $2.prefixes = Parser.prefixes;
       Parser.prefixes = null;
+
+      // Ensure that blank nodes are not used across INSERT DATA clauses
+      if ($2.type === 'update') {
+        const insertBnodesAll = {};
+        for (const update of $2.updates) {
+          if (update.updateType === 'insert') {
+            // Collect bnodes for current insert clause
+            const insertBnodes = {};
+            for (const operation of update.insert) {
+              if (operation.type === 'bgp' || operation.type === 'graph') {
+                for (const triple of operation.triples) {
+                  if (triple.subject.termType === 'BlankNode')
+                    insertBnodes[triple.subject.value] = true;
+                  if (triple.predicate.termType === 'BlankNode')
+                    insertBnodes[triple.predicate.value] = true;
+                  if (triple.object.termType === 'BlankNode')
+                    insertBnodes[triple.object.value] = true;
+                }
+              }
+            }
+
+            // Check if the inserting bnodes don't clash with bnodes from a previous insert clause
+            for (const bnode of Object.keys(insertBnodes)) {
+              if (insertBnodesAll[bnode]) {
+                throw new Error('Detected reuse blank node across different INSERT DATA clauses');
+              }
+              insertBnodesAll[bnode] = true;
+            }
+          }
+        }
+      }
+
       return $2;
     }
     ;

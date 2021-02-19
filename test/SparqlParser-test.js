@@ -295,6 +295,44 @@ describe('A SPARQL parser', function () {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toContain('Detected illegal variable in BGP');
     });
+
+    it('should throw on variables in DELETE DATA clause with GRAPH', function () {
+      var query = 'DELETE DATA { GRAPH ?a { <ex:s> <ex:p> <ex:o> } }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal variable in GRAPH');
+    });
+
+    it('should not throw on reused blank nodes in one INSERT DATA clause', function () {
+      var query = 'INSERT DATA { _:a <ex:p> <ex:o> . _:a <ex:p> <ex:o> . }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).toBeNull();
+    });
+
+    it('should throw on reused blank nodes across INSERT DATA clauses', function () {
+      var query = 'INSERT DATA { _:a <ex:p> <ex:o> }; INSERT DATA { _:a <ex:p> <ex:o> }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected reuse blank node across different INSERT DATA clauses');
+    });
+
+    it('should throw on reused blank nodes across INSERT DATA clauses with GRAPH', function () {
+      var query = 'INSERT DATA { _:a <ex:p> <ex:o> }; INSERT DATA { GRAPH <ex:g> { _:a <ex:p> <ex:o> } }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected reuse blank node across different INSERT DATA clauses');
+    });
   });
 });
 
