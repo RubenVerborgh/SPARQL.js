@@ -165,13 +165,27 @@ describe('A SPARQL parser', function () {
 
     it('should use the base IRI', function () {
       var query = 'SELECT * { <> <#b> "" }';
-      var result = '{"subject":{"termType":"NamedNode","value":"http://ex.org/"},"predicate":{"termType":"NamedNode","value":""},"object":{"termType":"Literal","value":"","language":"","datatype":{"termType":"NamedNode","value":"http://www.w3.org/2001/XMLSchema#string"}}}';
       var result = {subject: dataFactory.namedNode("http://ex.org/"),
         predicate: dataFactory.namedNode("http://ex.org/#b"),
         object: dataFactory.literal("")
       };
 
       expect(parser.parse(query).where[0].triples[0]).toEqualParsedQuery(result);
+    });
+
+    it('should work after a previous query failed', function () {
+      var badQuery = 'SELECT * { <> <#b> "" } invalid!';
+      expect(() => parser.parse(badQuery)).toThrow(Error);
+
+      var goodQuery = 'SELECT * { <> <#b> "" }';
+
+      parser = new SparqlParser({ baseIRI: 'http://ex2.org/' });
+      var result = {subject: dataFactory.namedNode("http://ex2.org/"),
+        predicate: dataFactory.namedNode("http://ex2.org/#b"),
+        object: dataFactory.literal("")
+      };
+      var data = parser.parse(goodQuery);
+      expect(data.where[0].triples[0]).toEqualParsedQuery(result);
     });
   });
 
@@ -188,7 +202,6 @@ describe('A SPARQL parser', function () {
   describe('with group collapsing disabled', function () {
     it('should keep explicit pattern group', function () {
       var query = 'SELECT * WHERE { { ?s ?p ?o } ?a ?b ?c }';
-      var result = ',"object":{"termType":"Variable","value":"c"}}]}]';
       var result = [
         {
           type: "group",
