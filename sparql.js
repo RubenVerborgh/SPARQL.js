@@ -13,7 +13,7 @@ module.exports = {
    *   sparqlStar?: boolean,
    * }
    */
-  Parser: function ({ prefixes, baseIRI, factory, sparqlStar } = {}) {
+  Parser: function ({ prefixes, baseIRI, factory, sparqlStar, skipUngroupedVariableCheck } = {}) {
     // Create a copy of the prefixes
     var prefixesCopy = {};
     for (var prefix in prefixes || {})
@@ -27,6 +27,7 @@ module.exports = {
       Parser.prefixes = Object.create(prefixesCopy);
       Parser.factory = factory || new DataFactory();
       Parser.sparqlStar = Boolean(sparqlStar);
+      Parser.skipUngroupedVariableCheck = Boolean(skipUngroupedVariableCheck)
       return Parser.prototype.parse.apply(parser, arguments);
     };
     parser._resetBlanks = Parser._resetBlanks;
