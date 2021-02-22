@@ -434,7 +434,7 @@ PERCENT               "%"{HEX}{HEX}
 HEX                   [0-9A-Fa-f]
 PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|";"|"="|"/"|"?"|"#"|"@"|"%")
 COMMENT               "#"[^\n\r]*
-SPACES_COMMENTS       (\s+|{COMMENT})+
+SPACES_COMMENTS       (\s+|{COMMENT}\n\r?)+
 
 %options flex case-insensitive
 

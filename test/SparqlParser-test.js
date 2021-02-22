@@ -343,6 +343,25 @@ DATA { GRAPH <ex:G> { <ex:s> <ex:p> 'o1', 'o2', 'o3' } }`, error = null;
 
       expect(error).toBeNull();
     });
+
+    it('should not throw on comment after INSERT that could be confused with DATA', function () {
+      var query = `INSERT # DATA
+DATA { GRAPH <ex:G> { <ex:s> <ex:p> 'o1', 'o2', 'o3' } }`, error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).toBeNull();
+    });
+
+    it('should throw on commented DATA after INSERT', function () {
+      var query = `INSERT # DATA { GRAPH <ex:G> { <ex:s> <ex:p> 'o1', 'o2', 'o3' } }`, error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Parse error');
+    });
   });
 
   it('should throw an error on unicode codepoint escaping in literal with partial surrogate pair', function () {
