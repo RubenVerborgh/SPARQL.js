@@ -380,6 +380,7 @@
         }
       }
     }
+    return operations;
   }
 
   function ensureNoBnodes(operations) {
@@ -394,6 +395,7 @@
         }
       }
     }
+    return operations;
   }
 %}
 
@@ -795,14 +797,14 @@ Update1
     | ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: lowercase($1), silent: !!$2, graph: $3 }
     | ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: lowercase($1), silent: !!$2, source: $3, destination: $5 }
     | 'CREATE' 'SILENT'? 'GRAPH' iri -> { type: 'create', silent: !!$2, graph: { type: 'graph', name: $4 } }
-    | 'INSERTDATA'  QuadPatternGround         -> { updateType: 'insert',      insert: $2 }
-    | 'DELETEDATA'  QuadPatternGroundNoBnodes -> { updateType: 'delete',      delete: $2 }
-    | 'DELETEWHERE' QuadPatternNoBnodes       -> { updateType: 'deletewhere', delete: $2 }
+    | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: ensureNoVariables($2)                 }
+    | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: ensureNoBnodes(ensureNoVariables($2)) }
+    | 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: ensureNoBnodes($2)                    }
     | WithClause? InsertClause DeleteClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { insert: $2 || [] }, { delete: $3 || [] }, groupDatasets($4, 'using'), { where: $6.patterns })
     | WithClause? DeleteClause InsertClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { delete: $2 || [] }, { insert: $3 || [] }, groupDatasets($4, 'using'), { where: $6.patterns })
     ;
 DeleteClause
-    : 'DELETE' QuadPatternNoBnodes -> $2
+    : 'DELETE' QuadPattern -> ensureNoBnodes($2)
     ;
 InsertClause
     : 'INSERT' QuadPattern -> $2
@@ -826,28 +828,6 @@ GraphRefAll
     ;
 QuadPattern
     : '{' TriplesTemplate? QuadsNotTriples* '}' -> $2 ? unionAll($3, [$2]) : unionAll($3)
-    ;
-QuadPatternGround
-    : QuadPattern
-    {
-      ensureNoVariables($1);
-      $$ = $1
-    }
-    ;
-QuadPatternNoBnodes
-    : QuadPattern
-    {
-      ensureNoBnodes($1);
-      $$ = $1
-    }
-    ;
-QuadPatternGroundNoBnodes
-    : QuadPattern
-    {
-      ensureNoVariables($1);
-      ensureNoBnodes($1);
-      $$ = $1
-    }
     ;
 QuadsNotTriples
     : 'GRAPH' (VAR | iri) '{' TriplesTemplate? '}' '.'? TriplesTemplate?
