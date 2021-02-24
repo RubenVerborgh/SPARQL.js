@@ -263,6 +263,163 @@ describe('A SPARQL parser', function () {
       )).toThrow(expectedErrorMessage);
     });
   });
+
+  describe('for update queries', () => {
+    it('should throw on blank nodes in DELETE clause', function () {
+      var query = 'DELETE { ?a <ex:knows> [] . } WHERE { ?a <ex:knows> "Alan" . }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal blank node in BGP');
+    });
+
+    it('should not throw on blank nodes in INSERT clause', function () {
+      var query = 'INSERT { ?a <ex:knows> [] . } WHERE { ?a <ex:knows> "Alan" . }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).toBeNull();
+    });
+
+    it('should throw on blank nodes in compact DELETE clause', function () {
+      var query = 'DELETE WHERE { _:a <ex:p> <ex:o> }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal blank node in BGP');
+    });
+
+    it('should throw on variables in DELETE DATA clause', function () {
+      var query = 'DELETE DATA { ?a <ex:p> <ex:o> }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal variable in BGP');
+    });
+
+    it('should throw on blank nodes in DELETE DATA clause', function () {
+      var query = 'DELETE DATA { _:a <ex:p> <ex:o> }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal blank node in BGP');
+    });
+
+    it('should throw on variables in DELETE DATA clause with GRAPH', function () {
+      var query = 'DELETE DATA { GRAPH ?a { <ex:s> <ex:p> <ex:o> } }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal variable in GRAPH');
+    });
+
+    it('should throw on variables in INSERT DATA clause', function () {
+      var query = 'INSERT DATA { ?a <ex:p> <ex:o> }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal variable in BGP');
+    });
+
+    it('should throw on variables in DELETE DATA clause with GRAPH', function () {
+      var query = 'DELETE DATA { GRAPH ?a { <ex:s> <ex:p> <ex:o> } }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected illegal variable in GRAPH');
+    });
+
+    it('should not throw on reused blank nodes in one INSERT DATA clause', function () {
+      var query = 'INSERT DATA { _:a <ex:p> <ex:o> . _:a <ex:p> <ex:o> . }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).toBeNull();
+    });
+
+    it('should throw on reused blank nodes across INSERT DATA clauses', function () {
+      var query = 'INSERT DATA { _:a <ex:p> <ex:o> }; INSERT DATA { _:a <ex:p> <ex:o> }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected reuse blank node across different INSERT DATA clauses');
+    });
+
+    it('should throw on reused blank nodes across INSERT DATA clauses with GRAPH', function () {
+      var query = 'INSERT DATA { _:a <ex:p> <ex:o> }; INSERT DATA { GRAPH <ex:g> { _:a <ex:p> <ex:o> } }', error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Detected reuse blank node across different INSERT DATA clauses');
+    });
+
+    it('should not throw on comment between INSERT and DATA', function () {
+      var query = `INSERT
+# Comment
+DATA { GRAPH <ex:G> { <ex:s> <ex:p> 'o1', 'o2', 'o3' } }`, error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).toBeNull();
+    });
+
+    it('should not throw on comment after INSERT that could be confused with DATA', function () {
+      var query = `INSERT # DATA
+DATA { GRAPH <ex:G> { <ex:s> <ex:p> 'o1', 'o2', 'o3' } }`, error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).toBeNull();
+    });
+
+    it('should throw on commented DATA after INSERT', function () {
+      var query = `INSERT # DATA { GRAPH <ex:G> { <ex:s> <ex:p> 'o1', 'o2', 'o3' } }`, error = null;
+      try { parser.parse(query); }
+      catch (e) { error = e; }
+
+      expect(error).not.toBeUndefined();
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toContain('Parse error');
+    });
+  });
+
+  it('should throw an error on unicode codepoint escaping in literal with partial surrogate pair', function () {
+    var query = "SELECT * WHERE { ?s <ex:p> '\uD800' }";
+    var error = null;
+    try { parser.parse(query); }
+    catch (e) { error = e; }
+
+    expect(error).not.toBeUndefined();
+    expect(error).toBeInstanceOf(Error);
+    expect(error.message).toContain("Invalid unicode codepoint of surrogate pair without corresponding codepoint");
+  });
+
+  it('should not throw an error on unicode codepoint escaping in literal with complete surrogate pair', function () {
+    var query = "SELECT * WHERE { ?s <ex:p> '\uD800\uDFFF' }";
+    var error = null;
+    try { parser.parse(query); }
+    catch (e) { error = e; }
+
+    expect(error).toBeNull();
+  });
 });
 
 function testQueries(directory, settings) {

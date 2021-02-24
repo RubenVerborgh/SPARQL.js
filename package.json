@@ -32,7 +32,7 @@
     "spec-base-update": "rdf-test-suite spec/parser.js http://w3c.github.io/rdf-tests/sparql11/data-sparql11/manifest-all.ttl -s http://www.w3.org/TR/sparql11-update/ -c .rdf-test-suite-cache/",
     "spec-earl-query": "npm run spec-base-query --silent -- -o earl -p spec/earl-meta.json > spec/earl-query.ttl",
     "spec-earl-update": "npm run spec-base-update --silent -- -o earl -p spec/earl-meta.json > spec/earl-update.ttl",
-    "spec": "npm run spec-base-query -- && npm run spec-base-update -- -e"
+    "spec": "npm run spec-base-query && npm run spec-base-update"
   },
   "engines": {
     "node": ">=8.0"

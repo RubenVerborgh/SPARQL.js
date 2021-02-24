@@ -178,6 +178,7 @@
   var escapeSequence = /\\u([a-fA-F0-9]{4})|\\U([a-fA-F0-9]{8})|\\(.)/g,
       escapeReplacements = { '\\': '\\', "'": "'", '"': '"',
                              't': '\t', 'b': '\b', 'n': '\n', 'r': '\r', 'f': '\f' },
+      partialSurrogatesWithoutEndpoint = /[\uD800-\uDBFF]([^\uDC00-\uDFFF]|$)/,
       fromCharCode = String.fromCharCode;
 
   // Translates escape codes in the string into their textual equivalent
@@ -205,6 +206,12 @@
       });
     }
     catch (error) { return ''; }
+
+    // Test for invalid unicode surrogate pairs
+    if (partialSurrogatesWithoutEndpoint.exec(string)) {
+      throw new Error('Invalid unicode codepoint of surrogate pair without corresponding codepoint in ' + string);
+    }
+
     return string;
   }
 
@@ -357,6 +364,39 @@
     }
     return value;
   }
+
+  function ensureNoVariables(operations) {
+    for (const operation of operations) {
+      if (operation.type === 'graph' && operation.name.termType === 'Variable') {
+        throw new Error('Detected illegal variable in GRAPH');
+      }
+      if (operation.type === 'bgp' || operation.type === 'graph') {
+        for (const triple of operation.triples) {
+          if (triple.subject.termType === 'Variable' ||
+              triple.predicate.termType === 'Variable' ||
+              triple.object.termType === 'Variable') {
+            throw new Error('Detected illegal variable in BGP');
+          }
+        }
+      }
+    }
+    return operations;
+  }
+
+  function ensureNoBnodes(operations) {
+    for (const operation of operations) {
+      if (operation.type === 'bgp') {
+        for (const triple of operation.triples) {
+          if (triple.subject.termType === 'BlankNode' ||
+              triple.predicate.termType === 'BlankNode' ||
+              triple.object.termType === 'BlankNode') {
+            throw new Error('Detected illegal blank node in BGP');
+          }
+        }
+      }
+    }
+    return operations;
+  }
 %}
 
 %lex
@@ -395,12 +435,14 @@ PLX                   {PERCENT}|{PN_LOCAL_ESC}
 PERCENT               "%"{HEX}{HEX}
 HEX                   [0-9A-Fa-f]
 PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|";"|"="|"/"|"?"|"#"|"@"|"%")
+COMMENT               "#"[^\n\r]*
+SPACES_COMMENTS       (\s+|{COMMENT}\n\r?)+
 
 %options flex case-insensitive
 
 %%
 
-\s+|"#"[^\n\r]*          /* ignore */
+\s+|{COMMENT}            /* ignore */
 "BASE"                   return 'BASE'
 "PREFIX"                 return 'PREFIX'
 "SELECT"                 return 'SELECT'
@@ -438,9 +480,9 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 "TO"                     return 'TO'
 "MOVE"                   return 'MOVE'
 "COPY"                   return 'COPY'
-"INSERT"\s+"DATA"        return 'INSERTDATA'
-"DELETE"\s+"DATA"        return 'DELETEDATA'
-"DELETE"\s+"WHERE"       return 'DELETEWHERE'
+"INSERT"{SPACES_COMMENTS}"DATA"  return 'INSERTDATA'
+"DELETE"{SPACES_COMMENTS}"DATA"  return 'DELETEDATA'
+"DELETE"{SPACES_COMMENTS}"WHERE" return 'DELETEWHERE'
 "WITH"                   return 'WITH'
 "DELETE"                 return 'DELETE'
 "INSERT"                 return 'INSERT'
@@ -533,12 +575,45 @@ PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|"
 QueryOrUpdate
     : Prologue ( Query | Update? ) EOF
     {
+      // Set parser options
       $2 = $2 || {};
       if (Parser.base)
         $2.base = Parser.base;
       Parser.base = '';
       $2.prefixes = Parser.prefixes;
       Parser.prefixes = null;
+
+      // Ensure that blank nodes are not used across INSERT DATA clauses
+      if ($2.type === 'update') {
+        const insertBnodesAll = {};
+        for (const update of $2.updates) {
+          if (update.updateType === 'insert') {
+            // Collect bnodes for current insert clause
+            const insertBnodes = {};
+            for (const operation of update.insert) {
+              if (operation.type === 'bgp' || operation.type === 'graph') {
+                for (const triple of operation.triples) {
+                  if (triple.subject.termType === 'BlankNode')
+                    insertBnodes[triple.subject.value] = true;
+                  if (triple.predicate.termType === 'BlankNode')
+                    insertBnodes[triple.predicate.value] = true;
+                  if (triple.object.termType === 'BlankNode')
+                    insertBnodes[triple.object.value] = true;
+                }
+              }
+            }
+
+            // Check if the inserting bnodes don't clash with bnodes from a previous insert clause
+            for (const bnode of Object.keys(insertBnodes)) {
+              if (insertBnodesAll[bnode]) {
+                throw new Error('Detected reuse blank node across different INSERT DATA clauses');
+              }
+              insertBnodesAll[bnode] = true;
+            }
+          }
+        }
+      }
+
       return $2;
     }
     ;
@@ -722,14 +797,14 @@ Update1
     | ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: lowercase($1), silent: !!$2, graph: $3 }
     | ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: lowercase($1), silent: !!$2, source: $3, destination: $5 }
     | 'CREATE' 'SILENT'? 'GRAPH' iri -> { type: 'create', silent: !!$2, graph: { type: 'graph', name: $4 } }
-    | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: $2 }
-    | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: $2 }
-    | 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: $2 }
+    | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: ensureNoVariables($2)                 }
+    | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: ensureNoBnodes(ensureNoVariables($2)) }
+    | 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: ensureNoBnodes($2)                    }
     | WithClause? InsertClause DeleteClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { insert: $2 || [] }, { delete: $3 || [] }, groupDatasets($4, 'using'), { where: $6.patterns })
     | WithClause? DeleteClause InsertClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { delete: $2 || [] }, { insert: $3 || [] }, groupDatasets($4, 'using'), { where: $6.patterns })
     ;
 DeleteClause
-    : 'DELETE' QuadPattern -> $2
+    : 'DELETE' QuadPattern -> ensureNoBnodes($2)
     ;
 InsertClause
     : 'INSERT' QuadPattern -> $2
