@@ -1,5 +1,5 @@
 # SPARQL.js – A SPARQL 1.1 parser for JavaScript
-[![Build Status](https://api.travis-ci.com/RubenVerborgh/SPARQL.js.svg?branch=master)](https://travis-ci.org/RubenVerborgh/SPARQL.js)
+[![Build Status](https://github.com/RubenVerborgh/SPARQL.js/workflows/CI/badge.svg)](https://github.com/RubenVerborgh/SPARQL.js/actions)
 [![npm version](https://badge.fury.io/js/sparqljs.svg)](https://www.npmjs.com/package/sparqljs)
 [![DOI](https://zenodo.org/badge/22990236.svg)](https://zenodo.org/badge/latestdoi/22990236)
 
