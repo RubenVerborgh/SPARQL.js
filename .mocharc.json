@@ -1,0 +1,5 @@
+{
+  "extension": ["js"],
+  "recursive": true,
+  "require": ["test/test-setup.js"]
+}

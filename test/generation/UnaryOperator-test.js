@@ -1,5 +1,5 @@
-const SparqlParser = require('../sparql').Parser;
-const SparqlGenerator = require('../sparql').Generator;
+const SparqlParser = require('../../sparql').Parser;
+const SparqlGenerator = require('../../sparql').Generator;
 const expect = require('expect');
 
 describe('Unary Operator Support Test', function () {
