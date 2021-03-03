@@ -642,20 +642,21 @@ SelectQuery
     | SelectClauseVars     DatasetClause* WhereClause SolutionModifier
     {
       // Check for projection of ungrouped variable
-      if (Parser.skipUngroupedVariableCheck) return;
-      const counts = flatten($1.variables.map(vars => getAggregatesOfExpression(vars.expression)))
-        .some(agg => agg.aggregation === "count" && !(agg.expression instanceof Wildcard));
-      if (counts || $4.group) {
-        for (const selectVar of $1.variables) {
-          if (selectVar.termType === "Variable") {
-            if (!$4.group || !$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(selectVar))) {
-              throw Error("Projection of ungrouped variable (?" + getExpressionId(selectVar) + ")");
-            }
-          } else if (getAggregatesOfExpression(selectVar.expression).length === 0) {
-            const usedVars = getVariablesFromExpression(selectVar.expression);
-            for (const usedVar of usedVars) {
-              if (!$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(usedVar))) {
-                throw Error("Use of ungrouped variable in projection of operation (?" + getExpressionId(usedVar) + ")");
+      if (!Parser.skipUngroupedVariableCheck) {
+        const counts = flatten($1.variables.map(vars => getAggregatesOfExpression(vars.expression)))
+          .some(agg => agg.aggregation === "count" && !(agg.expression instanceof Wildcard));
+        if (counts || $4.group) {
+          for (const selectVar of $1.variables) {
+            if (selectVar.termType === "Variable") {
+              if (!$4.group || !$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(selectVar))) {
+                throw Error("Projection of ungrouped variable (?" + getExpressionId(selectVar) + ")");
+              }
+            } else if (getAggregatesOfExpression(selectVar.expression).length === 0) {
+              const usedVars = getVariablesFromExpression(selectVar.expression);
+              for (const usedVar of usedVars) {
+                if (!$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(usedVar))) {
+                  throw Error("Use of ungrouped variable in projection of operation (?" + getExpressionId(usedVar) + ")");
+                }
               }
             }
           }

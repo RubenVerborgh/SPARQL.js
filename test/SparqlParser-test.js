@@ -50,18 +50,26 @@ describe('A SPARQL parser', function () {
     expect(error.message).toContain("Projection of ungrouped variable (?o)");
   });
 
-  describe("with variable group checks disabled", function() {
+  describe('with variable group checks disabled', function() {
+    // We should remove this flag when https://github.com/RubenVerborgh/SPARQL.js/issues/120 is resolved
     var parserWithoutValidation = new SparqlParser({skipUngroupedVariableCheck:true});
 
     // Ensure the same blank node identifiers are used in every test
     beforeEach(function () { parser._resetBlanks(); });
 
-    it('should not throw an error on a projection of ungrouped variable', function () {
-      var query = 'PREFIX : <http://www.example.org/> SELECT ?o WHERE { ?s ?p ?o } GROUP BY ?s', error = null;
-      var error = null;
-      try { parserWithoutValidation.parse(query); }
-      catch (e) { error = e; }
-      expect(error).toBeNull();
+    it('should not throw ungrouped-variable error on a valid query', function () {
+      var query = 'PREFIX : <http://www.example.org/> SELECT ?o WHERE { ?s ?p ?o } GROUP BY ?s';
+      // When `skipUngroupedVariableCheck` is false, this call would throw:
+      // `Projection of ungrouped variable (?s)`
+      var groups = parserWithoutValidation.parse(query).where;
+      expect(groups[0].type).toBe("bgp");
+    });
+    it('should not throw undefined-property error on a valid query', function () {
+      var query = 'select (?x as ?xString) (count(?y) as ?count) { ?x ?y ?z }';
+      // When `skipUngroupedVariableCheck` is false, the thrown error would be:
+      // `Cannot read property 'map' of undefined`
+      var groups = parserWithoutValidation.parse(query).where;
+      expect(groups[0].type).toBe("bgp");
     });
   })
 
@@ -74,15 +82,6 @@ describe('A SPARQL parser', function () {
     expect(error).not.toBeUndefined();
     expect(error).toBeInstanceOf(Error);
     expect(error.message).toContain("Use of ungrouped variable in projection of operation (?p)");
-  });
-
-  //Setting test to skipped. Enable this test once https://github.com/RubenVerborgh/SPARQL.js/issues/120 is resolved.
-  it.skip('should not throw an ungrouped variable error when the query is valid', function () {
-    var query = 'select ?s (?x as ?y) {?s ?p ?x.} group by ?s';
-    var error = null;
-    try { parser.parse(query); }
-    catch (e) { error = e; }
-    expect(error).toBeNull();
   });
 
   it('should throw an error on an invalid bindscope', function () {
