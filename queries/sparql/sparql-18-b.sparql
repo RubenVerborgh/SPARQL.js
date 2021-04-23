@@ -1,0 +1,11 @@
+prefix example: <http://example/id/>
+PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+select ?s ?p ?o {
+    ?s  rdf:type [ example:prop* ?o ] .
+    ?s  rdf:type [ example:prop* ?o ] ;
+        example:p2 ?_ .
+    ?s  example:p1 ?_ ; 
+        rdf:type [ example:prop* ?o ] ;
+        example:p2 ?o .
+}
