@@ -1,0 +1,88 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "movie"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "movie"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/owl/#Film"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "movie"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://dbpedia.org/owl/#starring"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          }
+        },
+        {
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/2000/01/rdf-schema#label"
+          },
+          "object": {
+            "termType": "Literal",
+            "value": "Brad Pitt",
+            "language": "en",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
+            }
+          }
+        },
+        {
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          },
+          "predicate": {
+            "type": "path",
+            "pathType": "^",
+            "items": [
+              {
+                "termType": "NamedNode",
+                "value": "http://dbpedia.org/owl/#starring"
+              }
+            ]
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "otherMovie"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "dbpedia-owl": "http://dbpedia.org/owl/#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  }
+}

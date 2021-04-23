@@ -931,6 +931,9 @@ Verb
 ObjectList
     : (GraphNode ',')* GraphNode -> appendTo($1, $2)
     ;
+ObjectListPath
+    : (GraphNodePath ',')* GraphNodePath -> appendTo($1, $2)
+    ;
 TriplesSameSubjectPath
     : (VarOrTerm | VarTriple) PropertyListPathNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
     | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : appendAllTo($2.map(function (t) { return extend(triple($1.entity), t); }), $1.triples) /* the subject is a blank node, possibly with more triples */
@@ -940,7 +943,7 @@ PropertyListPathNotEmpty
     ;
 PropertyListPathNotEmptyTail
     : ';' -> []
-    | ';' ( Path | VAR ) ObjectList -> objectListToTriples(toVar($2), $3)
+    | ';' ( Path | VAR ) ObjectListPath -> objectListToTriples(toVar($2), $3)
     ;
 Path
     : ( PathSequence '|' )* PathSequence -> $1.length ? path('|',appendTo($1, $2)) : $2
