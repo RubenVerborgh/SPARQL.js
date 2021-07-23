@@ -654,7 +654,8 @@ SelectQuery
             } else if (getAggregatesOfExpression(selectVar.expression).length === 0) {
               const usedVars = getVariablesFromExpression(selectVar.expression);
               for (const usedVar of usedVars) {
-                if (!$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(usedVar))) {
+                // If there is no group, the grouping is implicit.
+                if ($4.group && !$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(usedVar))) {
                   throw Error("Use of ungrouped variable in projection of operation (?" + getExpressionId(usedVar) + ")");
                 }
               }
