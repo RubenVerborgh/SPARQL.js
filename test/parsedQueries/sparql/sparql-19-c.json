@@ -1,0 +1,46 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "p"
+    },
+    {
+      "expression": {
+        "expression": {
+          "termType": "Wildcard"
+        },
+        "type": "aggregate",
+        "aggregation": "count",
+        "distinct": false
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "n"
+      }
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_1"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
+}
