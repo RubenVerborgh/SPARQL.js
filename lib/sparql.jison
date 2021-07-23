@@ -648,7 +648,8 @@ SelectQuery
         if (counts || $4.group) {
           for (const selectVar of $1.variables) {
             if (selectVar.termType === "Variable") {
-              if (!$4.group || !$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(selectVar))) {
+              // If there is no group, the grouping is implicit.
+              if ($4.group && !$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(selectVar))) {
                 throw Error("Projection of ungrouped variable (?" + getExpressionId(selectVar) + ")");
               }
             } else if (getAggregatesOfExpression(selectVar.expression).length === 0) {

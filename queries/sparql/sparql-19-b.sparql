@@ -1,0 +1,4 @@
+select ?x (count(?y) as ?count)
+{
+  ?x ?y ?z
+}

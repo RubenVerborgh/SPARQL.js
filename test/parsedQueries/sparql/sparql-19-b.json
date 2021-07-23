@@ -1,0 +1,47 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "x"
+    },
+    {
+      "expression": {
+        "expression": {
+          "termType": "Variable",
+          "value": "y"
+        },
+        "type": "aggregate",
+        "aggregation": "count",
+        "distinct": false
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "count"
+      }
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "x"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "y"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "z"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
+}
