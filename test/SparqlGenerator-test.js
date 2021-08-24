@@ -82,6 +82,17 @@ describe('A SPARQL generator', function () {
     var expectedQuery = 'SELECT * WHERE { ?s ?p "foo". }';
     expect(generatedQuery).toEqual(expectedQuery);
   });
+
+  it('should omit brackets for group by with a single variable', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('SELECT ?k (COUNT(?a) AS ?c) WHERE { ?a <t:p> ?k } GROUP BY ?k');
+    var generator = new SparqlGenerator();
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery =
+      'SELECT ?k (COUNT(?a) AS ?c) WHERE { ?a <t:p> ?k. }\n' +
+      'GROUP BY ?k';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
 });
 
 function testQueries(directory, settings) {
