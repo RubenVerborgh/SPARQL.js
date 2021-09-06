@@ -359,7 +359,7 @@
   }
 
   function ensureSparqlStar(value) {
-    if (!Parser.sparqlStar) {
+    if (!Parser.sparqlStar && !Parser.skipValidation) {
       throw new Error('SPARQL* support is not enabled');
     }
     return value;
@@ -642,21 +642,19 @@ SelectQuery
     | SelectClauseVars     DatasetClause* WhereClause SolutionModifier
     {
       // Check for projection of ungrouped variable
-      if (!Parser.skipUngroupedVariableCheck) {
+      if (!Parser.skipValidation) {
         const counts = flatten($1.variables.map(vars => getAggregatesOfExpression(vars.expression)))
           .some(agg => agg.aggregation === "count" && !(agg.expression instanceof Wildcard));
         if (counts || $4.group) {
           for (const selectVar of $1.variables) {
             if (selectVar.termType === "Variable") {
-              // If there is no group, the grouping is implicit.
-              if ($4.group && !$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(selectVar))) {
+              if (!$4.group || !$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(selectVar))) {
                 throw Error("Projection of ungrouped variable (?" + getExpressionId(selectVar) + ")");
               }
             } else if (getAggregatesOfExpression(selectVar.expression).length === 0) {
               const usedVars = getVariablesFromExpression(selectVar.expression);
               for (const usedVar of usedVars) {
-                // If there is no group, the grouping is implicit.
-                if ($4.group && !$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(usedVar))) {
+                if (!$4.group || !$4.group.map || !$4.group.map(groupVar => getExpressionId(groupVar)).includes(getExpressionId(usedVar))) {
                   throw Error("Use of ungrouped variable in projection of operation (?" + getExpressionId(usedVar) + ")");
                 }
               }

@@ -1,3 +1,0 @@
-select ?p (count(*) as ?n) {
-  [ ?p [] ].
-}

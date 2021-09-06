@@ -1,6 +1,3 @@
-select
-  (?x as ?xString)
-  (count(?y) as ?count)
-{
-  ?x ?y ?z
+select ?p (count(*) as ?n) {
+  [ ?p [] ].
 }

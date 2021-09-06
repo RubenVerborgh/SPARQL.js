@@ -2,20 +2,13 @@
   "queryType": "SELECT",
   "variables": [
     {
-      "expression": {
-        "termType": "Variable",
-        "value": "x"
-      },
-      "variable": {
-        "termType": "Variable",
-        "value": "xString"
-      }
+      "termType": "Variable",
+      "value": "p"
     },
     {
       "expression": {
         "expression": {
-          "termType": "Variable",
-          "value": "y"
+          "termType": "Wildcard"
         },
         "type": "aggregate",
         "aggregation": "count",
@@ -23,7 +16,7 @@
       },
       "variable": {
         "termType": "Variable",
-        "value": "count"
+        "value": "n"
       }
     }
   ],
@@ -33,16 +26,16 @@
       "triples": [
         {
           "subject": {
-            "termType": "Variable",
-            "value": "x"
+            "termType": "BlankNode",
+            "value": "g_1"
           },
           "predicate": {
             "termType": "Variable",
-            "value": "y"
+            "value": "p"
           },
           "object": {
-            "termType": "Variable",
-            "value": "z"
+            "termType": "BlankNode",
+            "value": "g_0"
           }
         }
       ]
