@@ -359,7 +359,7 @@
   }
 
   function ensureSparqlStar(value) {
-    if (!Parser.sparqlStar && !Parser.skipValidation) {
+    if (!Parser.sparqlStar && !Parser.skipUngroupedVariableCheck && !Parser.skipValidation) {
       throw new Error('SPARQL* support is not enabled');
     }
     return value;
@@ -642,7 +642,7 @@ SelectQuery
     | SelectClauseVars     DatasetClause* WhereClause SolutionModifier
     {
       // Check for projection of ungrouped variable
-      if (!Parser.skipValidation) {
+      if (!Parser.skipUngroupedVariableCheck && !Parser.skipValidation) {
         const counts = flatten($1.variables.map(vars => getAggregatesOfExpression(vars.expression)))
           .some(agg => agg.aggregation === "count" && !(agg.expression instanceof Wildcard));
         if (counts || $4.group) {
