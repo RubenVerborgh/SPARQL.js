@@ -22,11 +22,19 @@ describe('A SPARQL parser', function () {
   describe('in SPARQL mode', () => {
     testQueries('sparql', {});
     testQueries('sparqlstar', { mustError: true });
+    testQueries('sparql-skip-validation', { mustError: true });
+  });
+
+  describe('in SPARQL mode with skipValidation', () => {
+    testQueries('sparql', { skipValidation: true });
+    testQueries('sparqlstar', { skipValidation: true });
+    testQueries('sparql-skip-validation', { skipValidation: true });
   });
 
   describe('in SPARQL* mode', () => {
     testQueries('sparql', { sparqlStar: true });
     testQueries('sparqlstar', { sparqlStar: true });
+    testQueries('sparql-skip-validation', { sparqlStar: true, mustError: true });
   });
 
   it('should throw an error on an invalid query', function () {
@@ -50,16 +58,16 @@ describe('A SPARQL parser', function () {
     expect(error.message).toContain("Projection of ungrouped variable (?o)");
   });
 
-  describe('with variable group checks disabled', function() {
-    // We should remove this flag when https://github.com/RubenVerborgh/SPARQL.js/issues/120 is resolved
-    var parserWithoutValidation = new SparqlParser({skipUngroupedVariableCheck:true});
+  describe('with skipValidation enabled', function() {
+    // This flag is added for certain use cases see https://github.com/RubenVerborgh/SPARQL.js/issues/120
+    var parserWithoutValidation = new SparqlParser({skipValidation:true});
 
     // Ensure the same blank node identifiers are used in every test
     beforeEach(function () { parser._resetBlanks(); });
 
-    it('should not throw ungrouped-variable error on a valid query', function () {
+    it('should not throw ungrouped-variable error on an invalid query while skipValidation is set', function () {
       var query = 'PREFIX : <http://www.example.org/> SELECT ?o WHERE { ?s ?p ?o } GROUP BY ?s';
-      // When `skipUngroupedVariableCheck` is false, this call would throw:
+      // When `skipValidation` is false, this call would throw:
       // `Projection of ungrouped variable (?s)`
       var groups = parserWithoutValidation.parse(query).where;
       expect(groups[0].type).toBe("bgp");
@@ -67,7 +75,7 @@ describe('A SPARQL parser', function () {
 
     it('should not throw undefined-property error on a valid query', function () {
       var query = 'select (?x as ?xString) (count(?y) as ?count) { ?x ?y ?z }';
-      // When `skipUngroupedVariableCheck` is false, the thrown error would be:
+      // When `skipValidation` is false, the thrown error would be:
       // `Cannot read property 'map' of undefined`
       var groups = parserWithoutValidation.parse(query).where;
       expect(groups[0].type).toBe("bgp");

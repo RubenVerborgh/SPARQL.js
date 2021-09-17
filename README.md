@@ -28,6 +28,22 @@ parsedQuery.variables = ['?mickey'];
 var generatedQuery = generator.stringify(parsedQuery);
 ```
 Set `sparqlStar` to `true` to allow [SPARQL*](https://blog.liu.se/olafhartig/2019/01/10/position-statement-rdf-star-and-sparql-star/) syntax.
+
+### Validation
+
+By default SPARQL.js throws on queries that are syntactically correct, but not allowed by the spec.
+Set `skipValidation` to `true` to skip validation.
+
+```JavaScript
+// Parse a SPARQL query without validation.
+var SparqlParser = require('sparqljs').Parser;
+var parser = new SparqlParser({ skipValidation: true });
+var parsedQuery = parser.parse(
+  'select (?x as ?xString)' +
+  '(count(?y) as ?count)' +
+  '{ ?x ?y ?z }');
+```
+
 ### Standalone
 ```bash
 $ sparql-to-json --strict query.sparql
