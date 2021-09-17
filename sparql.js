@@ -11,9 +11,12 @@ module.exports = {
    *   baseIRI?: string,
    *   factory?: import('rdf-js').DataFactory,
    *   sparqlStar?: boolean,
+   *   skipValidation?: boolean,
+   *   skipUngroupedVariableCheck?: boolean
    * }
    */
-  Parser: function ({ prefixes, baseIRI, factory, sparqlStar, skipValidation } = {}) {
+  Parser: function ({ prefixes, baseIRI, factory, sparqlStar, skipValidation, skipUngroupedVariableCheck } = {}) {
+
     // Create a copy of the prefixes
     var prefixesCopy = {};
     for (var prefix in prefixes || {})
@@ -27,7 +30,8 @@ module.exports = {
       Parser.prefixes = Object.create(prefixesCopy);
       Parser.factory = factory || new DataFactory();
       Parser.sparqlStar = Boolean(sparqlStar);
-      Parser.skipValidation = Boolean(skipValidation)
+      // We keep skipUngroupedVariableCheck for compatibility reasons.
+      Parser.skipValidation = Boolean(skipValidation) || Boolean(skipUngroupedVariableCheck)
       return Parser.prototype.parse.apply(parser, arguments);
     };
     parser._resetBlanks = Parser._resetBlanks;
