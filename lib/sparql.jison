@@ -359,7 +359,7 @@
   }
 
   function ensureSparqlStar(value) {
-    if (!Parser.sparqlStar && !Parser.skipValidation) {
+    if (!Parser.sparqlStar) {
       throw new Error('SPARQL* support is not enabled');
     }
     return value;
