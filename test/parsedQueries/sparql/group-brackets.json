@@ -1,0 +1,79 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "company"
+    },
+    {
+      "expression": {
+        "expression": {
+          "termType": "Variable",
+          "value": "key"
+        },
+        "type": "aggregate",
+        "aggregation": "count",
+        "distinct": true
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "keyCount"
+      }
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "company"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://www.example.org/Company"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "company"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.example.org/hasKey"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "key"
+          }
+        }
+      ]
+    }
+  ],
+  "group": [
+    {
+      "expression": {
+        "termType": "Variable",
+        "value": "company"
+      }
+    }
+  ],
+  "order": [
+    {
+      "expression": {
+        "termType": "Variable",
+        "value": "company"
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://www.example.org/"
+  }
+}
