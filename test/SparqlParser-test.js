@@ -27,7 +27,7 @@ describe('A SPARQL parser', function () {
 
   describe('in SPARQL mode with skipValidation', () => {
     testQueries('sparql', { skipValidation: true });
-    testQueries('sparqlstar', { skipValidation: true });
+    testQueries('sparqlstar', { skipValidation: true, mustError: true });
     testQueries('sparql-skip-validation', { skipValidation: true });
   });
 
