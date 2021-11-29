@@ -1,0 +1,11 @@
+PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT *
+WHERE {
+  ?movie a dbpedia-owl:Film ;
+    dbpedia-owl:starring [
+      rdfs:label "Brad Pitt"@en ;
+      ^dbpedia-owl:starring ?otherMovie
+    ] .
+}
