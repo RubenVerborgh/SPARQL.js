@@ -93,6 +93,18 @@ describe('A SPARQL generator', function () {
       'GROUP BY ?k';
     expect(generatedQuery).toEqual(expectedQuery);
   });
+
+  // TODO enable once fixed
+  // test currently fails, i.e. sparql.js drops <http://example.com/my-graph> 
+  it.skip('should preserve source graph in sparql 1.1 update graph management operations', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('ADD <http://example.com/my-graph> TO <http://example.com/your-graph>');
+    var generator = new SparqlGenerator();
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery =
+      'ADD <http://example.com/my-graph> TO <http://example.com/your-graph>';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
 });
 
 function testQueries(directory, settings) {
