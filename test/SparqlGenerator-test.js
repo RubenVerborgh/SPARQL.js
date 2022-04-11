@@ -94,15 +94,33 @@ describe('A SPARQL generator', function () {
     expect(generatedQuery).toEqual(expectedQuery);
   });
 
-  // TODO enable once fixed
-  // test currently fails, i.e. sparql.js drops <http://example.com/my-graph> 
-  it.skip('should preserve source graph in sparql 1.1 update graph management operations', function () {
+  it('should preserve source graph in sparql 1.1 update ADD operation', function () {
     var parser = new SparqlParser();
     var parsedQuery = parser.parse('ADD <http://example.com/my-graph> TO <http://example.com/your-graph>');
     var generator = new SparqlGenerator();
     var generatedQuery = generator.stringify(parsedQuery);
     var expectedQuery =
       'ADD <http://example.com/my-graph> TO <http://example.com/your-graph>';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
+
+  it('should preserve source, default graph in sparql 1.1 update MOVE operation', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('MOVE DEFAULT TO <http://example.org/named>');
+    var generator = new SparqlGenerator();
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery =
+      'MOVE DEFAULT TO <http://example.org/named>';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
+
+  it('should preserve source, default graph in sparql 1.1 update MOVE operation', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('COPY SILENT DEFAULT TO <http://example.org/named>');
+    var generator = new SparqlGenerator();
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery =
+      'COPY SILENT DEFAULT TO <http://example.org/named>';
     expect(generatedQuery).toEqual(expectedQuery);
   });
 });
