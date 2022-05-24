@@ -1045,9 +1045,10 @@ MultiplicativeExpressionTail
     : ( '*' | '/' ) UnaryExpression -> [$1, $2]
     ;
 UnaryExpression
-    : '+'? PrimaryExpression -> $2
+    : '+' PrimaryExpression -> operation('UPLUS', [$2])
     | '!'  PrimaryExpression -> operation($1, [$2])
     | '-'  PrimaryExpression -> operation('UMINUS', [$2])
+    | PrimaryExpression -> $1
     ;
 PrimaryExpression
     : BrackettedExpression

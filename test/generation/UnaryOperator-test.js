@@ -4,13 +4,13 @@ const expect = require('expect');
 
 describe('Unary Operator Support Test', function () {
 
-  it('should unparse unary minus', function () {
+  it('should unparse unary plus and minus', function () {
     const query = `SELECT ?toto WHERE {
   VALUES ?toto {
     "-5"^^<http://www.w3.org/2001/XMLSchema#integer>
     12 
   }
-  FILTER(?toto < (-(2  + 2 )))
+  FILTER(?toto < (-(2  + (+(2 )))))
 }`;
 
     const sparqlParser = new SparqlParser();
