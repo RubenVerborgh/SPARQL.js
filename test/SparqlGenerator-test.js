@@ -93,6 +93,36 @@ describe('A SPARQL generator', function () {
       'GROUP BY ?k';
     expect(generatedQuery).toEqual(expectedQuery);
   });
+
+  it('should preserve source graph in sparql 1.1 update ADD operation', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('ADD <http://example.com/my-graph> TO <http://example.com/your-graph>');
+    var generator = new SparqlGenerator();
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery =
+      'ADD <http://example.com/my-graph> TO <http://example.com/your-graph>';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
+
+  it('should preserve source, default graph in sparql 1.1 update MOVE operation', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('MOVE DEFAULT TO <http://example.org/named>');
+    var generator = new SparqlGenerator();
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery =
+      'MOVE DEFAULT TO <http://example.org/named>';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
+
+  it('should preserve source, default graph in sparql 1.1 update MOVE operation', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('COPY SILENT DEFAULT TO <http://example.org/named>');
+    var generator = new SparqlGenerator();
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery =
+      'COPY SILENT DEFAULT TO <http://example.org/named>';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
 });
 
 function testQueries(directory, settings) {
