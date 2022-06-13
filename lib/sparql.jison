@@ -573,7 +573,7 @@ SPACES_COMMENTS       (\s+|{COMMENT}\n\r?)+
 %%
 
 QueryOrUpdate
-    : Prologue ( Query | Update? ) EOF
+    : Prologue ( Query | Update? | Path) EOF
     {
       // Set parser options
       $2 = $2 || {};
@@ -582,6 +582,15 @@ QueryOrUpdate
       Parser.base = '';
       $2.prefixes = Parser.prefixes;
       Parser.prefixes = null;
+
+      if (Parser.pathOnly) {
+        if ($2.type === 'path' || 'termType' in $2) {
+          return $2
+        }
+        throw new Error('Recieved full SPARQL query in path only mode');
+      } else if ($2.type === 'path') {
+        throw new Error('Recieved only path in full SPARQL mode');
+      }
 
       // Ensure that blank nodes are not used across INSERT DATA clauses
       if ($2.type === 'update') {
@@ -613,7 +622,6 @@ QueryOrUpdate
           }
         }
       }
-
       return $2;
     }
     ;
