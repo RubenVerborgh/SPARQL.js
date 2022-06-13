@@ -589,7 +589,7 @@ QueryOrUpdate
         }
         throw new Error('Received full SPARQL query in path only mode');
       } else if ($2.type === 'path' || 'termType' in $2) {
-        throw new Error('Recieved only path in full SPARQL mode');
+        throw new Error('Received only path in full SPARQL mode');
       }
 
       // Ensure that blank nodes are not used across INSERT DATA clauses
