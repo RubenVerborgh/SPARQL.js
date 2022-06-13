@@ -587,7 +587,7 @@ QueryOrUpdate
         if ($2.type === 'path' || 'termType' in $2) {
           return $2
         }
-        throw new Error('Recieved full SPARQL query in path only mode');
+        throw new Error('Received full SPARQL query in path only mode');
       } else if ($2.type === 'path' || 'termType' in $2) {
         throw new Error('Recieved only path in full SPARQL mode');
       }
