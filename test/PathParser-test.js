@@ -10,8 +10,8 @@ expect.extend({
 });
 
 var dataFactory = new DataFactory();
-var queriesPath = __dirname + '/../paths/';
-var parsedQueriesPath = __dirname + '/../test/parsedPaths/';
+var queriesPath = __dirname + '/../queries/';
+var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 
 describe('A SPARQL path parser', function () {
   var parser = new SparqlParser({ pathOnly: true });
@@ -19,8 +19,14 @@ describe('A SPARQL path parser', function () {
   // Ensure the same blank node identifiers are used in every test
   beforeEach(function () { parser._resetBlanks(); });
 
-  describe('in SPARQL mode', () => {
-    testQueries('all', { pathOnly: true, prefixes: { ex: "http://example.org/" } });
+  describe('in pathOnly mode', () => {
+    testQueries('paths', { pathOnly: true, prefixes: { ex: "http://example.org/" } });
+  });
+
+  describe('in pathOnly mode SPARQL queries should fail', () => {
+    testQueries('sparql', { pathOnly: true, mustError: true })
+    testQueries('sparql-skip-validation', { pathOnly: true, mustError: true })
+    testQueries('sparqlstar', { pathOnly: true, mustError: true })
   });
 });
 
