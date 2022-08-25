@@ -825,35 +825,97 @@ DataBlockValue
 DataBlockValueList
     : '(' DataBlockValue+ ')' -> $2
     ;
+
+// [29]
+// TODO: Establish why this is totally different to the published grammar
 Update
     : (Update1 ';' Prologue)* Update1 (';' Prologue)? -> { type: 'update', updates: appendTo($1, $2) }
     ;
+
+// [30]
 Update1
+    : Load
+    | ClearOrDrop
+    | AddOrMoveOrCopy
+    | Create
+    | InsertData
+    | DeleteData
+    | DeleteWhere
+    | Modify
+    ;
+
+
+// [31]
+// TODO: See if into graph clause is needed
+Load
     : 'LOAD' 'SILENT'? iri IntoGraphClause? -> extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })
-    | ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: lowercase($1), silent: !!$2, graph: $3 }
-    | ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: lowercase($1), silent: !!$2, source: $3, destination: $5 }
-    | 'CREATE' 'SILENT'? GraphRef -> { type: 'create', silent: !!$2, graph: { type: 'graph', name: $3 } }
-    | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: ensureNoVariables($2)                 }
-    | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: ensureNoBnodes(ensureNoVariables($2)) }
-    | 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: ensureNoBnodes($2)                    }
-    | WithClause? InsertClause DeleteClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { insert: $2 || [] }, { delete: $3 || [] }, groupDatasets($4, 'using'), { where: $6.patterns })
-    | WithClause? DeleteClause InsertClause? UsingClause* 'WHERE' GroupGraphPattern -> extend({ updateType: 'insertdelete' }, $1, { delete: $2 || [] }, { insert: $3 || [] }, groupDatasets($4, 'using'), { where: $6.patterns })
     ;
-DeleteClause
-    : 'DELETE' QuadPattern -> ensureNoBnodes($2)
-    ;
-InsertClause
-    : 'INSERT' QuadPattern -> $2
-    ;
-UsingClause
-    : 'USING' 'NAMED'? iri -> { iri: $3, named: !!$2 }
-    ;
-WithClause
-    : 'WITH' iri -> { graph: $2 }
-    ;
+
 IntoGraphClause
     : 'INTO' GraphRef -> $2
     ;
+
+// [32]-[33]
+ClearOrDrop
+    : ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: lowercase($1), silent: !!$2, graph: $3 }
+    ;
+
+
+// [34]
+Create
+    : 'CREATE' 'SILENT'? GraphRef -> { type: 'create', silent: !!$2, graph: { type: 'graph', name: $3 } }
+    ;
+
+// [35]-[37]
+AddOrMoveOrCopy
+    : ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: lowercase($1), silent: !!$2, source: $3, destination: $5 }
+    ;
+
+// [38]
+InsertData
+    : 'INSERTDATA' QuadPattern -> { updateType: 'insert', insert: ensureNoVariables($2) }
+    ;
+
+// [39]
+DeleteData
+    : 'DELETEDATA' QuadPattern -> { updateType: 'delete', delete: ensureNoBnodes(ensureNoVariables($2)) }
+    ;
+
+// [40]
+DeleteWhere
+    : 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: ensureNoBnodes($2) }
+    ;
+
+// [41]
+Modify
+    : WithClause? InsertDeleteClause UsingClause* 'WHERE' GroupGraphPattern -> { updateType: 'insertdelete', ...$1, ...$2, ...groupDatasets($3, 'using'), where: $5.patterns }
+    ;
+
+InsertDeleteClause
+    : DeleteClause InsertClause? -> { delete: $1, insert: $2 || [] }
+    | InsertClause -> { delete: [], insert: $1 }
+    ;
+
+// [42]
+DeleteClause
+    : 'DELETE' QuadPattern -> ensureNoBnodes($2)
+    ;
+
+// [43]
+InsertClause
+    : 'INSERT' QuadPattern -> $2
+    ;
+
+// [44]
+UsingClause
+    : 'USING' 'NAMED'? iri -> { iri: $3, named: !!$2 }
+    ;
+
+WithClause
+    : 'WITH' iri -> { graph: $2 }
+    ;
+
+// [45]
 GraphOrDefault
     : 'DEFAULT' -> { type: 'graph', default: true }
     | 'GRAPH'? iri -> { type: 'graph', name: $2 }
