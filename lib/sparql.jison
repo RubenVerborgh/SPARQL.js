@@ -752,18 +752,28 @@ AskQuery
 DatasetClause
     : 'FROM' 'NAMED'? iri -> { iri: $3, named: !!$2 }
     ;
+
+// [17]
 WhereClause
     : 'WHERE'? GroupGraphPattern -> { where: $2.patterns }
     ;
+
+// [18]
 SolutionModifier
     : GroupClause? SolutionModifierNoGroup -> extend($1, $2)
     ;
+
+// TODO: See why this is necessary rather than just existing in [18]
 SolutionModifierNoGroup
     : HavingClause? OrderClause? LimitOffsetClauses? -> extend($1, $2, $3)
     ;
+
+// [19]
 GroupClause
     : 'GROUP' 'BY' GroupCondition+ -> { group: $3 }
     ;
+
+// [20]
 GroupCondition
     : BuiltInCall -> expression($1)
     | FunctionCall -> expression($1)
@@ -771,27 +781,56 @@ GroupCondition
     | '(' Expression 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
     | VAR -> expression(toVar($1))
     ;
+
+// [21]
 HavingClause
-    : 'HAVING' Constraint+ -> { having: $2 }
+    : 'HAVING' HavingCondition+ -> { having: $2 }
     ;
+
+// [22]
+HavingCondition
+    : Constraint
+    ;
+
+// [23]
 OrderClause
     : 'ORDER' 'BY' OrderCondition+ -> { order: $3 }
     ;
+
+// [24]
 OrderCondition
     : 'ASC'  BrackettedExpression -> expression($2)
     | 'DESC' BrackettedExpression -> expression($2, { descending: true })
     | Constraint -> expression($1)
     | VAR -> expression(toVar($1))
     ;
+
+// [25]
 LimitOffsetClauses
-    : 'LIMIT'  INTEGER -> { limit:  toInt($2) }
-    | 'OFFSET' INTEGER -> { offset: toInt($2) }
-    | 'LIMIT'  INTEGER 'OFFSET' INTEGER -> { limit: toInt($2), offset: toInt($4) }
-    | 'OFFSET' INTEGER 'LIMIT'  INTEGER -> { limit: toInt($4), offset: toInt($2) }
+    : LimitClause -> { limit: $1 }
+    | OffsetClause -> { offset: $2 }
+    | LimitClause OffsetClause -> { limit: $1, offset: $2 }
+    | OffsetClause LimitClause -> { limit: $2, offset: $1 }
     ;
+
+// [26]
+LimitClause
+    : 'LIMIT' INTEGER -> toInt($2)
+    ;
+
+// [27]
+OffsetClause
+    : 'OFFSET' INTEGER -> toInt($2)
+    ;
+
+// [28]
+// TODO: See why we have InlineData rather than data block here
+// TODO: See why it is not all optional
+// TODO: Double check this
 ValuesClause
     : 'VALUES' InlineData -> { type: 'values', values: $2 }
     ;
+
 InlineData
     : VAR '{' DataBlockValue* '}'
     {
@@ -816,12 +855,15 @@ InlineData
       });
     }
     ;
+
 DataBlockValue
     : iri
     | Literal
-    | ConstTriple -> ensureSparqlStar($1)
+    // @see https://w3c.github.io/rdf-star/cg-spec/editors_draft.html#sparql-star-grammar
+    | QuotedTriple -> ensureSparqlStar($1)
     | 'UNDEF' -> undefined
     ;
+
 DataBlockValueList
     : '(' DataBlockValue+ ')' -> $2
     ;
