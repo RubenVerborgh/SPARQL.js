@@ -749,27 +749,54 @@ SelectClauseVars
 SelectClauseBase
     : 'SELECT' ( 'DISTINCT' | 'REDUCED' )? -> extend({ queryType: 'SELECT'}, $2 && ($1 = lowercase($2), $2 = {}, $2[$1] = true, $2))
     ;
+SelectClauseItem
+    : Var
+    | '(' Expression 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
+    | '(' VarTriple 'AS' VAR ')' -> ensureSparqlStar(expression($2, { variable: toVar($4) }))
+    ;
+
+// [8] Didn't check - optional clause seems disjoint with grammar
 SubSelect
     : SelectClauseWildcard WhereClause SolutionModifierNoGroup ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
     | SelectClauseVars     WhereClause SolutionModifier        ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
     ;
-SelectClauseItem
-    : VAR -> toVar($1)
-    | '(' Expression 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
-    | '(' VarTriple 'AS' VAR ')' -> ensureSparqlStar(expression($2, { variable: toVar($4) }))
-    ;
+
+// TODO: See what 9 is
+// [10] Didn't check
 ConstructQuery
     : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, groupDatasets($3), $4, $5)
     | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $5 = ($5 ? $5.triples : []) }, groupDatasets($2), { where: [ { type: 'bgp', triples: appendAllTo([], $5) } ] }, $7)
     ;
+
+// [11]
 DescribeQuery
     : 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? [new Wildcard()] : $2 }, groupDatasets($3), $4, $5)
     ;
+
+// [12]
+// TODO: See why this has solution modifier rather than ValuesClause.
 AskQuery
     : 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, groupDatasets($2), $3, $4)
     ;
+
+// [13]
 DatasetClause
-    : 'FROM' 'NAMED'? iri -> { iri: $3, named: !!$2 }
+    : 'FROM' (DefaultGraphClause | NamedGraphClause) -> $2
+    ;
+
+// [14]
+DefaultGraphClause
+    : SourceSelector -> { iri: $1, named: false }
+    ;
+
+// [15]
+NamedGraphClause
+    : 'NAMED' SourceSelector -> { iri: $2, named: true }
+    ;
+
+// [16]
+SourceSelector
+    : iri
     ;
 
 // [17]
@@ -875,6 +902,8 @@ InlineData
     }
     ;
 
+// TODO: Move to correct position
+// [65]
 DataBlockValue
     : iri
     | Literal
@@ -1071,14 +1100,58 @@ GraphPatternNotTriples
       else
         $$ = $2;
     }
-    | 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
+    // | 'OPTIONAL' GroeupGraphPattern -> extend($2, { type: 'optional' })
+    | OptionalGraphPattern
     | 'MINUS' GroupGraphPattern    -> extend($2, { type: 'minus' })
-    | 'GRAPH' VarOrIri GroupGraphPattern -> extend($3, { type: 'graph', name: $2 })
-    | 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern -> extend($4, { type: 'service', name: $3, silent: !!$2 })
+    // | 'GRAPH' VarOrIri GroupGraphPattern -> extend($3, { type: 'graph', name: $2 })
+    | GraphGraphPattern
+    // | 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern -> extend($4, { type: 'service', name: $3, silent: !!$2 })
+    | ServiceGraphPattern
     | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
-    | 'BIND' '(' Expression 'AS' Var ')' -> { type: 'bind', variable: $5, expression: $3 }
+    // | 'BIND' '(' Expression 'AS' Var ')' -> { type: 'bind', variable: $5, expression: $3 }
+    | Bind
+    // TODO: See what covers this
     | 'BIND' '(' VarTriple 'AS' Var ')' -> ensureSparqlStar({ type: 'bind', variable: $5, expression: $3 })
     | ValuesClause
+    ;
+
+
+// [57]
+OptionalGraphPattern
+    : 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
+    ;
+
+
+// [58]
+GraphGraphPattern
+    : 'GRAPH' VarOrIri GroupGraphPattern -> extend($3, { type: 'graph', name: $2 })
+    ;
+
+// [59]
+ServiceGraphPattern
+    : 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern -> extend($4, { type: 'service', name: $3, silent: !!$2 })
+    ;
+
+// [60]
+Bind
+    : 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
+    ;
+
+// [61]
+// TODO: See why this was named valuesClause rather than DataBlock
+InlineData
+    : 'VALUES' DataBlock -> { type: 'values', values: $2 }
+    ;
+
+// [62]
+DataBlock
+    : InlineDataOneVar
+    | InlineDataFull
+    ;
+
+// [63]
+InlineDataOneVar
+    : VAR '{' DataBlockValue* '}' -> $3.map(v => ({ [$1]: v }))
     ;
 
 // [69]
