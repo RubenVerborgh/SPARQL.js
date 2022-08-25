@@ -608,7 +608,7 @@ SPACES_COMMENTS       (\s+|{COMMENT}\n\r?)+
 %%
 
 QueryOrUpdate
-    : Prologue ( Query | Update? ) EOF
+    : Prologue ( QueryUnit | Update? ) EOF
     {
       // Set parser options
       $2 = $2 || {};
@@ -652,17 +652,34 @@ QueryOrUpdate
       return $2;
     }
     ;
-Prologue
-    : ( BaseDecl | PrefixDecl )*;
+
+// TODO: Properly factor out queryUnit
+
+// [1]
+QueryUnit
+  : Query
+  ;
+
+// [2]
+// TODO: Work out why ValuesClause was optional
 Query
     : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend($1, $2, { type: 'query' })
     ;
+
+// [4]
+Prologue
+    : ( BaseDecl | PrefixDecl )*
+    ;
+
+// [5]
 BaseDecl
     : 'BASE' IRIREF
     {
       Parser.base = resolveIRI($2)
     }
     ;
+
+// [6]
 PrefixDecl
     : 'PREFIX' PNAME_NS IRIREF
     {
@@ -672,6 +689,8 @@ PrefixDecl
       Parser.prefixes[$2] = $3;
     }
     ;
+
+// [7] Didn't check use of SolutionModifierNoGroup seems off as this introduces a havinClause where not expected.
 SelectQuery
     : SelectClauseWildcard DatasetClause* WhereClause SolutionModifierNoGroup -> extend($1, groupDatasets($2), $3, $4)
     | SelectClauseVars     DatasetClause* WhereClause SolutionModifier
@@ -1520,6 +1539,7 @@ ExprQuotedTP
 // ExprVarOrTerm
 //     : Literal
 //     | VarOrIri
+// // TODO: See if this recursive reference is the cause of the compilation error.
 //     | ExprQuotedTP
 //     ;
 
