@@ -1093,24 +1093,14 @@ TriplesBlock
     : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
 GraphPatternNotTriples
-    : ( GroupGraphPattern 'UNION' )* GroupGraphPattern
-    {
-      if ($1.length)
-        $$ = { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) };
-      else
-        $$ = $2;
-    }
-    // | 'OPTIONAL' GroeupGraphPattern -> extend($2, { type: 'optional' })
+    : GroupOrUnionGraphPattern
     | OptionalGraphPattern
-    | 'MINUS' GroupGraphPattern    -> extend($2, { type: 'minus' })
-    // | 'GRAPH' VarOrIri GroupGraphPattern -> extend($3, { type: 'graph', name: $2 })
+    | MinusGraphPattern
     | GraphGraphPattern
-    // | 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern -> extend($4, { type: 'service', name: $3, silent: !!$2 })
     | ServiceGraphPattern
-    | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
-    // | 'BIND' '(' Expression 'AS' Var ')' -> { type: 'bind', variable: $5, expression: $3 }
+    | Filter
     | Bind
-    // TODO: See what covers this
+    // TODO: See what covers this (it *might* be subsumed by Bind with the renewed definition of experession)
     | 'BIND' '(' VarTriple 'AS' Var ')' -> ensureSparqlStar({ type: 'bind', variable: $5, expression: $3 })
     | ValuesClause
     ;
@@ -1152,6 +1142,21 @@ DataBlock
 // [63]
 InlineDataOneVar
     : VAR '{' DataBlockValue* '}' -> $3.map(v => ({ [$1]: v }))
+    ;
+
+// [66]
+MinusGraphPattern
+    : 'MINUS' GroupGraphPattern -> extend($2, { type: 'minus' })
+    ;
+
+// [67]
+GroupOrUnionGraphPattern
+    : ( GroupGraphPattern 'UNION' )* GroupGraphPattern -> $1.length ? { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) } : $2
+    ;
+
+// [68]
+Filter
+    : 'FILTER' Constraint -> { type: 'filter', expression: $2 }
     ;
 
 // [69]
