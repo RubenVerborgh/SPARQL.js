@@ -744,7 +744,7 @@ ConstructQuery
     | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $5 = ($5 ? $5.triples : []) }, groupDatasets($2), { where: [ { type: 'bgp', triples: appendAllTo([], $5) } ] }, $7)
     ;
 DescribeQuery
-    : 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? [new Wildcard()] : $2 }, groupDatasets($3), $4, $5)
+    : 'DESCRIBE' ( (VAR | iri)+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? [new Wildcard()] : $2.map(toVar) }, groupDatasets($3), $4, $5)
     ;
 AskQuery
     : 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, groupDatasets($2), $3, $4)
@@ -832,7 +832,7 @@ Update1
     : 'LOAD' 'SILENT'? iri IntoGraphClause? -> extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })
     | ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: lowercase($1), silent: !!$2, graph: $3 }
     | ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: lowercase($1), silent: !!$2, source: $3, destination: $5 }
-    | 'CREATE' 'SILENT'? GraphRef -> { type: 'create', silent: !!$2, graph: { type: 'graph', name: $3 } }
+    | 'CREATE' 'SILENT'? 'GRAPH' iri -> { type: 'create', silent: !!$2, graph: { type: 'graph', name: $4 } }
     | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: ensureNoVariables($2)                 }
     | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: ensureNoBnodes(ensureNoVariables($2)) }
     | 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: ensureNoBnodes($2)                    }
@@ -852,7 +852,7 @@ WithClause
     : 'WITH' iri -> { graph: $2 }
     ;
 IntoGraphClause
-    : 'INTO' GraphRef -> $2
+    : 'INTO' 'GRAPH' iri -> $3
     ;
 GraphOrDefault
     : 'DEFAULT' -> { type: 'graph', default: true }
@@ -869,40 +869,13 @@ GraphRefAll
     : GraphRef -> { type: 'graph', name: $1 }
     | ( 'DEFAULT' | 'NAMED' | 'ALL' ) -> { [lowercase($1)]: true }
     ;
-
-// [48]
 QuadPattern
-    : QuadBraces
-    ; 
-
-// [49]
-QuadData
-    : QuadBraces
+    : '{' TriplesTemplate? QuadsNotTriples* '}' -> $2 ? unionAll($3, [$2]) : unionAll($3)
     ;
-
-
-// [48]
-QuadPattern
-    : '{' Quads '}' -> $2
-    ; 
-
-// [49]
-QuadData
-    : '{' Quads '}' -> $2
-    ;
-
-// [50]
-Quads
-    : TriplesTemplate? QuadsNotTriples* -> $1 ? unionAll($2, [$1]) : unionAll($2)
-    // TODO: Actually use this grammar (which *is* different)
-    // it seems like the problem comes down to TriplesTemplate not being correct
-    // : TriplesTemplate? ( QuadsNotTriples "."? TriplesTemplate? ) *
-    ;
-
 QuadsNotTriples
-    : 'GRAPH' VarOrIri '{' TriplesTemplate? '}' '.'? TriplesTemplate?
+    : 'GRAPH' (VAR | iri) '{' TriplesTemplate? '}' '.'? TriplesTemplate?
     {
-      var graph = extend($4 || { triples: [] }, { type: 'graph', name: $2 });
+      var graph = extend($4 || { triples: [] }, { type: 'graph', name: toVar($2) });
       $$ = $7 ? [graph, $7] : [graph];
     }
     ;
@@ -950,91 +923,56 @@ GraphPatternNotTriples
     }
     | 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
     | 'MINUS' GroupGraphPattern    -> extend($2, { type: 'minus' })
-    | 'GRAPH' VarOrIri GroupGraphPattern -> extend($3, { type: 'graph', name: $2 })
-    | 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern -> extend($4, { type: 'service', name: $3, silent: !!$2 })
+    | 'GRAPH' (VAR | iri) GroupGraphPattern -> extend($3, { type: 'graph', name: toVar($2) })
+    | 'SERVICE' 'SILENT'? (VAR | iri) GroupGraphPattern -> extend($4, { type: 'service', name: toVar($3), silent: !!$2 })
     | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
-    | 'BIND' '(' Expression 'AS' Var ')' -> { type: 'bind', variable: $5, expression: $3 }
-    | 'BIND' '(' VarTriple 'AS' Var ')' -> ensureSparqlStar({ type: 'bind', variable: $5, expression: $3 })
+    | 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
+    | 'BIND' '(' VarTriple 'AS' VAR ')' -> ensureSparqlStar({ type: 'bind', variable: toVar($5), expression: $3 })
     | ValuesClause
     ;
-
-// [69]
 Constraint
     : BrackettedExpression
     | BuiltInCall
     | FunctionCall
     ;
-
-// [70]
 FunctionCall
-    : iri ArgList -> { ...$2, function: $1 }
+    : iri NIL -> { type: 'functionCall', function: $1, args: [] }
+    | iri '(' 'DISTINCT'? ( Expression ',' )* Expression ')' -> { type: 'functionCall', function: $1, args: appendTo($4, $5), distinct: !!$3 }
     ;
-
-// [71]
-ArgList
-    : NIL -> { type: 'functionCall', args: [] }
-    | '(' 'DISTINCT'? ( Expression ',' )* Expression ')' -> { type: 'functionCall', args: appendTo($3, $4), distinct: !!$2 }
-    ;
-
-// [72]
 ExpressionList
     : NIL -> []
     | '(' ( Expression ',' )* Expression ')' -> appendTo($2, $3)
     ;
-
-// [73]
 ConstructTemplate
     : '{' ConstructTriples? '}' -> $2
     ;
-
-// [74]
-// TODO: See if there is a reason for using this
-// representation rather than the grammar representation
 ConstructTriples
     : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> unionAll($1, [$2])
     ;
-
-// [75]
 TriplesSameSubject
-    : VarOrTermOrQuotedTP PropertyListNotEmpty -> $2.map(t => extend(triple($1), t))
-    | TriplesNode PropertyList -> appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples) /* the subject is a blank node, possibly with more triples */
+    : (VarOrTerm | VarTriple) PropertyListNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
+    | TriplesNode PropertyList -> appendAllTo($2.map(function (t) { return extend(triple($1.entity), t); }), $1.triples) /* the subject is a blank node, possibly with more triples */
     ;
-
-// [76]
 PropertyList
     : PropertyListNotEmpty?
     ;
-
-// [77]
 PropertyListNotEmpty
     : VerbObjectList ( SemiOptionalVerbObjectList )* -> unionAll([$1], $2)
     ;
-
 SemiOptionalVerbObjectList
     : ';' VerbObjectList? -> unionAll($2)
     ;
 VerbObjectList
     : Verb ObjectList -> objectListToTriples($1, $2)
     ;
-
-// [78]
 Verb
-    : VarOrIri
+    : VAR -> toVar($1)
+    | iri
     | 'a' -> Parser.factory.namedNode(RDF_TYPE)
     ;
-
-// [79]
 ObjectList
-    : (Object ',')* Object -> appendTo($1, $2)
+    : (GraphNode ',')* GraphNode -> appendTo($1, $2)
     ;
-
-// [80]
-Object
-    // TODO: Work out what to *actually* do with the AnnotationPattern
-    // TODO: Then add tests
-    : GraphNode AnnotationPattern? -> $1
-    ;
-
 ObjectListPath
     : (GraphNodePath ',')* GraphNodePath -> appendTo($1, $2)
     ;
@@ -1049,60 +987,35 @@ PropertyListPathNotEmptyTail
     : ';' -> []
     | ';' ( Path | VAR ) ObjectListPath -> objectListToTriples(toVar($2), $3)
     ;
-
-// [88]
 Path
-    : PathAlternative
-    ;
-
-// [89]
-PathAlternative
     : ( PathSequence '|' )* PathSequence -> $1.length ? path('|',appendTo($1, $2)) : $2
     ;
-
-// [90]
 PathSequence
     : ( PathEltOrInverse '/' )* PathEltOrInverse -> $1.length ? path('/', appendTo($1, $2)) : $2
     ;
-
-// [91]
 PathElt
-    : PathPrimary PathMod? -> $2 ? path($2, [$1]) : $1
+    : PathPrimary ( '?' | '*' | '+' )? -> $2 ? path($2, [$1]) : $1
     ;
-
-// [92]
 PathEltOrInverse
     : '^'? PathElt -> $1 ? path($1, [$2]) : $2;
     ;
-
-// [93]
-PathMod
-    : '?'
-    | '*'
-    | '+'
-    ;
-
-// [94]
 PathPrimary
-    : IriOrA
+    : iri
+    | 'a' -> Parser.factory.namedNode(RDF_TYPE)
     | '!' PathNegatedPropertySet -> path($1, [$2])
     | '(' Path ')' -> $2
     ;
-
-// [95]
 PathNegatedPropertySet
     : PathOneInPropertySet
-    // TODO: See why nil is here (its not in the grammar)
     | NIL -> []
     | '(' ( PathOneInPropertySet '|' )* PathOneInPropertySet? ')' -> path('|', appendTo($2, $3))
     ;
-
-// [96]
 PathOneInPropertySet
-    : IriOrA
-    | '^' IriOrA -> path($1, [$2])
+    : iri
+    | 'a' -> Parser.factory.namedNode(RDF_TYPE)
+    | '^' iri -> path($1, [$2])
+    | '^' 'a' -> path($1, [Parser.factory.namedNode(RDF_TYPE)])
     ;
-
 TriplesNode
     : '(' GraphNode+ ')' -> createList($2)
     | '[' PropertyListNotEmpty ']' -> createAnonymousObject($2)
@@ -1119,77 +1032,41 @@ GraphNodePath
     : (VarOrTerm | VarTriple) -> { entity: $1, triples: [] } /* for consistency with TriplesNodePath */
     | TriplesNodePath
     ;
-
-// [106]
+VarTriple
+    : '<<' 'GRAPH' (VAR | iri) '{' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, toVar($3)))
+    | '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
+    ;
+ConstTriple
+    : '<<' 'GRAPH' (VAR | iri) '{' (ConstTriple | Term) Verb (ConstTriple | Term) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, toVar($3)))
+    | '<<' (ConstTriple | Term) Verb (ConstTriple | Term) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
+    ;
 VarOrTerm
-    : Var
-    // Was previously term
-    | GraphTerm
-    ;
-
-// [107]
-VarOrIri
-    : Var
-    | iri
-    ;
-
-// [108]
-Var
     : VAR -> toVar($1)
+    | Term
     ;
-
-// [109]
-GraphTerm
+Term
     : iri
     | Literal
     | BlankNode
-    // TODO: See if custom handling of NIL is needed here
     | NIL  -> Parser.factory.namedNode(RDF_NIL)
     ;
-
-// [110]
 Expression
-    : ConditionalOrExpression
+    : ConditionalAndExpression ExpressionTail* -> createOperationTree($1, $2)
     ;
-
-// [111]
-ConditionalOrExpression
-    : ConditionalAndExpression ConditionalOrExpressionTail* -> createOperationTree($1, $2)
-    ;
-
-ConditionalOrExpressionTail
+ExpressionTail
     : '||' ConditionalAndExpression -> ['||', $2]
     ;
-
-// [112]
 ConditionalAndExpression
-    : ValueLogical ConditionalAndExpressionTail* -> createOperationTree($1, $2)
+    : RelationalExpression ConditionalAndExpressionTail* -> createOperationTree($1, $2)
     ;
-
 ConditionalAndExpressionTail
-    : '&&' ValueLogical -> ['&&', $2]
+    : '&&' RelationalExpression -> ['&&', $2]
     ;
-
-// [113]
-ValueLogical
-    : RelationalExpression
-    ;
-
-// [114]
 RelationalExpression
-    : NumericExpression
-    // TODO: Fix missing pipe on sparql-star grammar page
-    | NumericExpression ( '=' | '!=' | '<' | '>' | '<=' | '>=' ) AdditiveExpression -> operation($2, [$1, $3])
-    | NumericExpression 'NOT'? 'IN' ExpressionList -> operation($2 ? 'notin' : 'in', [$1, $4])
-    ;
-
-// [115]
-NumericExpression
     : AdditiveExpression
+    | AdditiveExpression ( '=' | '!=' | '<' | '>' | '<=' | '>=' ) AdditiveExpression -> operation($2, [$1, $3])
+    | AdditiveExpression 'NOT'? 'IN' ExpressionList -> operation($2 ? 'notin' : 'in', [$1, $4])
     ;
-
-// [116]
-// TODO: Properly check these
 AdditiveExpression
     : MultiplicativeExpression AdditiveExpressionTail* -> createOperationTree($1, $2)
     ;
@@ -1202,69 +1079,46 @@ AdditiveExpressionTail
       $$ = ['-', createOperationTree(negatedLiteral, $2)];
     }
     ;
-
-// [117]
-// TODO: properly check
 MultiplicativeExpression
     : UnaryExpression MultiplicativeExpressionTail* -> createOperationTree($1, $2)
     ;
 MultiplicativeExpressionTail
     : ( '*' | '/' ) UnaryExpression -> [$1, $2]
     ;
-
-// [118]
-// TODO: Properly check
 UnaryExpression
     : '+' PrimaryExpression -> operation('UPLUS', [$2])
     | '!'  PrimaryExpression -> operation($1, [$2])
     | '-'  PrimaryExpression -> operation('UMINUS', [$2])
     | PrimaryExpression -> $1
     ;
-
-// [119]
 PrimaryExpression
     : BrackettedExpression
     | BuiltInCall
-    // TODO: See why this is not iriOrFunctionCall
     | iri
     | FunctionCall
     | Literal
-    | Var
-    | ExprQuotedTP
+    | VAR -> toVar($1)
     ;
-
-// [120]
 BrackettedExpression
     : '(' Expression ')' -> $2
     ;
-
-// [121]
-// TODO: Double check this
 BuiltInCall
     : Aggregate
     | FUNC_ARITY0 NIL -> operation(lowercase($1))
     | FUNC_ARITY1 '(' Expression ')' -> operation(lowercase($1), [$3])
     | FUNC_ARITY2 '(' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5])
-    | FUNC_ARITY3 '(' Expression ',' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5, $7])
-    // [122], [123], [124]
-    // TODO: Fix this - it is technically incorrect as 'SUBSTR' | 'REGEX' | 'REPLACE' are only allowed 2-3 args
-    // as opposed to an aribtrary number of args which this allows
+    | 'IF' '(' Expression ',' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5, $7])
     | ( 'CONCAT' | 'COALESCE' | 'SUBSTR' | 'REGEX' | 'REPLACE' ) ExpressionList -> operation(lowercase($1), $2)
     | 'BOUND' '(' VAR ')' -> operation('bound', [toVar($3)])
     | 'BNODE' NIL -> operation($1, [])
     | 'BNODE' '(' Expression ')' -> operation($1, [$3])
-    // [125], [126]
     | 'NOT'? 'EXISTS' GroupGraphPattern -> operation($1 ? 'notexists' :'exists', [degroupSingle($3)])
     ;
-
-// [127]
-// TODO: Double check this
 Aggregate
     : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')' -> expression($4, { type: 'aggregate', aggregation: lowercase($1), distinct: !!$3 })
     | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')' -> expression($4, { type: 'aggregate', aggregation: lowercase($1), distinct: !!$3 })
     | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression GroupConcatSeparator? ')'  -> expression($4, { type: 'aggregate', aggregation: lowercase($1), distinct: !!$3, separator: $5 || ' ' })
     ;
-
 GroupConcatSeparator
     : ';' 'SEPARATOR' '=' String -> $4
     ;
@@ -1359,79 +1213,3 @@ BlankNode
 //
 // Note [139] - [173] are grammar terms that are written above
 //
-
-// TODO: Make everthing here ensure sparqlStar
-
-// [174]
-QuotedTP
-    : '<<' qtSubjectOrObject Verb qtSubjectOrObject '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
-    ;
-
-// [175]
-QuotedTriple
-    : '<<'  DataValueTerm IriOrA DataValueTerm '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
-    ;
-
-// [176]
-qtSubjectOrObject
-    : VarOrTerm
-    | QuotedTP
-    ;
-
-
-// [177]
-DataValueTerm
-    : iri
-    | Literal
-    | QuotedTP
-    ;
-
-// [178]
-VarOrTermOrQuotedTP
-    : Var
-    | GraphTerm
-    | QuotedTP
-    ;
-
-// [179]
-AnnotationPattern
-    : '{|' PropertyListNotEmpty '|}' -> ensureSparqlStar($2)
-    ;
-
-// [180]
-AnnotationPatternPath
-    : '{|' PropertyListPathNotEmpty '|}' -> ensureSparqlStar($2)
-    ;
-
-
-// [181]
-// TODO: Work out how nested graphs should be handled
-ExprQuotedTP
-    : '<<'  ExprVarOrTerm Verb ExprVarOrTerm '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
-    ;
-
-// TODO: Re-enable
-// [182]
-// TODO: See if this should be overriding something else in the grammar
-// ExprVarOrTerm
-//     : Literal
-//     | VarOrIri
-//     | ExprQuotedTP
-//     ;
-
-// TODO: Remove these two to handle sparqlstar properly
-VarTriple
-    : '<<' 'GRAPH' VarOrIri '{' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, $3))
-    | '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
-    ;
-ConstTriple
-    : '<<' 'GRAPH' VarOrIri '{' (ConstTriple | GraphTerm) Verb (ConstTriple | GraphTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, $3))
-    | '<<' (ConstTriple | GraphTerm) Verb (ConstTriple | GraphTerm) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
-    ;
-
-// Utilities
-IriOrA
-    : iri -> $1
-    | 'a' -> Parser.factory.namedNode(RDF_TYPE)
-    ;
-
