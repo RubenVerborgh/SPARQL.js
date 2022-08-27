@@ -535,6 +535,8 @@ SPACES_COMMENTS       (\s+|{COMMENT}\n\r?)+
 "FILTER"                 return 'FILTER'
 "<<"                     return '<<'
 ">>"                     return '>>'
+"{|"                     return '{|'
+"|}"                     return '|}'
 ","                      return ','
 "a"                      return 'a'
 "|"                      return '|'
@@ -559,11 +561,11 @@ SPACES_COMMENTS       (\s+|{COMMENT}\n\r?)+
 "BOUND"                  return 'BOUND'
 "BNODE"                  return 'BNODE'
 ("RAND"|"NOW"|"UUID"|"STRUUID") return 'FUNC_ARITY0'
-("LANG"|"DATATYPE"|"IRI"|"URI"|"ABS"|"CEIL"|"FLOOR"|"ROUND"|"STRLEN"|"STR"|"UCASE"|"LCASE"|"ENCODE_FOR_URI"|"YEAR"|"MONTH"|"DAY"|"HOURS"|"MINUTES"|"SECONDS"|"TIMEZONE"|"TZ"|"MD5"|"SHA1"|"SHA256"|"SHA384"|"SHA512"|"isIRI"|"isURI"|"isBLANK"|"isLITERAL"|"isNUMERIC") return 'FUNC_ARITY1'
+("LANG"|"DATATYPE"|"IRI"|"URI"|"ABS"|"CEIL"|"FLOOR"|"ROUND"|"STRLEN"|"STR"|"UCASE"|"LCASE"|"ENCODE_FOR_URI"|"YEAR"|"MONTH"|"DAY"|"HOURS"|"MINUTES"|"SECONDS"|"TIMEZONE"|"TZ"|"MD5"|"SHA1"|"SHA256"|"SHA384"|"SHA512"|"isIRI"|"isURI"|"isBLANK"|"isLITERAL"|"isNUMERIC"|"SUBJECT"|"PREDICATE"|"OBJECT"|"isTRIPLE") return 'FUNC_ARITY1'
 ("LANGMATCHES"|"CONTAINS"|"STRSTARTS"|"STRENDS"|"STRBEFORE"|"STRAFTER"|"STRLANG"|"STRDT"|"sameTerm") return 'FUNC_ARITY2'
 "CONCAT"                 return 'CONCAT'
 "COALESCE"               return 'COALESCE'
-"IF"                     return 'IF'
+("IF"|"TRIPLE")          return 'FUNC_ARITY3'
 "REGEX"                  return 'REGEX'
 "SUBSTR"                 return 'SUBSTR'
 "REPLACE"                return 'REPLACE'
@@ -663,7 +665,12 @@ QueryUnit
 // [2]
 // TODO: Work out why ValuesClause was optional
 Query
-    : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> extend($1, $2, { type: 'query' })
+    : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> { ...$1, ...$2, type: 'query' }
+    ;
+
+// [3]
+UpdateUnit
+    : Update
     ;
 
 // [4]
@@ -692,7 +699,7 @@ PrefixDecl
 
 // [7] Didn't check use of SolutionModifierNoGroup seems off as this introduces a havinClause where not expected.
 SelectQuery
-    : SelectClauseWildcard DatasetClause* WhereClause SolutionModifierNoGroup -> extend($1, groupDatasets($2), $3, $4)
+    : SelectClauseWildcard DatasetClause* WhereClause SolutionModifierNoGroup -> { ...$1, ...groupDatasets($2), ...$3, ...$4 }
     | SelectClauseVars     DatasetClause* WhereClause SolutionModifier
     {
       // Check for projection of ungrouped variable
@@ -751,8 +758,9 @@ SelectClauseBase
     ;
 SelectClauseItem
     : Var
-    | '(' Expression 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
-    | '(' VarTriple 'AS' VAR ')' -> ensureSparqlStar(expression($2, { variable: toVar($4) }))
+    | '(' Expression 'AS' Var ')' -> expression($2, { variable: $4 })
+    // TODO: Remove this
+    | '(' VarTriple 'AS' Var ')' -> ensureSparqlStar(expression($2, { variable: $4 }))
     ;
 
 // [8] Didn't check - optional clause seems disjoint with grammar
@@ -824,8 +832,8 @@ GroupCondition
     : BuiltInCall -> expression($1)
     | FunctionCall -> expression($1)
     | '(' Expression ')' -> expression($2)
-    | '(' Expression 'AS' VAR ')' -> expression($2, { variable: toVar($4) })
-    | VAR -> expression(toVar($1))
+    | '(' Expression 'AS' Var ')' -> expression($2, { variable: $4 })
+    | Var -> expression($1)
     ;
 
 // [21]
@@ -848,7 +856,7 @@ OrderCondition
     : 'ASC'  BrackettedExpression -> expression($2)
     | 'DESC' BrackettedExpression -> expression($2, { descending: true })
     | Constraint -> expression($1)
-    | VAR -> expression(toVar($1))
+    | Var -> expression($1)
     ;
 
 // [25]
@@ -878,15 +886,8 @@ ValuesClause
     ;
 
 InlineData
-    : VAR '{' DataBlockValue* '}'
-    {
-      $$ = $3.map(function(v) { var o = {}; o[$1] = v; return o; })
-    }
-    |
-    NIL '{' NIL* '}'
-    {
-      $$ = $3.map(function() { return {}; })
-    }
+    : VAR '{' DataBlockValue* '}' -> $3.map(v => ({ [$1]: v }))
+    | NIL '{' NIL* '}' -> $3.map(() => ({}))
     | '(' VAR+ ')' '{' DataBlockValueList* '}'
     {
       var length = $2.length;
@@ -900,16 +901,6 @@ InlineData
         return valuesObject;
       });
     }
-    ;
-
-// TODO: Move to correct position
-// [65]
-DataBlockValue
-    : iri
-    | Literal
-    // @see https://w3c.github.io/rdf-star/cg-spec/editors_draft.html#sparql-star-grammar
-    | QuotedTriple -> ensureSparqlStar($1)
-    | 'UNDEF' -> undefined
     ;
 
 DataBlockValueList
@@ -1051,16 +1042,23 @@ Quads
     // : TriplesTemplate? ( QuadsNotTriples "."? TriplesTemplate? ) *
     ;
 
+// [51]
 QuadsNotTriples
+// TODO Fix this - it is actually the definition for quad
     : 'GRAPH' VarOrIri '{' TriplesTemplate? '}' '.'? TriplesTemplate?
     {
       var graph = extend($4 || { triples: [] }, { type: 'graph', name: $2 });
       $$ = $7 ? [graph, $7] : [graph];
     }
     ;
+
+// [52]
+// TODO: See why this is not identical to the grammar
 TriplesTemplate
     : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
+
+// [53]
 GroupGraphPattern
     : '{' SubSelect '}' -> { type: 'group', patterns: [ $2 ] }
     | '{' GroupGraphPatternSub '}'
@@ -1083,15 +1081,35 @@ GroupGraphPattern
       $$ = { type: 'group', patterns: $2 }
     }
     ;
+
+// [54]
 GroupGraphPatternSub
     : TriplesBlock? GroupGraphPatternSubTail* -> $1 ? unionAll([$1], $2) : unionAll($2)
     ;
+
 GroupGraphPatternSubTail
     : GraphPatternNotTriples '.'? TriplesBlock? -> $3 ? [$1, $3] : $1
     ;
+
+// [55]
+// TODO: See why this is not identical to the grammar
 TriplesBlock
     : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
+
+// [56]
+// TODO: Use this
+// GraphPatternNotTriples
+//     : GroupOrUnionGraphPattern
+//     | OptionalGraphPattern
+//     | MinusGraphPattern
+//     | GraphGraphPattern
+//     | ServiceGraphPattern
+//     | Filter
+//     | Bind
+//     | InlineData
+//     ;
+
 GraphPatternNotTriples
     : GroupOrUnionGraphPattern
     | OptionalGraphPattern
@@ -1124,10 +1142,11 @@ ServiceGraphPattern
 
 // [60]
 Bind
-    : 'BIND' '(' Expression 'AS' VAR ')' -> { type: 'bind', variable: toVar($5), expression: $3 }
+    : 'BIND' '(' Expression 'AS' Var ')' -> { type: 'bind', variable: $5, expression: $3 }
     ;
 
 // [61]
+// TODO: Handle conflict with the other inlineData
 // TODO: See why this was named valuesClause rather than DataBlock
 InlineData
     : 'VALUES' DataBlock -> { type: 'values', values: $2 }
@@ -1142,6 +1161,34 @@ DataBlock
 // [63]
 InlineDataOneVar
     : VAR '{' DataBlockValue* '}' -> $3.map(v => ({ [$1]: v }))
+    ;
+
+
+// [64]
+InlineDataFull
+    : NIL '{' NIL* '}' -> $3.map(() => ({}))
+    | '(' VAR+ ')' '{' DataBlockValueList* '}'
+    {
+      var length = $2.length;
+      $2 = $2.map(toVar);
+      $$ = $5.map(function (values) {
+        if (values.length !== length)
+          throw Error('Inconsistent VALUES length');
+        var valuesObject = {};
+        for(var i = 0; i<length; i++)
+          valuesObject['?' + $2[i].value] = values[i];
+        return valuesObject;
+      });
+    }
+    ;
+
+// [65]
+DataBlockValue
+    : iri
+    | Literal
+    // @see https://w3c.github.io/rdf-star/cg-spec/editors_draft.html#sparql-star-grammar
+    | QuotedTriple -> ensureSparqlStar($1)
+    | 'UNDEF' -> undefined
     ;
 
 // [66]
@@ -1236,15 +1283,38 @@ Object
     : GraphNode AnnotationPattern? -> $1
     ;
 
-ObjectListPath
-    : (GraphNodePath ',')* GraphNodePath -> appendTo($1, $2)
-    ;
+// [81]
 TriplesSameSubjectPath
     : (VarOrTerm | VarTriple) PropertyListPathNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
-    | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : appendAllTo($2.map(function (t) { return extend(triple($1.entity), t); }), $1.triples) /* the subject is a blank node, possibly with more triples */
+    // TODO!: Use this grammar instead
+    // : VarOrTermOrQuotedTP PropertyListPathNotEmpty -> $2.map(t => extend(triple($1), t))
+    // TODO: See why this is optional since it is not in the grammar
+    | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples) /* the subject is a blank node, possibly with more triples */
     ;
+
+// [84]
+VerbPath
+    : Path
+    ;
+
+// [85]
+VerbSimple
+    : Var
+    ;
+
+// [86]
+ObjectListPath
+    : (ObjectPath ',')* ObjectPath -> appendTo($1, $2)
+    ;
+
+// [87]
+ObjectPath
+    // TODO: Work out what to map this do
+    : GraphNodePath AnnotationPatternPath? -> $1
+    ;
+
 PropertyListPathNotEmpty
-    : ( Path | VAR ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail* -> objectListToTriples(toVar($1), appendTo($2, $3), $4)
+    : ( Path | Var ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail* -> objectListToTriples($1, appendTo($2, $3), $4)
     ;
 PropertyListPathNotEmptyTail
     : ';' -> []
