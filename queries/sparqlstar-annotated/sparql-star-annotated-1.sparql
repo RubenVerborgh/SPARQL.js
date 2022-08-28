@@ -1,0 +1,11 @@
+PREFIX ex: <http://example.com/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT * WHERE {
+    # TODO: Open question - what should the graph term be in a nested rdf-star triple.
+    ?s ?p ?o {| ex:author ex:Bob |} .
+    ex:Moscow a ex:City {| ex:author ?person |} .
+    # TODO: See if an error should be thrown here due to having a list
+    # in a reification
+    _:b ex:x () {| ex:broken true |} .
+}

@@ -28,12 +28,17 @@ describe('A SPARQL parser', function () {
   describe('in SPARQL mode with skipValidation', () => {
     testQueries('sparql', { skipValidation: true });
     testQueries('sparqlstar', { skipValidation: true, mustError: true });
+    testQueries('sparqlstar-annotated', { skipValidation: true, mustError: true });
+    testQueries('sparqlstar-nested-quads', { skipValidation: true, mustError: true });
     testQueries('sparql-skip-validation', { skipValidation: true });
   });
 
-  describe('in SPARQL* mode', () => {
+  describe('in SPARQL-star mode', () => {
     testQueries('sparql', { sparqlStar: true });
     testQueries('sparqlstar', { sparqlStar: true });
+    testQueries('sparqlstar-nested-quads', { sparqlStar: true, mustError: true, skipValidation: true });
+    // TODO: See if we need skip validation here
+    // testQueries('sparqlstar-nested-quads', { sparqlStar: true, sparqlStarNestedQuads: true });
     testQueries('sparql-skip-validation', { sparqlStar: true, mustError: true });
   });
 
@@ -251,7 +256,7 @@ describe('A SPARQL parser', function () {
 
   describe('without SPARQL* support enabled', function () {
     var parser = new SparqlParser();
-    const expectedErrorMessage = 'SPARQL* support is not enabled';
+    const expectedErrorMessage = 'SPARQL-star support is not enabled';
 
     it('should throw an error on RDF* triple in projection', function () {
       expect(() => parser.parse(

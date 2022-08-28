@@ -360,7 +360,14 @@
 
   function ensureSparqlStar(value) {
     if (!Parser.sparqlStar) {
-      throw new Error('SPARQL* support is not enabled');
+      throw new Error('SPARQL-star support is not enabled');
+    }
+    return value;
+  }
+
+  function ensureSparqlStarNestedQuads(value) {
+    if (!Parser.sparqlStarNestedQuads) {
+      throw new Error('Lenient SPARQL-star support with nested quads is not enabled');
     }
     return value;
   }
@@ -1285,9 +1292,9 @@ Object
 
 // [81]
 TriplesSameSubjectPath
-    : (VarOrTerm | VarTriple) PropertyListPathNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
+    // : (VarOrTerm | VarTriple) PropertyListPathNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
     // TODO!: Use this grammar instead
-    // : VarOrTermOrQuotedTP PropertyListPathNotEmpty -> $2.map(t => extend(triple($1), t))
+    : VarOrTermOrQuotedTP PropertyListPathNotEmpty -> $2.map(t => extend(triple($1), t))
     // TODO: See why this is optional since it is not in the grammar
     | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples) /* the subject is a blank node, possibly with more triples */
     ;
@@ -1696,6 +1703,9 @@ VarTriple
     : '<<' 'GRAPH' VarOrIri '{' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, $3))
     | '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
     ;
+
+
+
 ConstTriple
     : '<<' 'GRAPH' VarOrIri '{' (ConstTriple | GraphTerm) Verb (ConstTriple | GraphTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, $3))
     | '<<' (ConstTriple | GraphTerm) Verb (ConstTriple | GraphTerm) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
