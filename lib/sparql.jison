@@ -1287,6 +1287,7 @@ ObjectList
 Object
     // TODO: Work out what to *actually* do with the AnnotationPattern
     // TODO: Then add tests
+    // TODO: Probably also ensureSParqlStar
     : GraphNode AnnotationPattern? -> $1
     ;
 
@@ -1297,6 +1298,20 @@ TriplesSameSubjectPath
     : VarOrTermOrQuotedTP PropertyListPathNotEmpty -> $2.map(t => extend(triple($1), t))
     // TODO: See why this is optional since it is not in the grammar
     | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples) /* the subject is a blank node, possibly with more triples */
+    ;
+
+// [82] Should be propertyListPath
+
+// [83]
+PropertyListPathNotEmpty
+    : ( VerbPath | VerbSimple ) ObjectListPath PropertyListPathNotEmptyTail* -> objectListToTriples($1, $2, $3)
+    ;
+
+// TODO: Double check all of this
+PropertyListPathNotEmptyTail
+    // TODO: Double check this in particular
+    : ';' -> []
+    | ';' ( VerbPath | VerbSimple ) ObjectListPath -> objectListToTriples(toVar($2), $3)
     ;
 
 // [84]
@@ -1318,14 +1333,6 @@ ObjectListPath
 ObjectPath
     // TODO: Work out what to map this do
     : GraphNodePath AnnotationPatternPath? -> $1
-    ;
-
-PropertyListPathNotEmpty
-    : ( Path | Var ) ( GraphNodePath ',' )* GraphNodePath PropertyListPathNotEmptyTail* -> objectListToTriples($1, appendTo($2, $3), $4)
-    ;
-PropertyListPathNotEmptyTail
-    : ';' -> []
-    | ';' ( Path | VAR ) ObjectListPath -> objectListToTriples(toVar($2), $3)
     ;
 
 // [88]

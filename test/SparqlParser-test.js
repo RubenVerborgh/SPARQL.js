@@ -30,6 +30,7 @@ describe('A SPARQL parser', function () {
     testQueries('sparqlstar', { skipValidation: true, mustError: true });
     testQueries('sparqlstar-annotated', { skipValidation: true, mustError: true });
     testQueries('sparqlstar-nested-quads', { skipValidation: true, mustError: true });
+    testQueries('sparqlstar-invalid', { skipValidation: true, mustError: true });
     testQueries('sparql-skip-validation', { skipValidation: true });
   });
 
@@ -37,9 +38,9 @@ describe('A SPARQL parser', function () {
     testQueries('sparql', { sparqlStar: true });
     testQueries('sparqlstar', { sparqlStar: true });
     testQueries('sparqlstar-annotated', { sparqlStar: true });
-    testQueries('sparqlstar-nested-quads', { sparqlStar: true, mustError: true, skipValidation: true });
+    // testQueries('sparqlstar-nested-quads', { sparqlStar: true, mustError: true, skipValidation: true });
     // TODO: See if we need skip validation here
-    testQueries('sparqlstar-nested-quads', { sparqlStar: true, sparqlStarNestedQuads: true });
+    // testQueries('sparqlstar-nested-quads', { sparqlStar: true, sparqlStarNestedQuads: true });
     testQueries('sparql-skip-validation', { sparqlStar: true, mustError: true });
   });
 
