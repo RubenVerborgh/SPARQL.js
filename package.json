@@ -35,7 +35,7 @@
     "spec": "npm run spec-base-query && npm run spec-base-update"
   },
   "engines": {
-    "node": ">=8.0"
+    "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
   },
   "dependencies": {
     "rdf-data-factory": "^1.1.1"
