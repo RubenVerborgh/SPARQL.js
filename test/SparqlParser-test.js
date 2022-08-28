@@ -36,9 +36,10 @@ describe('A SPARQL parser', function () {
   describe('in SPARQL-star mode', () => {
     testQueries('sparql', { sparqlStar: true });
     testQueries('sparqlstar', { sparqlStar: true });
+    testQueries('sparqlstar-annotated', { sparqlStar: true });
     testQueries('sparqlstar-nested-quads', { sparqlStar: true, mustError: true, skipValidation: true });
     // TODO: See if we need skip validation here
-    // testQueries('sparqlstar-nested-quads', { sparqlStar: true, sparqlStarNestedQuads: true });
+    testQueries('sparqlstar-nested-quads', { sparqlStar: true, sparqlStarNestedQuads: true });
     testQueries('sparql-skip-validation', { sparqlStar: true, mustError: true });
   });
 
