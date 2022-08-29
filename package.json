@@ -40,14 +40,14 @@
     "node": ">=8.0"
   },
   "dependencies": {
-    "rdf-data-factory": "^1.0.4"
+    "rdf-data-factory": "^1.1.1"
   },
   "devDependencies": {
-    "expect": "^24.8.0",
+    "expect": "^24.9.0",
     "jison": "0.4.18",
-    "mocha": "^7.0.0",
+    "mocha": "^7.2.0",
     "pre-commit": "^1.2.2",
-    "rdf-test-suite": "^1.11.0"
+    "rdf-test-suite": "^1.19.2"
   },
   "browser": {
     "_process": false,
