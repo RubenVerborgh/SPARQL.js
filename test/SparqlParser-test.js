@@ -458,6 +458,7 @@ function testQueries(directory, settings) {
         var parsedQuery = parseJSON(fs.readFileSync(parsedQueryFile, 'utf8'));
 
         const parsed = parser.parse(sparql);
+        console.log(JSON.stringify(parsed, null, 2))
         expect(parsed).toEqualParsedQuery(parsedQuery);
       });
     }

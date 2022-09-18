@@ -242,9 +242,17 @@
   function objectListToTriples(predicate, objectList, otherTriples) {
     var objects = [], triples = [];
     objectList.forEach(function (l) {
+      if (l.annotation) {
+        // objects.push(triple(l.subject, l.predicate, l.object))
+        throw new Error(`${JSON.stringify(l, null, 2)}${JSON.stringify(objects, null, 2)}`)
+        triples.push(triple(l.subject, l.predicate, l.object))
+        l = l.object;
+      }
+        // throw new Error(`annotation is ${JSON.stringify(l.annotation, null, 2)}`);
       objects.push(triple(null, predicate, l.entity));
       appendAllTo(triples, l.triples);
     });
+    // throw new Error(JSON.stringify(objects, null, 2))
     return unionAll(objects, otherTriples || [], triples);
   }
 
@@ -1288,7 +1296,7 @@ Object
     // TODO: Work out what to *actually* do with the AnnotationPattern
     // TODO: Then add tests
     // TODO: Probably also ensureSParqlStar
-    : GraphNode AnnotationPattern? -> $1
+    : GraphNode AnnotationPattern? -> $2 ? { annotation: $2, object: $1 } : $1
     ;
 
 // [81]
@@ -1332,7 +1340,7 @@ ObjectListPath
 // [87]
 ObjectPath
     // TODO: Work out what to map this do
-    : GraphNodePath AnnotationPatternPath? -> $1
+    : GraphNodePath AnnotationPatternPath? -> $2 ? { object: $1, annotation: $2 } : $1;
     ;
 
 // [88]

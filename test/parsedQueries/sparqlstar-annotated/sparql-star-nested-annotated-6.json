@@ -9,48 +9,68 @@
       "triples": [
         {
           "subject": {
-            "termType": "Quad",
-            "value": "",
-            "subject": {
-              "termType": "Variable",
-              "value": "s0"
-            },
-            "predicate": {
-              "termType": "Variable",
-              "value": "p0"
-            },
-            "object": {
-              "termType": "Variable",
-              "value": "o0"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
-            }
+            "termType": "Variable",
+            "value": "s1"
           },
           "predicate": {
             "termType": "Variable",
             "value": "p1"
           },
           "object": {
+            "termType": "Variable",
+            "value": "o1"
+          }
+        },
+        {
+          "subject": {
             "termType": "Quad",
             "value": "",
             "subject": {
               "termType": "Variable",
-              "value": "s2"
+              "value": "s1"
             },
             "predicate": {
               "termType": "Variable",
-              "value": "p2"
+              "value": "p1"
             },
             "object": {
               "termType": "Variable",
-              "value": "o2"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
+              "value": "o1"
             }
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p2"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o2"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "Variable",
+              "value": "s1"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p1"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o1"
+            }
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p2"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o3"
           }
         }
       ]
