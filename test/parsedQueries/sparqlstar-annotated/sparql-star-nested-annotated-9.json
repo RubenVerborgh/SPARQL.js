@@ -34,6 +34,10 @@
             "object": {
               "termType": "Variable",
               "value": "o1"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           },
           "predicate": {
@@ -63,6 +67,10 @@
               "object": {
                 "termType": "Variable",
                 "value": "o1"
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
               }
             },
             "predicate": {
@@ -72,6 +80,10 @@
             "object": {
               "termType": "Variable",
               "value": "o2"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           },
           "predicate": {
@@ -104,6 +116,10 @@
                 "object": {
                   "termType": "Variable",
                   "value": "o1"
+                },
+                "graph": {
+                  "termType": "DefaultGraph",
+                  "value": ""
                 }
               },
               "predicate": {
@@ -122,6 +138,10 @@
             "object": {
               "termType": "Variable",
               "value": "o3"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           },
           "predicate": {
@@ -131,6 +151,10 @@
           "object": {
             "termType": "Variable",
             "value": "o4"
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
           }
         }
       ]

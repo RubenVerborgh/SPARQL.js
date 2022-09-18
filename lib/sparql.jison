@@ -155,11 +155,12 @@
   }
 
   // Creates a triple with the given subject, predicate, and object
-  function triple(subject, predicate, object) {
+  function triple(subject, predicate, object, annotations) {
     var triple = {};
     if (subject   != null) triple.subject   = subject;
     if (predicate != null) triple.predicate = predicate;
     if (object    != null) triple.object    = object;
+    if (annotations != null) triple.annotations = annotations;
     return triple;
   }
 
@@ -242,17 +243,18 @@
   function objectListToTriples(predicate, objectList, otherTriples) {
     var objects = [], triples = [];
     objectList.forEach(function (l) {
+      let annotation = null;
       if (l.annotation) {
         // objects.push(triple(l.subject, l.predicate, l.object))
-        throw new Error(`${JSON.stringify(l, null, 2)}${JSON.stringify(objects, null, 2)}`)
-        triples.push(triple(l.subject, l.predicate, l.object))
+        // throw new Error(`${JSON.stringify(l, null, 2)}${JSON.stringify(objects, null, 2)}`)
+        // triples.push(triple(l.subject, l.predicate, l.object))
+        annotation = l.annotation
         l = l.object;
       }
         // throw new Error(`annotation is ${JSON.stringify(l.annotation, null, 2)}`);
-      objects.push(triple(null, predicate, l.entity));
+      objects.push(triple(null, predicate, l.entity, annotation));
       appendAllTo(triples, l.triples);
     });
-    // throw new Error(JSON.stringify(objects, null, 2))
     return unionAll(objects, otherTriples || [], triples);
   }
 
@@ -373,11 +375,52 @@
     return value;
   }
 
+  function _applyAnnotations(subject, annotations, arr) {
+    for (const annotation of annotations) {
+      const t = Parser.factory.quad(subject, annotation.predicate, annotation.object);
+      
+      // const t = {
+      //   subject,
+      //   predicate: annotation.predicate,
+      //   object: annotation.object,
+      //   termType: "Quad",
+      //   value: "",
+      // }
+      // const t = triple(subject, annotation.predicate, annotation.object);
+      // t.termType = 'Triple';
+
+      arr.push(t);
+
+      if (annotation.annotations) {
+        _applyAnnotations(t, annotation.annotations, arr)
+      }
+    }
+  }
+
+  function applyAnnotations(triples) {
+    if (Parser.sparqlStar) {
+      const newTriples = [];
+
+      triples.forEach(t => {
+        const s = triple(t.subject, t.predicate, t.object);
+
+        newTriples.push(s);
+
+        if (t.annotations) {
+          _applyAnnotations(Parser.factory.quad(t.subject, t.predicate, t.object), t.annotations, newTriples);
+        }
+      });
+
+      return newTriples;
+    }
+    return triples;
+  }
+
   function ensureSparqlStarNestedQuads(value) {
     if (!Parser.sparqlStarNestedQuads) {
       throw new Error('Lenient SPARQL-star support with nested quads is not enabled');
     }
-    return value;
+    return value;sparqlStar
   }
 
   function ensureNoVariables(operations) {
@@ -1259,8 +1302,8 @@ ConstructTriples
 
 // [75]
 TriplesSameSubject
-    : VarOrTermOrQuotedTP PropertyListNotEmpty -> $2.map(t => extend(triple($1), t))
-    | TriplesNode PropertyList -> appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples) /* the subject is a blank node, possibly with more triples */
+    : VarOrTermOrQuotedTP PropertyListNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    | TriplesNode PropertyList -> applyAnnotations(appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples)) /* the subject is a blank node, possibly with more triples */
     ;
 
 // [76]
@@ -1303,9 +1346,9 @@ Object
 TriplesSameSubjectPath
     // : (VarOrTerm | VarTriple) PropertyListPathNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
     // TODO!: Use this grammar instead
-    : VarOrTermOrQuotedTP PropertyListPathNotEmpty -> $2.map(t => extend(triple($1), t))
+    : VarOrTermOrQuotedTP PropertyListPathNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
     // TODO: See why this is optional since it is not in the grammar
-    | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples) /* the subject is a blank node, possibly with more triples */
+    | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : applyAnnotations(appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples)) /* the subject is a blank node, possibly with more triples */
     ;
 
 // [82] Should be propertyListPath
