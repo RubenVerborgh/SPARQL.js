@@ -25,7 +25,7 @@
     "bin/*"
   ],
   "scripts": {
-    "build": "jison lib/sparql.jison -p slr -o lib/SparqlParser.js",
+    "build": "jison lib/sparql.jison -p slr -m js -o lib/SparqlParser.js && echo 'module.exports=SparqlParser' >> lib/SparqlParser.js",
     "test": "mocha",
     "prepublishOnly": "npm run build",
     "spec-base-query": "rdf-test-suite spec/parser.js http://w3c.github.io/rdf-tests/sparql11/data-sparql11/manifest-all.ttl -s http://www.w3.org/TR/sparql11-query/ -c .rdf-test-suite-cache/",
