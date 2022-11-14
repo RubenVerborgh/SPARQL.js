@@ -1,1 +1,94 @@
-{}
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "Variable",
+              "value": "s0"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p0"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o0"
+            }
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p1"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o1"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "Quad",
+              "value": "",
+              "subject": {
+                "termType": "Variable",
+                "value": "s0"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p0"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "o0"
+              }
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p1"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o1"
+            }
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p2"
+          },
+          "object": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "Variable",
+              "value": "s3"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p3"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o3"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {}
+}

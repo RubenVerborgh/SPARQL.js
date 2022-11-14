@@ -12,8 +12,20 @@
       "triples": [
         {
           "subject": {
-            "termType": "Variable",
-            "value": "s1"
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "Variable",
+              "value": "s0"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p0"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o0"
+            }
           },
           "predicate": {
             "termType": "Variable",
@@ -22,10 +34,6 @@
           "object": {
             "termType": "Variable",
             "value": "o1"
-          },
-          "graph": {
-            "termType": "DefaultGraph",
-            "value": ""
           }
         },
         {
@@ -33,8 +41,20 @@
             "termType": "Quad",
             "value": "",
             "subject": {
-              "termType": "Variable",
-              "value": "s1"
+              "termType": "Quad",
+              "value": "",
+              "subject": {
+                "termType": "Variable",
+                "value": "s0"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p0"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "o0"
+              }
             },
             "predicate": {
               "termType": "Variable",
@@ -43,10 +63,6 @@
             "object": {
               "termType": "Variable",
               "value": "o1"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
             }
           },
           "predicate": {
@@ -62,6 +78,5 @@
     }
   ],
   "type": "query",
-  "prefixes": {
-  }
+  "prefixes": {}
 }

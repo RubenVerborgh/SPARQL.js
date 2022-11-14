@@ -377,7 +377,14 @@
 
   function _applyAnnotations(subject, annotations, arr) {
     for (const annotation of annotations) {
-      const t = Parser.factory.quad(subject, annotation.predicate, annotation.object);
+      const t = triple(
+        subject,
+        annotation.predicate,
+        annotation.object
+      )
+
+      // const t = Parser.factory.quad(subject, annotation.predicate, annotation.object);
+      // delete t.graph;
       
       // const t = {
       //   subject,
@@ -407,7 +414,7 @@
         newTriples.push(s);
 
         if (t.annotations) {
-          _applyAnnotations(Parser.factory.quad(t.subject, t.predicate, t.object), t.annotations, newTriples);
+          _applyAnnotations(triple(t.subject, t.predicate, t.object), t.annotations, newTriples);
         }
       });
 
@@ -1700,12 +1707,12 @@ BlankNode
 
 // [174]
 QuotedTP
-    : '<<' qtSubjectOrObject Verb qtSubjectOrObject '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
+    : '<<' qtSubjectOrObject Verb qtSubjectOrObject '>>' -> ensureSparqlStar(triple($2, $3, $4))
     ;
 
 // [175]
 QuotedTriple
-    : '<<'  DataValueTerm IriOrA DataValueTerm '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
+    : '<<'  DataValueTerm IriOrA DataValueTerm '>>' -> ensureSparqlStar(triple($2, $3, $4))
     ;
 
 // [176]
@@ -1743,7 +1750,7 @@ AnnotationPatternPath
 // [181]
 // TODO: Work out how nested graphs should be handled
 ExprQuotedTP
-    : '<<'  ExprVarOrTerm Verb ExprVarOrTerm '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
+    : '<<'  ExprVarOrTerm Verb ExprVarOrTerm '>>' -> ensureSparqlStar(triple($2, $3, $4))
     ;
 
 // TODO: Re-enable
@@ -1758,15 +1765,17 @@ ExprQuotedTP
 
 // TODO: Remove these two to handle sparqlstar properly
 VarTriple
-    : '<<' 'GRAPH' VarOrIri '{' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, $3))
-    | '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
+    // TODO: Remove this - it is not valid SPARQLstar
+    // : '<<' 'GRAPH' VarOrIri '{' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, $3))
+    : '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> ensureSparqlStar(triple($2, $3, $4))
     ;
 
 
 
 ConstTriple
-    : '<<' 'GRAPH' VarOrIri '{' (ConstTriple | GraphTerm) Verb (ConstTriple | GraphTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, $3))
-    | '<<' (ConstTriple | GraphTerm) Verb (ConstTriple | GraphTerm) '>>' -> ensureSparqlStar(Parser.factory.quad($2, $3, $4))
+    // TODO: Remove this - it is not valid sparql star
+    // : '<<' 'GRAPH' VarOrIri '{' (ConstTriple | GraphTerm) Verb (ConstTriple | GraphTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, $3))
+    : '<<' (ConstTriple | GraphTerm) Verb (ConstTriple | GraphTerm) '>>' -> ensureSparqlStar(triple($2, $3, $4))
     ;
 
 // Utilities

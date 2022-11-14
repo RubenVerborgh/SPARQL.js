@@ -49,10 +49,6 @@
             "object": {
               "termType": "Variable",
               "value": "o1"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
             }
           },
           "predicate": {
