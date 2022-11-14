@@ -10,7 +10,6 @@
         {
           "subject": {
             "termType": "Quad",
-            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "s0"
@@ -21,7 +20,6 @@
             },
             "object": {
               "termType": "Quad",
-              "value": "",
               "subject": {
                 "termType": "Variable",
                 "value": "s2"

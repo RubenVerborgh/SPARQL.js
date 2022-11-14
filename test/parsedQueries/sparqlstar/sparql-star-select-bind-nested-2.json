@@ -8,7 +8,6 @@
     {
       "expression": {
         "termType": "Quad",
-        "value": "",
         "subject": {
           "termType": "NamedNode",
           "value": "http://example.com/a"
@@ -19,7 +18,6 @@
         },
         "object": {
           "termType": "Quad",
-          "value": "",
           "subject": {
             "termType": "NamedNode",
             "value": "http://example.com/a"

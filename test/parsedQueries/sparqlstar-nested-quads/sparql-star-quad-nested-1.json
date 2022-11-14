@@ -12,10 +12,8 @@
         {
           "subject": {
             "termType": "Quad",
-            "value": "",
             "subject": {
               "termType": "Quad",
-              "value": "",
               "subject": {
                 "termType": "NamedNode",
                 "value": "http://example.com/Moscow"

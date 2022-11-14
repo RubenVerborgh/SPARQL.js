@@ -12,7 +12,6 @@
         {
           "subject": {
             "termType": "Quad",
-            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "s"
@@ -42,7 +41,6 @@
         {
           "subject": {
             "termType": "Quad",
-            "value": "",
             "subject": {
               "termType": "NamedNode",
               "value": "http://example.com/Moscow"
@@ -72,7 +70,6 @@
         {
           "subject": {
             "termType": "Quad",
-            "value": "",
             "subject": {
               "termType": "BlankNode",
               "value": "e_b"
