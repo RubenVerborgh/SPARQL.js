@@ -387,7 +387,10 @@
   function _applyAnnotations(subject, annotations, arr) {
     for (const annotation of annotations) {
       const t = triple(
-        subject,
+        // If the annotation already has a subject then just push the
+        // annotation to the upper scope as it is a blank node introduced
+        // from a pattern like :s :p :o {| :p1 [ :p2 :o2; :p3 :o3 ] |}
+        'subject' in annotation ? annotation.subject : subject,
         annotation.predicate,
         annotation.object
       )
@@ -639,11 +642,13 @@ SPACES_COMMENTS       (\s+|{COMMENT}\n\r?)+
 "BOUND"                  return 'BOUND'
 "BNODE"                  return 'BNODE'
 ("RAND"|"NOW"|"UUID"|"STRUUID") return 'FUNC_ARITY0'
-("LANG"|"DATATYPE"|"IRI"|"URI"|"ABS"|"CEIL"|"FLOOR"|"ROUND"|"STRLEN"|"STR"|"UCASE"|"LCASE"|"ENCODE_FOR_URI"|"YEAR"|"MONTH"|"DAY"|"HOURS"|"MINUTES"|"SECONDS"|"TIMEZONE"|"TZ"|"MD5"|"SHA1"|"SHA256"|"SHA384"|"SHA512"|"isIRI"|"isURI"|"isBLANK"|"isLITERAL"|"isNUMERIC"|"SUBJECT"|"PREDICATE"|"OBJECT"|"isTRIPLE") return 'FUNC_ARITY1'
+("LANG"|"DATATYPE"|"IRI"|"URI"|"ABS"|"CEIL"|"FLOOR"|"ROUND"|"STRLEN"|"STR"|"UCASE"|"LCASE"|"ENCODE_FOR_URI"|"YEAR"|"MONTH"|"DAY"|"HOURS"|"MINUTES"|"SECONDS"|"TIMEZONE"|"TZ"|"MD5"|"SHA1"|"SHA256"|"SHA384"|"SHA512"|"isIRI"|"isURI"|"isBLANK"|"isLITERAL"|"isNUMERIC") return 'FUNC_ARITY1'
+("SUBJECT"|"PREDICATE"|"OBJECT"|"isTRIPLE") return 'FUNC_ARITY1_SPARQL_STAR'
 ("LANGMATCHES"|"CONTAINS"|"STRSTARTS"|"STRENDS"|"STRBEFORE"|"STRAFTER"|"STRLANG"|"STRDT"|"sameTerm") return 'FUNC_ARITY2'
 "CONCAT"                 return 'CONCAT'
 "COALESCE"               return 'COALESCE'
-("IF"|"TRIPLE")          return 'FUNC_ARITY3'
+"IF"                     return 'FUNC_ARITY3'
+"TRIPLE"                 return 'FUNC_ARITY3_SPARQL_STAR'
 "REGEX"                  return 'REGEX'
 "SUBSTR"                 return 'SUBSTR'
 "REPLACE"                return 'REPLACE'
@@ -1600,8 +1605,10 @@ BuiltInCall
     : Aggregate
     | FUNC_ARITY0 NIL -> operation(lowercase($1))
     | FUNC_ARITY1 '(' Expression ')' -> operation(lowercase($1), [$3])
+    | FUNC_ARITY1_SPARQL_STAR '(' Expression ')' -> ensureSparqlStar(operation(lowercase($1), [$3]))
     | FUNC_ARITY2 '(' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5])
     | FUNC_ARITY3 '(' Expression ',' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5, $7])
+    | FUNC_ARITY3_SPARQL_STAR '(' Expression ',' Expression ',' Expression ')' -> ensureSparqlStar(operation(lowercase($1), [$3, $5, $7]))
     // [122], [123], [124]
     // TODO: Fix this - it is technically incorrect as 'SUBSTR' | 'REGEX' | 'REPLACE' are only allowed 2-3 args
     // as opposed to an aribtrary number of args which this allows

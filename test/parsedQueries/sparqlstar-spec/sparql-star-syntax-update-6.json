@@ -1,0 +1,94 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "insertdelete",
+      "delete": [],
+      "insert": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "s"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#r"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "o"
+              }
+            },
+            {
+              "subject": {
+                "termType": "Quad",
+                "subject": {
+                  "termType": "Variable",
+                  "value": "s"
+                },
+                "predicate": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#r"
+                },
+                "object": {
+                  "termType": "Variable",
+                  "value": "o"
+                }
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#added"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "Property :r",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "where": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "s"
+              },
+              "predicate": {
+                "type": "path",
+                "pathType": "/",
+                "items": [
+                  {
+                    "termType": "NamedNode",
+                    "value": "http://example.com/ns#p"
+                  },
+                  {
+                    "termType": "NamedNode",
+                    "value": "http://example.com/ns#q"
+                  }
+                ]
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "o"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

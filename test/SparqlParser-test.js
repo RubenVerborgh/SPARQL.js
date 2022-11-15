@@ -23,6 +23,7 @@ describe('A SPARQL parser', function () {
     testQueries('sparql', {});
     testQueries('sparqlstar', { mustError: true });
     testQueries('sparql-skip-validation', { mustError: true });
+    testQueries('sparqlstar-spec', { mustError: true });
   });
 
   describe('in SPARQL mode with skipValidation', () => {
@@ -32,6 +33,7 @@ describe('A SPARQL parser', function () {
     testQueries('sparqlstar-nested-quads', { skipValidation: true, mustError: true });
     testQueries('sparqlstar-invalid', { skipValidation: true, mustError: true });
     testQueries('sparql-skip-validation', { skipValidation: true });
+    testQueries('sparqlstar-spec', { mustError: true });
   });
 
   describe('in SPARQL-star mode', () => {
@@ -42,6 +44,8 @@ describe('A SPARQL parser', function () {
     // TODO: See if we need skip validation here
     // testQueries('sparqlstar-nested-quads', { sparqlStar: true, sparqlStarNestedQuads: true });
     testQueries('sparql-skip-validation', { sparqlStar: true, mustError: true });
+    // Select queries from the sparqlstar specification
+    testQueries('sparqlstar-spec', { sparqlStar: true });
   });
 
   it('should throw an error on an invalid query', function () {

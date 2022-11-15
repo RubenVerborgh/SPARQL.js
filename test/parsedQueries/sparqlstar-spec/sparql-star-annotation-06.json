@@ -1,0 +1,74 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "Variable",
+              "value": "s"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o"
+            }
+          },
+          "predicate": {
+            "type": "path",
+            "pathType": "/",
+            "items": [
+              {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#r"
+              },
+              {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#q"
+              }
+            ]
+          },
+          "object": {
+            "termType": "Literal",
+            "value": "ABC",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#string"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "values",
+      "values": [
+        {
+          "?x": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#s"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#o"
+            }
+          }
+        },
+        {
+          "?x": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "Quad",
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#s"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#p"
+              },
+              "object": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#o"
+              }
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#q"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "values",
+      "values": [
+        {
+          "?y": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#s"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#o"
+            }
+          },
+          "?z": {
+            "termType": "Literal",
+            "value": "123",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
+        },
+        {
+          "?y": {
+            "termType": "Literal",
+            "value": "123",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          },
+          "?z": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#s"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#o"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}
