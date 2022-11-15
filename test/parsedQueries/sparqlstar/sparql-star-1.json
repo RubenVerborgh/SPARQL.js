@@ -24,10 +24,6 @@
             "object": {
               "termType": "Variable",
               "value": "o"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
             }
           },
           "predicate": {
@@ -53,10 +49,6 @@
             "object": {
               "termType": "NamedNode",
               "value": "http://example.com/City"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
             }
           },
           "predicate": {
@@ -82,10 +74,6 @@
             "object": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
             }
           },
           "predicate": {

@@ -25,10 +25,6 @@
         "object": {
           "termType": "NamedNode",
           "value": "http://example.com/City"
-        },
-        "graph": {
-          "termType": "DefaultGraph",
-          "value": ""
         }
       }
     }
