@@ -30,7 +30,7 @@
     "prepublishOnly": "npm run build",
     "spec-base-query": "rdf-test-suite spec/parser.js http://w3c.github.io/rdf-tests/sparql11/data-sparql11/manifest-all.ttl -s http://www.w3.org/TR/sparql11-query/ -c .rdf-test-suite-cache/",
     "spec-base-update": "rdf-test-suite spec/parser.js http://w3c.github.io/rdf-tests/sparql11/data-sparql11/manifest-all.ttl -s http://www.w3.org/TR/sparql11-update/ -c .rdf-test-suite-cache/",
-    "spec-star": "rdf-test-suite spec/parser.js https://w3c.github.io/rdf-star/tests/sparql/syntax/manifest.jsonld -s https://w3c.github.io/rdf-star/cg-spec/editors_draft.html -c .rdf-test-suite-cache/",
+    "spec-star": "rdf-test-suite spec/parser.js https://w3c.github.io/rdf-star/tests/sparql/syntax/manifest.jsonld -i '{ \"sparqlStar\": true }' -c .rdf-test-suite-cache/",
     "spec-earl-query": "npm run spec-base-query --silent -- -o earl -p spec/earl-meta.json > spec/earl-query.ttl",
     "spec-earl-update": "npm run spec-base-update --silent -- -o earl -p spec/earl-meta.json > spec/earl-update.ttl",
     "spec-earl-star": "npm run spec-star --silent -- -o earl -p spec/earl-meta.json > spec/earl-star.ttl",
@@ -47,7 +47,7 @@
     "jison": "0.4.18",
     "mocha": "^7.2.0",
     "pre-commit": "^1.2.2",
-    "rdf-test-suite": "^1.19.2"
+    "rdf-test-suite": "file:../rdf-test-suite.js"
   },
   "browser": {
     "_process": false,

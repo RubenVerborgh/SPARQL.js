@@ -401,19 +401,6 @@
         annotation.object
       )
 
-      // const t = Parser.factory.quad(subject, annotation.predicate, annotation.object);
-      // delete t.graph;
-      
-      // const t = {
-      //   subject,
-      //   predicate: annotation.predicate,
-      //   object: annotation.object,
-      //   termType: "Quad",
-      //   value: "",
-      // }
-      // const t = triple(subject, annotation.predicate, annotation.object);
-      // t.termType = 'Triple';
-
       arr.push(t);
 
       if (annotation.annotations) {
@@ -449,7 +436,7 @@
     if (!Parser.sparqlStarNestedQuads) {
       throw new Error('Lenient SPARQL-star support with nested quads is not enabled');
     }
-    return value;sparqlStar
+    return value;
   }
 
   function ensureNoVariables(operations) {
@@ -849,7 +836,7 @@ SelectClauseItem
     : Var
     | '(' Expression 'AS' Var ')' -> expression($2, { variable: $4 })
     // TODO: Remove this
-    | '(' VarTriple 'AS' Var ')' -> ensureSparqlStar(expression($2, { variable: $4 }))
+    // | '(' VarTriple 'AS' Var ')' -> ensureSparqlStar(expression($2, { variable: $4 }))
     ;
 
 // [8] Didn't check - optional clause seems disjoint with grammar
@@ -1208,7 +1195,7 @@ GraphPatternNotTriples
     | Filter
     | Bind
     // TODO: See what covers this (it *might* be subsumed by Bind with the renewed definition of experession)
-    | 'BIND' '(' VarTriple 'AS' Var ')' -> ensureSparqlStar({ type: 'bind', variable: $5, expression: $3 })
+    // | 'BIND' '(' VarTriple 'AS' Var ')' -> ensureSparqlStar({ type: 'bind', variable: $5, expression: $3 })
     | ValuesClause
     ;
 
@@ -1232,6 +1219,7 @@ ServiceGraphPattern
 // [60]
 Bind
     : 'BIND' '(' Expression 'AS' Var ')' -> { type: 'bind', variable: $5, expression: $3 }
+    // | 'BIND' '(' VarTriple 'AS' Var ')' -> ensureSparqlStar({ type: 'bind', variable: $5, expression: $3 })
     ;
 
 // [61]
@@ -1367,9 +1355,6 @@ ObjectList
 
 // [80]
 Object
-    // TODO: Work out what to *actually* do with the AnnotationPattern
-    // TODO: Then add tests
-    // TODO: Probably also ensureSParqlStar
     : GraphNode AnnotationPattern? -> $2 ? { annotation: $2, object: $1 } : $1
     ;
 
@@ -1478,12 +1463,16 @@ TriplesNodePath
     : '(' GraphNodePath+ ')' -> createList($2)
     | '[' PropertyListPathNotEmpty ']' -> createAnonymousObject($2)
     ;
+
+// [104]
 GraphNode
-    : (VarOrTerm | VarTriple) -> { entity: $1, triples: [] } /* for consistency with TriplesNode */
+    : VarOrTermOrQuotedTP -> { entity: $1, triples: [] } /* for consistency with TriplesNode */
     | TriplesNode
     ;
+
+// [105]
 GraphNodePath
-    : (VarOrTerm | VarTriple) -> { entity: $1, triples: [] } /* for consistency with TriplesNodePath */
+    : VarOrTermOrQuotedTP -> { entity: $1, triples: [] } /* for consistency with TriplesNodePath */
     | TriplesNodePath
     ;
 
@@ -1545,7 +1534,6 @@ ValueLogical
 // [114]
 RelationalExpression
     : NumericExpression
-    // TODO: Fix missing pipe on sparql-star grammar page
     | NumericExpression ( '=' | '!=' | '<' | '>' | '<=' | '>=' ) AdditiveExpression -> operation($2, [$1, $3])
     | NumericExpression 'NOT'? 'IN' ExpressionList -> operation($2 ? 'notin' : 'in', [$1, $4])
     ;
@@ -1782,8 +1770,15 @@ ExprQuotedTP
 // TODO: Re-enable
 // [182]
 // TODO: See if this should be overriding something else in the grammar
-// ExprVarOrTerm
-//     : Literal
+ExprVarOrTerm
+  // : VarTriple
+  : VarOrIri
+  | ExprQuotedTP
+  | Literal
+  ;
+//     // : Literal
+//     : VarOrIri
+//     ;
 //     | VarOrIri
 // // TODO: See if this recursive reference is the cause of the compilation error.
 //     | ExprQuotedTP
