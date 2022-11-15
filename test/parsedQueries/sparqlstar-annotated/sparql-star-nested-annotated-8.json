@@ -1,6 +1,11 @@
 {
   "queryType": "SELECT",
-  "variables": [{}],
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
   "where": [
     {
       "type": "bgp",

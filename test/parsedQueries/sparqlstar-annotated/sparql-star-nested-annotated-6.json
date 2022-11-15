@@ -1,7 +1,10 @@
 {
   "queryType": "SELECT",
   "variables": [
-    {}
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
   ],
   "where": [
     {
