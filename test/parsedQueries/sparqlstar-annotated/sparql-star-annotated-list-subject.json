@@ -1,0 +1,97 @@
+{
+  "prefixes": {
+    "": "http://example.com/ns#"
+  },
+  "queryType": "SELECT",
+  "type": "query",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "triples": [
+        {
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#o"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#p"
+          },
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          }
+        },
+        {
+          "object": {
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            },
+            "language": "",
+            "termType": "Literal",
+            "value": "123"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#q"
+          },
+          "subject": {
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#o"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "subject": {
+              "termType": "BlankNode",
+              "value": "g_0"
+            },
+            "termType": "Quad"
+          }
+        },
+        {
+          "object": {
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#string"
+            },
+            "language": "",
+            "termType": "Literal",
+            "value": "abc"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#first"
+          },
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          }
+        },
+        {
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"
+          },
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          }
+        }
+      ],
+      "type": "bgp"
+    }
+  ]
+}
