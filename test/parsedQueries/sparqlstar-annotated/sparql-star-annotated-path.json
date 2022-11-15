@@ -1,0 +1,105 @@
+{
+  "prefixes": {
+    "": "http://example.com/"
+  },
+  "queryType": "SELECT",
+  "type": "query",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "triples": [
+        {
+          "object": {
+            "termType": "Variable",
+            "value": "o"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          }
+        },
+        {
+          "object": {
+            "termType": "Variable",
+            "value": "o1"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p1"
+          },
+          "subject": {
+            "object": {
+              "termType": "Variable",
+              "value": "o"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p"
+            },
+            "subject": {
+              "termType": "Variable",
+              "value": "s"
+            },
+            "termType": "Quad"
+          }
+        },
+        {
+          "object": {
+            "termType": "Variable",
+            "value": "o2"
+          },
+          "predicate": {
+            "items": [
+              {
+                "termType": "NamedNode",
+                "value": "http://example.com/p"
+              },
+              {
+                "termType": "NamedNode",
+                "value": "http://example.com/q"
+              }
+            ],
+            "pathType": "/",
+            "type": "path"
+          },
+          "subject": {
+            "object": {
+              "termType": "Variable",
+              "value": "o1"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p1"
+            },
+            "subject": {
+              "object": {
+                "termType": "Variable",
+                "value": "o"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p"
+              },
+              "subject": {
+                "termType": "Variable",
+                "value": "s"
+              },
+              "termType": "Quad"
+            },
+            "termType": "Quad"
+          }
+        }
+      ],
+      "type": "bgp"
+    }
+  ]
+}
