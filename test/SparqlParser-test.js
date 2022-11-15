@@ -46,6 +46,9 @@ describe('A SPARQL parser', function () {
     testQueries('sparql-skip-validation', { sparqlStar: true, mustError: true });
     // Select queries from the sparqlstar specification
     testQueries('sparqlstar-spec', { sparqlStar: true });
+
+    testQueries('sparqlstar-nested-quads', { mustError: true, sparqlStar: true });
+    testQueries('sparqlstar-invalid', { mustError: true, sparqlStar: true });
   });
 
   it('should throw an error on an invalid query', function () {

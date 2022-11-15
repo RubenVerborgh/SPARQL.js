@@ -155,6 +155,12 @@
   }
 
   function nestedTriple(subject, predicate, object) {
+
+    // TODO: Remove this when it is caught by the grammar
+    if (!('termType' in predicate)) {
+      throw new Error('Nested triples cannot contain paths');
+    }
+
     return {
       termType: "Quad",
       subject,
