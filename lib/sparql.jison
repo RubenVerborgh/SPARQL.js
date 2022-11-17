@@ -543,7 +543,6 @@ PERCENT               "%"{HEX}{HEX}
 HEX                   [0-9A-Fa-f]
 // [173]
 PN_LOCAL_ESC          "\\"("_"|"~"|"."|"-"|"!"|"$"|"&"|"'"|"("|")"|"*"|"+"|","|";"|"="|"/"|"?"|"#"|"@"|"%")
-// TODO: Work out where this fits into the production grammar
 COMMENT               "#"[^\n\r]*
 SPACES_COMMENTS       (\s+|{COMMENT}\n\r?)+
 
@@ -731,15 +730,12 @@ QueryOrUpdate
     }
     ;
 
-// TODO: Properly factor out queryUnit
-
 // [1]
 QueryUnit
   : Query
   ;
 
 // [2]
-// TODO: Work out why ValuesClause was optional
 Query
     : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> { ...$1, ...$2, type: 'query' }
     ;
@@ -835,18 +831,15 @@ SelectClauseBase
 SelectClauseItem
     : Var
     | '(' Expression 'AS' Var ')' -> expression($2, { variable: $4 })
-    // TODO: Remove this
-    // | '(' VarTriple 'AS' Var ')' -> ensureSparqlStar(expression($2, { variable: $4 }))
     ;
 
-// [8] Didn't check - optional clause seems disjoint with grammar
+// [8]
 SubSelect
     : SelectClauseWildcard WhereClause SolutionModifierNoGroup ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
     | SelectClauseVars     WhereClause SolutionModifier        ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
     ;
 
-// TODO: See what 9 is
-// [10] Didn't check
+// [10]
 ConstructQuery
     : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, groupDatasets($3), $4, $5)
     | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $5 = ($5 ? $5.triples : []) }, groupDatasets($2), { where: [ { type: 'bgp', triples: appendAllTo([], $5) } ] }, $7)
@@ -858,7 +851,6 @@ DescribeQuery
     ;
 
 // [12]
-// TODO: See why this has solution modifier rather than ValuesClause.
 AskQuery
     : 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, groupDatasets($2), $3, $4)
     ;
@@ -893,7 +885,6 @@ SolutionModifier
     : GroupClause? SolutionModifierNoGroup -> extend($1, $2)
     ;
 
-// TODO: See why this is necessary rather than just existing in [18]
 SolutionModifierNoGroup
     : HavingClause? OrderClause? LimitOffsetClauses? -> extend($1, $2, $3)
     ;
@@ -954,9 +945,6 @@ OffsetClause
     ;
 
 // [28]
-// TODO: See why we have InlineData rather than data block here
-// TODO: See why it is not all optional
-// TODO: Double check this
 ValuesClause
     : 'VALUES' InlineData -> { type: 'values', values: $2 }
     ;
@@ -984,7 +972,6 @@ DataBlockValueList
     ;
 
 // [29]
-// TODO: Establish why this is totally different to the published grammar
 Update
     : (Update1 ';' Prologue)* Update1 (';' Prologue)? -> { type: 'update', updates: appendTo($1, $2) }
     ;
@@ -1003,7 +990,6 @@ Update1
 
 
 // [31]
-// TODO: See if into graph clause is needed
 Load
     : 'LOAD' 'SILENT'? iri IntoGraphClause? -> extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })
     ;
@@ -1113,14 +1099,10 @@ QuadData
 // [50]
 Quads
     : TriplesTemplate? QuadsNotTriples* -> $1 ? unionAll($2, [$1]) : unionAll($2)
-    // TODO: Actually use this grammar (which *is* different)
-    // it seems like the problem comes down to TriplesTemplate not being correct
-    // : TriplesTemplate? ( QuadsNotTriples "."? TriplesTemplate? ) *
     ;
 
 // [51]
 QuadsNotTriples
-// TODO Fix this - it is actually the definition for quad
     : 'GRAPH' VarOrIri '{' TriplesTemplate? '}' '.'? TriplesTemplate?
     {
       var graph = extend($4 || { triples: [] }, { type: 'graph', name: $2 });
@@ -1129,7 +1111,6 @@ QuadsNotTriples
     ;
 
 // [52]
-// TODO: See why this is not identical to the grammar
 TriplesTemplate
     : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
@@ -1168,23 +1149,11 @@ GroupGraphPatternSubTail
     ;
 
 // [55]
-// TODO: See why this is not identical to the grammar
 TriplesBlock
     : (TriplesSameSubjectPath '.')* TriplesSameSubjectPath '.'? -> { type: 'bgp', triples: unionAll($1, [$2]) }
     ;
 
 // [56]
-// TODO: Use this
-// GraphPatternNotTriples
-//     : GroupOrUnionGraphPattern
-//     | OptionalGraphPattern
-//     | MinusGraphPattern
-//     | GraphGraphPattern
-//     | ServiceGraphPattern
-//     | Filter
-//     | Bind
-//     | InlineData
-//     ;
 
 GraphPatternNotTriples
     : GroupOrUnionGraphPattern
@@ -1194,17 +1163,13 @@ GraphPatternNotTriples
     | ServiceGraphPattern
     | Filter
     | Bind
-    // TODO: See what covers this (it *might* be subsumed by Bind with the renewed definition of experession)
-    // | 'BIND' '(' VarTriple 'AS' Var ')' -> ensureSparqlStar({ type: 'bind', variable: $5, expression: $3 })
     | ValuesClause
     ;
-
 
 // [57]
 OptionalGraphPattern
     : 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
     ;
-
 
 // [58]
 GraphGraphPattern
@@ -1219,12 +1184,9 @@ ServiceGraphPattern
 // [60]
 Bind
     : 'BIND' '(' Expression 'AS' Var ')' -> { type: 'bind', variable: $5, expression: $3 }
-    // | 'BIND' '(' VarTriple 'AS' Var ')' -> ensureSparqlStar({ type: 'bind', variable: $5, expression: $3 })
     ;
 
 // [61]
-// TODO: Handle conflict with the other inlineData
-// TODO: See why this was named valuesClause rather than DataBlock
 InlineData
     : 'VALUES' DataBlock -> { type: 'values', values: $2 }
     ;
@@ -1313,8 +1275,6 @@ ConstructTemplate
     ;
 
 // [74]
-// TODO: See if there is a reason for using this
-// representation rather than the grammar representation
 ConstructTriples
     : (TriplesSameSubject '.')* TriplesSameSubject '.'? -> unionAll($1, [$2])
     ;
@@ -1360,10 +1320,7 @@ Object
 
 // [81]
 TriplesSameSubjectPath
-    // : (VarOrTerm | VarTriple) PropertyListPathNotEmpty -> $2.map(function (t) { return extend(triple($1), t); })
-    // TODO!: Use this grammar instead
     : VarOrTermOrQuotedTP PropertyListPathNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
-    // TODO: See why this is optional since it is not in the grammar
     | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : applyAnnotations(appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples)) /* the subject is a blank node, possibly with more triples */
     ;
 
@@ -1374,9 +1331,7 @@ PropertyListPathNotEmpty
     : ( VerbPath | VerbSimple ) ObjectListPath PropertyListPathNotEmptyTail* -> objectListToTriples($1, $2, $3)
     ;
 
-// TODO: Double check all of this
 PropertyListPathNotEmptyTail
-    // TODO: Double check this in particular
     : ';' -> []
     | ';' ( VerbPath | VerbSimple ) ObjectListPath -> objectListToTriples(toVar($2), $3)
     ;
@@ -1398,7 +1353,6 @@ ObjectListPath
 
 // [87]
 ObjectPath
-    // TODO: Work out what to map this do
     : GraphNodePath AnnotationPatternPath? -> $2 ? { object: $1, annotation: $2 } : $1;
     ;
 
@@ -1444,7 +1398,6 @@ PathPrimary
 // [95]
 PathNegatedPropertySet
     : PathOneInPropertySet
-    // TODO: See why nil is here (its not in the grammar)
     | NIL -> []
     | '(' ( PathOneInPropertySet '|' )* PathOneInPropertySet? ')' -> path('|', appendTo($2, $3))
     ;
@@ -1499,7 +1452,6 @@ GraphTerm
     : iri
     | Literal
     | BlankNode
-    // TODO: See if custom handling of NIL is needed here
     | NIL  -> Parser.factory.namedNode(RDF_NIL)
     ;
 
@@ -1544,7 +1496,6 @@ NumericExpression
     ;
 
 // [116]
-// TODO: Properly check these
 AdditiveExpression
     : MultiplicativeExpression AdditiveExpressionTail* -> createOperationTree($1, $2)
     ;
@@ -1559,7 +1510,6 @@ AdditiveExpressionTail
     ;
 
 // [117]
-// TODO: properly check
 MultiplicativeExpression
     : UnaryExpression MultiplicativeExpressionTail* -> createOperationTree($1, $2)
     ;
@@ -1568,7 +1518,6 @@ MultiplicativeExpressionTail
     ;
 
 // [118]
-// TODO: Properly check
 UnaryExpression
     : '+' PrimaryExpression -> operation('UPLUS', [$2])
     | '!'  PrimaryExpression -> operation($1, [$2])
@@ -1580,7 +1529,6 @@ UnaryExpression
 PrimaryExpression
     : BrackettedExpression
     | BuiltInCall
-    // TODO: See why this is not iriOrFunctionCall
     | iri
     | FunctionCall
     | Literal
@@ -1594,7 +1542,6 @@ BrackettedExpression
     ;
 
 // [121]
-// TODO: Double check this
 BuiltInCall
     : Aggregate
     | FUNC_ARITY0 NIL -> operation(lowercase($1))
@@ -1604,8 +1551,6 @@ BuiltInCall
     | FUNC_ARITY3 '(' Expression ',' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5, $7])
     | FUNC_ARITY3_SPARQL_STAR '(' Expression ',' Expression ',' Expression ')' -> ensureSparqlStar(operation(lowercase($1), [$3, $5, $7]))
     // [122], [123], [124]
-    // TODO: Fix this - it is technically incorrect as 'SUBSTR' | 'REGEX' | 'REPLACE' are only allowed 2-3 args
-    // as opposed to an aribtrary number of args which this allows
     | ( 'CONCAT' | 'COALESCE' | 'SUBSTR' | 'REGEX' | 'REPLACE' ) ExpressionList -> operation(lowercase($1), $2)
     | 'BOUND' '(' VAR ')' -> operation('bound', [toVar($3)])
     | 'BNODE' NIL -> operation($1, [])
@@ -1615,7 +1560,6 @@ BuiltInCall
     ;
 
 // [127]
-// TODO: Double check this
 Aggregate
     : 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')' -> expression($4, { type: 'aggregate', aggregation: lowercase($1), distinct: !!$3 })
     | FUNC_AGGREGATE '(' 'DISTINCT'? Expression ')' -> expression($4, { type: 'aggregate', aggregation: lowercase($1), distinct: !!$3 })
@@ -1717,8 +1661,6 @@ BlankNode
 // Note [139] - [173] are grammar terms that are written above
 //
 
-// TODO: Make everthing here ensure sparqlStar
-
 // [174]
 QuotedTP
     : '<<' qtSubjectOrObject Verb qtSubjectOrObject '>>' -> ensureSparqlStar(nestedTriple($2, $3, $4))
@@ -1765,14 +1707,11 @@ AnnotationPatternPath
 
 
 // [181]
-// TODO: Work out how nested graphs should be handled
 ExprQuotedTP
     : '<<'  ExprVarOrTerm Verb ExprVarOrTerm '>>' -> ensureSparqlStar(nestedTriple($2, $3, $4))
     ;
 
-// TODO: Re-enable
 // [182]
-// TODO: See if this should be overriding something else in the grammar
 ExprVarOrTerm
   : VarOrIri
   | ExprQuotedTP
@@ -1784,4 +1723,3 @@ IriOrA
     : iri -> $1
     | 'a' -> Parser.factory.namedNode(RDF_TYPE)
     ;
-
