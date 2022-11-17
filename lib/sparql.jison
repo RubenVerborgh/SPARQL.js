@@ -1731,7 +1731,10 @@ QuotedTriple
 
 // [176]
 qtSubjectOrObject
-    : VarOrTerm
+    : Var
+    | iri
+    | BlankNode
+    | Literal
     | QuotedTP
     ;
 
@@ -1771,33 +1774,10 @@ ExprQuotedTP
 // [182]
 // TODO: See if this should be overriding something else in the grammar
 ExprVarOrTerm
-  // : VarTriple
   : VarOrIri
   | ExprQuotedTP
   | Literal
   ;
-//     // : Literal
-//     : VarOrIri
-//     ;
-//     | VarOrIri
-// // TODO: See if this recursive reference is the cause of the compilation error.
-//     | ExprQuotedTP
-//     ;
-
-// TODO: Remove these two to handle sparqlstar properly
-VarTriple
-    // TODO: Remove this - it is not valid SPARQLstar
-    // : '<<' 'GRAPH' VarOrIri '{' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, $3))
-    : '<<' (VarTriple | VarOrTerm) Verb (VarTriple | VarOrTerm) '>>' -> ensureSparqlStar(nestedTriple($2, $3, $4))
-    ;
-
-
-
-ConstTriple
-    // TODO: Remove this - it is not valid sparql star
-    // : '<<' 'GRAPH' VarOrIri '{' (ConstTriple | GraphTerm) Verb (ConstTriple | GraphTerm) '}' '>>' -> ensureSparqlStar(Parser.factory.quad($5, $6, $7, $3))
-    : '<<' (ConstTriple | GraphTerm) Verb (ConstTriple | GraphTerm) '>>' -> ensureSparqlStar(nestedTriple($2, $3, $4))
-    ;
 
 // Utilities
 IriOrA
