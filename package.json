@@ -1,6 +1,6 @@
 {
   "name": "sparqljs",
-  "version": "3.5.2",
+  "version": "3.6.1",
   "description": "A parser for the SPARQL query language",
   "author": "Ruben Verborgh <ruben.verborgh@gmail.com>",
   "keywords": [
@@ -25,7 +25,7 @@
     "bin/*"
   ],
   "scripts": {
-    "build": "jison lib/sparql.jison -p slr -o lib/SparqlParser.js",
+    "build": "jison lib/sparql.jison -p slr -m js -o lib/SparqlParser.js && echo 'module.exports=SparqlParser' >> lib/SparqlParser.js",
     "test": "mocha",
     "prepublishOnly": "npm run build",
     "spec-base-query": "rdf-test-suite spec/parser.js http://w3c.github.io/rdf-tests/sparql11/data-sparql11/manifest-all.ttl -s http://www.w3.org/TR/sparql11-query/ -c .rdf-test-suite-cache/",
@@ -37,7 +37,7 @@
     "spec": "npm run spec-base-query && npm run spec-base-update && npm run spec-star"
   },
   "engines": {
-    "node": ">=8.0"
+    "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
   },
   "dependencies": {
     "rdf-data-factory": "^1.1.1"

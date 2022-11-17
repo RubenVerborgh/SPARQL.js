@@ -15,7 +15,7 @@ module.exports = {
    *   skipUngroupedVariableCheck?: boolean
    * }
    */
-  Parser: function ({ prefixes, baseIRI, factory, sparqlStar, skipValidation, skipUngroupedVariableCheck, sparqlStarNestedQuads } = {}) {
+  Parser: function ({ prefixes, baseIRI, factory, sparqlStar, skipValidation, skipUngroupedVariableCheck, pathOnly } = {}) {
 
     // Create a copy of the prefixes
     var prefixesCopy = {};
@@ -30,7 +30,7 @@ module.exports = {
       Parser.prefixes = Object.create(prefixesCopy);
       Parser.factory = factory || new DataFactory();
       Parser.sparqlStar = Boolean(sparqlStar);
-      Parser.sparqlStarNestedQuads = Boolean(sparqlStarNestedQuads);
+      Parser.pathOnly = Boolean(pathOnly);
       // We keep skipUngroupedVariableCheck for compatibility reasons.
       Parser.skipValidation = Boolean(skipValidation) || Boolean(skipUngroupedVariableCheck)
       return Parser.prototype.parse.apply(parser, arguments);

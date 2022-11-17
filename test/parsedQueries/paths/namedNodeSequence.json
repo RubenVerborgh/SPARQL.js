@@ -1,0 +1,15 @@
+{
+  "items": [
+    {
+      "termType": "NamedNode",
+      "value": "http://example.org/a"
+    },
+    {
+    "termType": "NamedNode",
+    "value": "http://example.org/b"
+    }
+  ],
+  "pathType": "/",
+  "prefixes": {},
+  "type": "path"
+}

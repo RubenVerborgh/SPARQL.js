@@ -29,6 +29,8 @@ var generatedQuery = generator.stringify(parsedQuery);
 ```
 Set `sparqlStar` to `true` to allow [SPARQL*](https://blog.liu.se/olafhartig/2019/01/10/position-statement-rdf-star-and-sparql-star/) syntax.
 
+Set `pathOnly` to `true` to parse SPARQL paths such as `foaf:name/foaf:knows` rather than the full SPARQL Algebra.
+
 ### Validation
 
 By default SPARQL.js throws on queries that are syntactically correct, but not allowed by the spec.
