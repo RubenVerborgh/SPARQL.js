@@ -260,13 +260,9 @@
     objectList.forEach(function (l) {
       let annotation = null;
       if (l.annotation) {
-        // objects.push(triple(l.subject, l.predicate, l.object))
-        // throw new Error(`${JSON.stringify(l, null, 2)}${JSON.stringify(objects, null, 2)}`)
-        // triples.push(triple(l.subject, l.predicate, l.object))
         annotation = l.annotation
         l = l.object;
       }
-        // throw new Error(`annotation is ${JSON.stringify(l.annotation, null, 2)}`);
       objects.push(triple(null, predicate, l.entity, annotation));
       appendAllTo(triples, l.triples);
     });
