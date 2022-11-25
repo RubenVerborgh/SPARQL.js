@@ -1,0 +1,55 @@
+{
+  "prefixes": {
+    "ex": "http://example.com/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  },
+  "queryType": "SELECT",
+  "type": "query",
+  "variables": [
+    {
+      "expression": {
+        "args": [
+          {
+            "termType": "Variable",
+            "value": "s"
+          },
+          {
+            "termType": "Variable",
+            "value": "p"
+          },
+          {
+            "termType": "Variable",
+            "value": "o"
+          }
+        ],
+        "operator": "triple",
+        "type": "operation"
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "t"
+      }
+    }
+  ],
+  "where": [
+    {
+      "triples": [
+        {
+          "object": {
+            "termType": "Variable",
+            "value": "o"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          }
+        }
+      ],
+      "type": "bgp"
+    }
+  ]
+}
