@@ -36,6 +36,22 @@
         "termType": "Variable",
         "value": "plist2"
       }
+    },
+    {
+      "expression": {
+        "expression": {
+          "termType": "Variable",
+          "value": "p"
+        },
+        "type": "aggregate",
+        "aggregation": "group_concat",
+        "distinct": true,
+        "separator": ""
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "plist3"
+      }
     }
   ],
   "where": [
