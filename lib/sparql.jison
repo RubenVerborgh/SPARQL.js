@@ -681,7 +681,7 @@ SPACES_COMMENTS       (\s+|{COMMENT}\n\r?)+
 %%
 
 QueryOrUpdate
-    : Prologue ( QueryUnit | Update? | Path ) EOF
+    : Prologue ( Query /* [1] QueryUnit */ | Update? | Path ) EOF
     {
       // Set parser options
       $2 = $2 || {};
@@ -734,19 +734,9 @@ QueryOrUpdate
     }
     ;
 
-// [1]
-QueryUnit
-  : Query
-  ;
-
 // [2]
 Query
-    : ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause? -> { ...$1, ...$2, type: 'query' }
-    ;
-
-// [3]
-UpdateUnit
-    : Update
+    : Qry ValuesClause? -> { ...$1, ...$2, type: 'query' }
     ;
 
 // [4]
@@ -773,8 +763,8 @@ PrefixDecl
     }
     ;
 
-// [7] Didn't check use of SolutionModifierNoGroup seems off as this introduces a havinClause where not expected.
-SelectQuery
+Qry
+    // [7] SelectQuery: Didn't check use of SolutionModifierNoGroup seems off as this introduces a havinClause where not expected.
     : SelectClauseWildcard DatasetClause* WhereClause SolutionModifierNoGroup -> { ...$1, ...groupDatasets($2), ...$3, ...$4 }
     | SelectClauseVars     DatasetClause* WhereClause SolutionModifier
     {
@@ -812,7 +802,15 @@ SelectQuery
       }
       $$ = extend($1, groupDatasets($2), $3, $4)
     }
+    // [10] ConstructQuery
+    | 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, groupDatasets($3), $4, $5)
+    | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $5 = ($5 ? $5.triples : []) }, groupDatasets($2), { where: [ { type: 'bgp', triples: appendAllTo([], $5) } ] }, $7)
+    // [11] DescribeQuery
+    | 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? [new Wildcard()] : $2 }, groupDatasets($3), $4, $5)
+    // [12] AskQuery
+    | 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, groupDatasets($2), $3, $4)
     ;
+
 SelectClauseWildcard
     : SelectClauseBase '*' -> extend($1, {variables: [new Wildcard()]})
     ;
@@ -843,40 +841,10 @@ SubSelect
     | SelectClauseVars     WhereClause SolutionModifier        ValuesClause? -> extend($1, $2, $3, $4, { type: 'query' })
     ;
 
-// [10]
-ConstructQuery
-    : 'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $2 }, groupDatasets($3), $4, $5)
-    | 'CONSTRUCT' DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier -> extend({ queryType: 'CONSTRUCT', template: $5 = ($5 ? $5.triples : []) }, groupDatasets($2), { where: [ { type: 'bgp', triples: appendAllTo([], $5) } ] }, $7)
-    ;
-
-// [11]
-DescribeQuery
-    : 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier -> extend({ queryType: 'DESCRIBE', variables: $2 === '*' ? [new Wildcard()] : $2 }, groupDatasets($3), $4, $5)
-    ;
-
-// [12]
-AskQuery
-    : 'ASK' DatasetClause* WhereClause SolutionModifier -> extend({ queryType: 'ASK' }, groupDatasets($2), $3, $4)
-    ;
-
 // [13]
 DatasetClause
-    : 'FROM' (DefaultGraphClause | NamedGraphClause) -> $2
-    ;
-
-// [14]
-DefaultGraphClause
-    : SourceSelector -> { iri: $1, named: false }
-    ;
-
-// [15]
-NamedGraphClause
-    : 'NAMED' SourceSelector -> { iri: $2, named: true }
-    ;
-
-// [16]
-SourceSelector
-    : iri
+    // [14] & [15]
+    : 'FROM' 'NAMED'? iri -> { iri: $3, named: !!$2 }
     ;
 
 // [17]
@@ -909,12 +877,7 @@ GroupCondition
 
 // [21]
 HavingClause
-    : 'HAVING' HavingCondition+ -> { having: $2 }
-    ;
-
-// [22]
-HavingCondition
-    : Constraint
+    : 'HAVING' (Constraint /* [22] HavingCondition */)+ -> { having: $2 }
     ;
 
 // [23]
@@ -932,20 +895,12 @@ OrderCondition
 
 // [25]
 LimitOffsetClauses
-    : LimitClause -> { limit: $1 }
-    | OffsetClause -> { offset: $2 }
-    | LimitClause OffsetClause -> { limit: $1, offset: $2 }
-    | OffsetClause LimitClause -> { limit: $2, offset: $1 }
-    ;
-
-// [26]
-LimitClause
-    : 'LIMIT' INTEGER -> toInt($2)
-    ;
-
-// [27]
-OffsetClause
-    : 'OFFSET' INTEGER -> toInt($2)
+    // [26] LimitClause
+    : 'LIMIT' INTEGER -> { limit: toInt($2) }
+    // [27] OffsetClause
+    | 'OFFSET' INTEGER -> { offset: toInt($2) }
+    | 'LIMIT'  INTEGER 'OFFSET' INTEGER -> { limit: toInt($2), offset: toInt($4) }
+    | 'OFFSET' INTEGER 'LIMIT'  INTEGER -> { limit: toInt($4), offset: toInt($2) }
     ;
 
 // [28]
@@ -982,70 +937,32 @@ Update
 
 // [30]
 Update1
-    : Load
-    | ClearOrDrop
-    | AddOrMoveOrCopy
-    | Create
-    | InsertData
-    | DeleteData
-    | DeleteWhere
-    | Modify
-    ;
-
-
-// [31]
-Load
+    // [31] Load
     : 'LOAD' 'SILENT'? iri IntoGraphClause? -> extend({ type: 'load', silent: !!$2, source: $3 }, $4 && { destination: $4 })
+    // [32]-[33] ClearOrDrop
+    | ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: lowercase($1), silent: !!$2, graph: $3 }
+    // [35]-[37] AddOrMoveOrCopy
+    | ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: lowercase($1), silent: !!$2, source: $3, destination: $5 }
+    // [34] Create
+    | 'CREATE' 'SILENT'? 'GRAPH' iri -> { type: 'create', silent: !!$2, graph: { type: 'graph', name: $4 } }
+    // [38] InsertData
+    | 'INSERTDATA'  QuadPattern -> { updateType: 'insert',      insert: ensureNoVariables($2)                 }
+    // [39] DeleteData
+    | 'DELETEDATA'  QuadPattern -> { updateType: 'delete',      delete: ensureNoBnodes(ensureNoVariables($2)) }
+    // [40] DeleteWhere
+    | 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: ensureNoBnodes($2)                    }
+    // [41] Modify
+    | WithClause? InsertDeleteClause UsingClause* 'WHERE' GroupGraphPattern -> { updateType: 'insertdelete', ...$1, ...$2, ...groupDatasets($3, 'using'), where: $5.patterns }
     ;
 
 IntoGraphClause
     : 'INTO' GraphRef -> $2
     ;
 
-// [32]-[33]
-ClearOrDrop
-    : ( 'CLEAR' | 'DROP' ) 'SILENT'? GraphRefAll -> { type: lowercase($1), silent: !!$2, graph: $3 }
-    ;
-
-
-// [34]
-Create
-    : 'CREATE' 'SILENT'? GraphRef -> { type: 'create', silent: !!$2, graph: { type: 'graph', name: $3 } }
-    ;
-
-// [35]-[37]
-AddOrMoveOrCopy
-    : ( 'ADD' | 'MOVE' | 'COPY' ) 'SILENT'? GraphOrDefault 'TO' GraphOrDefault -> { type: lowercase($1), silent: !!$2, source: $3, destination: $5 }
-    ;
-
-// [38]
-InsertData
-    : 'INSERTDATA' QuadPattern -> { updateType: 'insert', insert: ensureNoVariables($2) }
-    ;
-
-// [39]
-DeleteData
-    : 'DELETEDATA' QuadPattern -> { updateType: 'delete', delete: ensureNoBnodes(ensureNoVariables($2)) }
-    ;
-
-// [40]
-DeleteWhere
-    : 'DELETEWHERE' QuadPattern -> { updateType: 'deletewhere', delete: ensureNoBnodes($2) }
-    ;
-
-// [41]
-Modify
-    : WithClause? InsertDeleteClause UsingClause* 'WHERE' GroupGraphPattern -> { updateType: 'insertdelete', ...$1, ...$2, ...groupDatasets($3, 'using'), where: $5.patterns }
-    ;
-
 InsertDeleteClause
-    : DeleteClause InsertClause? -> { delete: $1, insert: $2 || [] }
+    // [42] DeleteClause
+    : 'DELETE' QuadPattern InsertClause? -> { delete: ensureNoBnodes($2), insert: $3 || [] }
     | InsertClause -> { delete: [], insert: $1 }
-    ;
-
-// [42]
-DeleteClause
-    : 'DELETE' QuadPattern -> ensureNoBnodes($2)
     ;
 
 // [43]
@@ -1081,24 +998,8 @@ GraphRefAll
 
 // [48]
 QuadPattern
-    : QuadBraces
-    ; 
-
-// [49]
-QuadData
-    : QuadBraces
-    ;
-
-
-// [48]
-QuadPattern
     : '{' Quads '}' -> $2
     ; 
-
-// [49]
-QuadData
-    : '{' Quads '}' -> $2
-    ;
 
 // [50]
 Quads
@@ -1158,36 +1059,21 @@ TriplesBlock
     ;
 
 // [56]
-
 GraphPatternNotTriples
     : GroupOrUnionGraphPattern
-    | OptionalGraphPattern
-    | MinusGraphPattern
-    | GraphGraphPattern
-    | ServiceGraphPattern
-    | Filter
-    | Bind
+    // [57] OptionalGraphPattern
+    | 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
+    // [66] MinusGraphPattern
+    | 'MINUS' GroupGraphPattern -> extend($2, { type: 'minus' })
+    // [58] GraphGraphPattern
+    | 'GRAPH' VarOrIri GroupGraphPattern -> extend($3, { type: 'graph', name: $2 })
+    // [59] ServiceGraphPattern
+    | 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern -> extend($4, { type: 'service', name: $3, silent: !!$2 })
+    // [68] Filter
+    | 'FILTER' Constraint -> { type: 'filter', expression: $2 }
+    // [60] Bind
+    | 'BIND' '(' Expression 'AS' Var ')' -> { type: 'bind', variable: $5, expression: $3 }
     | ValuesClause
-    ;
-
-// [57]
-OptionalGraphPattern
-    : 'OPTIONAL' GroupGraphPattern -> extend($2, { type: 'optional' })
-    ;
-
-// [58]
-GraphGraphPattern
-    : 'GRAPH' VarOrIri GroupGraphPattern -> extend($3, { type: 'graph', name: $2 })
-    ;
-
-// [59]
-ServiceGraphPattern
-    : 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern -> extend($4, { type: 'service', name: $3, silent: !!$2 })
-    ;
-
-// [60]
-Bind
-    : 'BIND' '(' Expression 'AS' Var ')' -> { type: 'bind', variable: $5, expression: $3 }
     ;
 
 // [61]
@@ -1205,7 +1091,6 @@ DataBlock
 InlineDataOneVar
     : VAR '{' DataBlockValue* '}' -> $3.map(v => ({ [$1]: v }))
     ;
-
 
 // [64]
 InlineDataFull
@@ -1234,19 +1119,9 @@ DataBlockValue
     | 'UNDEF' -> undefined
     ;
 
-// [66]
-MinusGraphPattern
-    : 'MINUS' GroupGraphPattern -> extend($2, { type: 'minus' })
-    ;
-
 // [67]
 GroupOrUnionGraphPattern
     : ( GroupGraphPattern 'UNION' )* GroupGraphPattern -> $1.length ? { type: 'union', patterns: unionAll($1.map(degroupSingle), [degroupSingle($2)]) } : $2
-    ;
-
-// [68]
-Filter
-    : 'FILTER' Constraint -> { type: 'filter', expression: $2 }
     ;
 
 // [69]
@@ -1332,23 +1207,16 @@ TriplesSameSubjectPath
 
 // [83]
 PropertyListPathNotEmpty
-    : ( VerbPath | VerbSimple ) ObjectListPath PropertyListPathNotEmptyTail* -> objectListToTriples($1, $2, $3)
+    : O PropertyListPathNotEmptyTail* -> objectListToTriples(...$1, $2)
     ;
 
 PropertyListPathNotEmptyTail
     : ';' -> []
-    | ';' ( VerbPath | VerbSimple ) ObjectListPath -> objectListToTriples(toVar($2), $3)
+    | ';' O -> objectListToTriples(...$2)
     ;
 
-// [84]
-VerbPath
-    : Path
-    ;
-
-// [85]
-VerbSimple
-    : Var
-    ;
+O : ( Path /* [84] VerbPath */ | Var /* [85] VerbSimple */ ) ObjectListPath -> [$1, $2]
+  ;
 
 // [86]
 ObjectListPath
@@ -1360,13 +1228,8 @@ ObjectPath
     : GraphNodePath AnnotationPatternPath? -> $2 ? { object: $1, annotation: $2 } : $1;
     ;
 
-// [88]
+// [88] Path [89] PathAlternative
 Path
-    : PathAlternative
-    ;
-
-// [89]
-PathAlternative
     : ( PathSequence '|' )* PathSequence -> $1.length ? path('|',appendTo($1, $2)) : $2
     ;
 
@@ -1377,19 +1240,12 @@ PathSequence
 
 // [91]
 PathElt
-    : PathPrimary PathMod? -> $2 ? path($2, [$1]) : $1
+    : PathPrimary ('?'|'*'|'+' /* [93] PathMod */)? -> $2 ? path($2, [$1]) : $1
     ;
 
 // [92]
 PathEltOrInverse
     : '^'? PathElt -> $1 ? path($1, [$2]) : $2;
-    ;
-
-// [93]
-PathMod
-    : '?'
-    | '*'
-    | '+'
     ;
 
 // [94]
@@ -1423,15 +1279,19 @@ TriplesNodePath
 
 // [104]
 GraphNode
-    : VarOrTermOrQuotedTP -> { entity: $1, triples: [] } /* for consistency with TriplesNode */
+    : G /* for consistency with TriplesNode */
     | TriplesNode
     ;
 
 // [105]
 GraphNodePath
-    : VarOrTermOrQuotedTP -> { entity: $1, triples: [] } /* for consistency with TriplesNodePath */
+    : G /* for consistency with TriplesNodePath */
     | TriplesNodePath
     ;
+
+G
+  : VarOrTermOrQuotedTP -> { entity: $1, triples: [] }
+  ;
 
 // [106]
 VarOrTerm
@@ -1456,7 +1316,7 @@ GraphTerm
     : iri
     | Literal
     | BlankNode
-    | NIL  -> Parser.factory.namedNode(RDF_NIL)
+    | NIL -> Parser.factory.namedNode(RDF_NIL)
     ;
 
 // [110]
@@ -1475,32 +1335,22 @@ ConditionalOrExpressionTail
 
 // [112]
 ConditionalAndExpression
-    : ValueLogical ConditionalAndExpressionTail* -> createOperationTree($1, $2)
+    : RelationalExpression /* [113] ValueLogical */ ConditionalAndExpressionTail* -> createOperationTree($1, $2)
     ;
 
 ConditionalAndExpressionTail
-    : '&&' ValueLogical -> ['&&', $2]
-    ;
-
-// [113]
-ValueLogical
-    : RelationalExpression
+    : '&&' RelationalExpression /* [113] ValueLogical */ -> ['&&', $2]
     ;
 
 // [114]
 RelationalExpression
     : NumericExpression
-    | NumericExpression ( '=' | '!=' | '<' | '>' | '<=' | '>=' ) AdditiveExpression -> operation($2, [$1, $3])
+    | NumericExpression ( '=' | '!=' | '<' | '>' | '<=' | '>=' ) NumericExpression /* [116] AdditiveExpression */ -> operation($2, [$1, $3])
     | NumericExpression 'NOT'? 'IN' ExpressionList -> operation($2 ? 'notin' : 'in', [$1, $4])
     ;
 
 // [115]
 NumericExpression
-    : AdditiveExpression
-    ;
-
-// [116]
-AdditiveExpression
     : MultiplicativeExpression AdditiveExpressionTail* -> createOperationTree($1, $2)
     ;
 AdditiveExpressionTail
@@ -1576,30 +1426,18 @@ GroupConcatSeparator
 
 // Summary of [129], [130] & [134]
 Literal
-    : RDFLiteral
-    | NumericLiteral
-    | BooleanLiteral
-    ;
-
-// [129]
-RDFLiteral
+    // [129] RDFLiteral
     : String -> createTypedLiteral($1)
     | String LANGTAG  -> createLangLiteral($1, lowercase($2.substr(1)))
     | String '^^' iri -> createTypedLiteral($1, $3)
-    ;
-
-// [130]
-NumericLiteral
-    : NumericLiteralUnsigned
-    | NumericLiteralPositive
-    | NumericLiteralNegative
-    ;
-
-// [131]
-NumericLiteralUnsigned
-    : INTEGER -> createTypedLiteral($1, XSD_INTEGER)
+    // [131] NumericLiteralUnsigned
+    | INTEGER -> createTypedLiteral($1, XSD_INTEGER)
     | DECIMAL -> createTypedLiteral($1, XSD_DECIMAL)
     | DOUBLE  -> createTypedLiteral(lowercase($1), XSD_DOUBLE)
+    | NumericLiteralPositive
+    | NumericLiteralNegative
+    // [134] BooleanLiteral
+    | BOOLEAN -> createTypedLiteral($1.toLowerCase(), XSD_BOOLEAN)
     ;
 
 // [132]
@@ -1614,11 +1452,6 @@ NumericLiteralNegative
     : INTEGER_NEGATIVE -> createTypedLiteral($1, XSD_INTEGER)
     | DECIMAL_NEGATIVE -> createTypedLiteral($1, XSD_DECIMAL)
     | DOUBLE_NEGATIVE  -> createTypedLiteral(lowercase($1), XSD_DOUBLE)
-    ;
-
-// [134]
-BooleanLiteral
-    : BOOLEAN -> createTypedLiteral($1.toLowerCase(), XSD_BOOLEAN)
     ;
 
 // [135]
