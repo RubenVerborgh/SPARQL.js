@@ -1279,17 +1279,17 @@ TriplesNodePath
 
 // [104]
 GraphNode
-    : G /* for consistency with TriplesNode */
+    : VarOrTermOrQuotedTPExpr /* for consistency with TriplesNode */
     | TriplesNode
     ;
 
 // [105]
 GraphNodePath
-    : G /* for consistency with TriplesNodePath */
+    : VarOrTermOrQuotedTPExpr /* for consistency with TriplesNodePath */
     | TriplesNodePath
     ;
 
-G
+VarOrTermOrQuotedTPExpr
   : VarOrTermOrQuotedTP -> { entity: $1, triples: [] }
   ;
 
