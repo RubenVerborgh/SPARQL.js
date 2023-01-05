@@ -172,9 +172,9 @@
   // Creates a triple with the given subject, predicate, and object
   function triple(subject, predicate, object, annotations) {
     var triple = {};
-    if (subject   != null) triple.subject   = subject;
-    if (predicate != null) triple.predicate = predicate;
-    if (object    != null) triple.object    = object;
+    if (subject   != null) triple.subject       = subject;
+    if (predicate != null) triple.predicate     = predicate;
+    if (object    != null) triple.object        = object;
     if (annotations != null) triple.annotations = annotations;
     return triple;
   }
