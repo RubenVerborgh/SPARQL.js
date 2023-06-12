@@ -15,7 +15,6 @@
       },
       "expression": {
         "termType": "Quad",
-        "value": "",
         "subject": {
           "termType": "NamedNode",
           "value": "http://example.com/a"
@@ -26,7 +25,6 @@
         },
         "object": {
           "termType": "Quad",
-          "value": "",
           "subject": {
             "termType": "NamedNode",
             "value": "http://example.com/SaintPetersburg"
@@ -38,15 +36,7 @@
           "object": {
             "termType": "NamedNode",
             "value": "http://example.com/City"
-          },
-          "graph": {
-            "termType": "DefaultGraph",
-            "value": ""
           }
-        },
-        "graph": {
-          "termType": "DefaultGraph",
-          "value": ""
         }
       }
     }

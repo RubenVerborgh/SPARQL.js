@@ -23,18 +23,31 @@ describe('A SPARQL parser', function () {
     testQueries('sparql', {});
     testQueries('sparqlstar', { mustError: true });
     testQueries('sparql-skip-validation', { mustError: true });
+    testQueries('sparqlstar-spec', { mustError: true });
   });
 
   describe('in SPARQL mode with skipValidation', () => {
     testQueries('sparql', { skipValidation: true });
     testQueries('sparqlstar', { skipValidation: true, mustError: true });
+    testQueries('sparqlstar-annotated', { skipValidation: true, mustError: true });
+    testQueries('sparqlstar-nested-quads', { skipValidation: true, mustError: true });
+    testQueries('sparqlstar-invalid', { skipValidation: true, mustError: true });
     testQueries('sparql-skip-validation', { skipValidation: true });
+    testQueries('sparqlstar-spec', { mustError: true });
   });
 
-  describe('in SPARQL* mode', () => {
+  describe('in SPARQL-star mode', () => {
     testQueries('sparql', { sparqlStar: true });
     testQueries('sparqlstar', { sparqlStar: true });
+    testQueries('sparqlstar-annotated', { sparqlStar: true });
     testQueries('sparql-skip-validation', { sparqlStar: true, mustError: true });
+    // Select queries from the sparqlstar specification
+    testQueries('sparqlstar-spec', { sparqlStar: true });
+    testQueries('sparqlstar-operators', { sparqlStar: true });
+
+    testQueries('sparqlstar-nested-quads', { mustError: true, sparqlStar: true, skipValidation: true });
+    testQueries('sparqlstar-nested-quads', { mustError: true, sparqlStar: true });
+    testQueries('sparqlstar-invalid', { mustError: true, sparqlStar: true });
   });
 
   it('should throw an error on an invalid query', function () {
@@ -251,7 +264,7 @@ describe('A SPARQL parser', function () {
 
   describe('without SPARQL* support enabled', function () {
     var parser = new SparqlParser();
-    const expectedErrorMessage = 'SPARQL* support is not enabled';
+    const expectedErrorMessage = 'SPARQL-star support is not enabled';
 
     it('should throw an error on RDF* triple in projection', function () {
       expect(() => parser.parse(

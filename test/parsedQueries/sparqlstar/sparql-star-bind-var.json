@@ -15,10 +15,6 @@
         "object": {
           "termType": "Variable",
           "value": "c"
-        },
-        "graph": {
-          "termType": "DefaultGraph",
-          "value": ""
         }
       },
       "variable": {
@@ -51,10 +47,6 @@
         "object": {
           "termType": "Variable",
           "value": "o"
-        },
-        "graph": {
-          "termType": "DefaultGraph",
-          "value": ""
         }
       }
     }

@@ -1,0 +1,7 @@
+PREFIX : <http://example.org#>
+
+CONSTRUCT {
+  ?s1 ?p1 ?o1
+} WHERE {
+  ?s1 ?p1 ?o1 {| :is true |}
+}

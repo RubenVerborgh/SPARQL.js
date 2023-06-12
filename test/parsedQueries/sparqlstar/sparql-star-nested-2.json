@@ -20,7 +20,6 @@
           },
           "object": {
             "termType": "Quad",
-            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "s2"
@@ -31,7 +30,6 @@
             },
             "object": {
               "termType": "Quad",
-              "value": "",
               "subject": {
                 "termType": "Variable",
                 "value": "s3"
@@ -43,15 +41,7 @@
               "object": {
                 "termType": "Variable",
                 "value": "o3"
-              },
-              "graph": {
-                "termType": "DefaultGraph",
-                "value": ""
               }
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
             }
           }
         }

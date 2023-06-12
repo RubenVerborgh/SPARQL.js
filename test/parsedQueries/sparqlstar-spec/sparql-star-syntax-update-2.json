@@ -1,0 +1,57 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "insert",
+      "insert": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#s"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#p"
+              },
+              "object": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#o"
+              }
+            },
+            {
+              "subject": {
+                "termType": "Quad",
+                "subject": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#s"
+                },
+                "predicate": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#p"
+                },
+                "object": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#o"
+                }
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#y"
+              },
+              "object": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#z"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

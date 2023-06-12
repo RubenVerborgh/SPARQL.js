@@ -1,0 +1,86 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "Variable",
+              "value": "S"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#o"
+            }
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#r"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#z"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "Quad",
+              "subject": {
+                "termType": "Variable",
+                "value": "S"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#p"
+              },
+              "object": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#o"
+              }
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#r"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#z"
+            }
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#q"
+          },
+          "object": {
+            "termType": "Literal",
+            "value": "1",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

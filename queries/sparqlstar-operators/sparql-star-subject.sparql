@@ -1,0 +1,7 @@
+PREFIX ex: <http://example.com/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT (subject(?s) as ?s1) WHERE {
+    ?s ?p ?o .
+    FILTER(isTriple(?s))
+}

@@ -1,0 +1,81 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#a"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#q"
+          },
+          "object": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#s"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "O"
+            }
+          }
+        },
+        {
+          "subject": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#a"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#q"
+            },
+            "object": {
+              "termType": "Quad",
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#s"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#p"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "O"
+              }
+            }
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#r"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#z"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

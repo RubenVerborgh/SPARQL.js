@@ -8,7 +8,6 @@
     {
       "expression": {
         "termType": "Quad",
-        "value": "",
         "subject": {
           "termType": "NamedNode",
           "value": "http://example.com/Moscow"
@@ -20,10 +19,6 @@
         "object": {
           "termType": "NamedNode",
           "value": "http://example.com/City"
-        },
-        "graph": {
-          "termType": "DefaultGraph",
-          "value": ""
         }
       },
       "variable": {
@@ -41,7 +36,6 @@
       },
       "expression": {
         "termType": "Quad",
-        "value": "",
         "subject": {
           "termType": "NamedNode",
           "value": "http://example.com/SaintPetersburg"
@@ -53,10 +47,6 @@
         "object": {
           "termType": "NamedNode",
           "value": "http://example.com/City"
-        },
-        "graph": {
-          "termType": "DefaultGraph",
-          "value": ""
         }
       }
     }

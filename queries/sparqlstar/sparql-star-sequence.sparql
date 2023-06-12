@@ -1,0 +1,3 @@
+SELECT * WHERE {
+    <<<a> <b> <c>>> :p/:q ?o .
+}

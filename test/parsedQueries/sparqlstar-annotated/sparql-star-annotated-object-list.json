@@ -1,0 +1,137 @@
+
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "s1"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p1"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o1"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "Variable",
+              "value": "s1"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p1"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o1"
+            }
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p12"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o12"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "s1"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p1"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o2"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "Variable",
+              "value": "s1"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p1"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o2"
+            }
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p22"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o22"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "s1"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p1"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o3"
+          }
+        },
+        {
+          "subject": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "Variable",
+              "value": "s1"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p1"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o3"
+            }
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p32"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o32"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+  }
+}

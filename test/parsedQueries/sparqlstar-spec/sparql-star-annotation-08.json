@@ -1,0 +1,78 @@
+{
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "subject": {
+        "termType": "Variable",
+        "value": "s"
+      },
+      "predicate": {
+        "termType": "Variable",
+        "value": "p"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "o"
+      }
+    },
+    {
+      "subject": {
+        "termType": "Quad",
+        "subject": {
+          "termType": "Variable",
+          "value": "s"
+        },
+        "predicate": {
+          "termType": "Variable",
+          "value": "p"
+        },
+        "object": {
+          "termType": "Variable",
+          "value": "o"
+        }
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://example.com/ns#source"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "g"
+      }
+    }
+  ],
+  "where": [
+    {
+      "type": "graph",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "s"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "o"
+              }
+            }
+          ]
+        }
+      ],
+      "name": {
+        "termType": "Variable",
+        "value": "g"
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

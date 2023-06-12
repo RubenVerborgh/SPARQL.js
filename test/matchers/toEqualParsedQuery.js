@@ -62,6 +62,12 @@ let objectsEqual = function (received, expected){
             for (let key of keys_first){
                 if (! objectsEqual(received[key], expected[key])) return false;
             }
+
+            // We do this to make sure that we are not missing keys in the received object
+            let keys_second = Object.keys(expected);
+            for (let key of keys_second){
+                if (! objectsEqual(received[key], expected[key])) return false;
+            }
         }
         return true;
     }

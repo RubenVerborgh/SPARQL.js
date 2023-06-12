@@ -3,7 +3,7 @@ const { Parser } = require('..');
 
 module.exports = {
   parse: async function (query, options) {
-    const parser = new Parser({ baseIRI: options.baseIRI });
+    const parser = new Parser(options);
     parser.parse(query);
   },
   query: function() {
