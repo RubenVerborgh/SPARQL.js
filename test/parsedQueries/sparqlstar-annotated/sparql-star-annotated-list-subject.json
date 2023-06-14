@@ -54,6 +54,10 @@
               "termType": "BlankNode",
               "value": "g_0"
             },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            },
             "termType": "Quad"
           }
         },

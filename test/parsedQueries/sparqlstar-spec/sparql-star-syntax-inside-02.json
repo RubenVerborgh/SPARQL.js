@@ -51,6 +51,10 @@
             "object": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#o1"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           }
         },
@@ -90,6 +94,10 @@
             "object": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#o2"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           }
         },

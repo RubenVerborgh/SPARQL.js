@@ -24,6 +24,10 @@
             "object": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#z"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           },
           "predicate": {
@@ -43,6 +47,10 @@
             "object": {
               "termType": "Variable",
               "value": "C"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           }
         },
@@ -62,6 +70,10 @@
               "object": {
                 "termType": "NamedNode",
                 "value": "http://example.com/ns#z"
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
               }
             },
             "predicate": {
@@ -81,7 +93,15 @@
               "object": {
                 "termType": "BlankNode",
                 "value": "g_0"
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
               }
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           },
           "predicate": {
@@ -103,6 +123,10 @@
               "object": {
                 "termType": "NamedNode",
                 "value": "http://example.com/ns#z"
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
               }
             },
             "predicate": {
@@ -122,7 +146,15 @@
               "object": {
                 "termType": "BlankNode",
                 "value": "g_2"
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
               }
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           }
         }

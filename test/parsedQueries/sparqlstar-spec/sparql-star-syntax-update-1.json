@@ -21,6 +21,10 @@
                 "object": {
                   "termType": "NamedNode",
                   "value": "http://example.com/ns#c"
+                },
+                "graph": {
+                  "termType": "DefaultGraph",
+                  "value": ""
                 }
               },
               "predicate": {

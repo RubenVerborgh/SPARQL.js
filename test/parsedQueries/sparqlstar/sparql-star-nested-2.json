@@ -41,7 +41,15 @@
               "object": {
                 "termType": "Variable",
                 "value": "o3"
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
               }
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           }
         }

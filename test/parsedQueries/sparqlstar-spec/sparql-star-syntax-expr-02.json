@@ -47,6 +47,10 @@
           "object": {
             "termType": "Variable",
             "value": "o"
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
           }
         },
         "predicate": {
@@ -56,6 +60,10 @@
         "object": {
           "termType": "NamedNode",
           "value": "http://example.com/ns#z"
+        },
+        "graph": {
+          "termType": "DefaultGraph",
+          "value": ""
         }
       }
     }

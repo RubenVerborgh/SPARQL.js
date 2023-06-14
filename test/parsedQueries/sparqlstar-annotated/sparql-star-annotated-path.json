@@ -49,6 +49,10 @@
               "termType": "Variable",
               "value": "s"
             },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            },
             "termType": "Quad"
           }
         },
@@ -93,7 +97,15 @@
                 "termType": "Variable",
                 "value": "s"
               },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
+              },
               "termType": "Quad"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             },
             "termType": "Quad"
           }

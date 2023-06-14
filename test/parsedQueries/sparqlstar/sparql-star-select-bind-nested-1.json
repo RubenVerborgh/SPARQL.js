@@ -21,6 +21,10 @@
           "object": {
             "termType": "NamedNode",
             "value": "http://example.com/City"
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
           }
         },
         "predicate": {
@@ -30,6 +34,10 @@
         "object": {
           "termType": "NamedNode",
           "value": "http://example.com/b"
+        },
+        "graph": {
+          "termType": "DefaultGraph",
+          "value": ""
         }
       },
       "variable": {

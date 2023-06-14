@@ -25,6 +25,10 @@
                 "object": {
                   "termType": "Variable",
                   "value": "o1"
+                },
+                "graph": {
+                  "termType": "DefaultGraph",
+                  "value": ""
                 }
               },
               "predicate": {
@@ -34,7 +38,11 @@
               "object": {
                 "termType": "Variable",
                 "value": "o2"
-              }
+              },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
           },
           "predicate": {
             "termType": "Variable",

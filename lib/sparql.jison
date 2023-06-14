@@ -161,12 +161,7 @@
       throw new Error('Nested triples cannot contain paths');
     }
 
-    return {
-      termType: "Quad",
-      subject,
-      predicate,
-      object
-    }
+    return Parser.factory.quad(subject, predicate, object);
   }
 
   // Creates a triple with the given subject, predicate, and object
@@ -999,7 +994,7 @@ GraphRefAll
 // [48]
 QuadPattern
     : '{' Quads '}' -> $2
-    ; 
+    ;
 
 // [50]
 Quads

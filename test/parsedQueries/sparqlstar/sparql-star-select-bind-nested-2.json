@@ -29,7 +29,15 @@
           "object": {
             "termType": "NamedNode",
             "value": "http://example.com/c"
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
           }
+        },
+        "graph": {
+          "termType": "DefaultGraph",
+          "value": ""
         }
       },
       "variable": {

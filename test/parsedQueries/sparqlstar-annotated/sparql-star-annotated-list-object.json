@@ -54,6 +54,10 @@
               "termType": "Variable",
               "value": "s"
             },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            },
             "termType": "Quad"
           }
         },

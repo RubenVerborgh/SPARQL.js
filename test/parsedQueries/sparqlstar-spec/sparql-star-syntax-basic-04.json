@@ -32,6 +32,10 @@
             "object": {
               "termType": "Variable",
               "value": "c"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           }
         }
