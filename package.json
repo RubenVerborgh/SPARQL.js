@@ -40,7 +40,7 @@
     "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
   },
   "dependencies": {
-    "rdf-data-factory": "^1.1.1"
+    "rdf-data-factory": "^1.1.2"
   },
   "devDependencies": {
     "expect": "^24.9.0",

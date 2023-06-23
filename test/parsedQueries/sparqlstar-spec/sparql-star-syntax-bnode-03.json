@@ -24,6 +24,10 @@
             "object": {
               "termType": "BlankNode",
               "value": "g_1"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
             }
           },
           "predicate": {
