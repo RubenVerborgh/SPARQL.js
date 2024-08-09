@@ -57,7 +57,7 @@
     if (iri[0] === '<')
       iri = iri.substring(1, iri.length - 1);
     // Return absolute IRIs unmodified
-    if (/^[a-z]+:/i.test(iri))
+    if (/^[a-z][a-z0-9.+-]*:/i.test(iri))
       return iri;
     if (!Parser.base)
       throw new Error('Cannot resolve relative IRI ' + iri + ' because no base IRI was set.');
