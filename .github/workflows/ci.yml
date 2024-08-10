@@ -12,19 +12,35 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         node-version:
-          - 12.x
-          - 14.x
           - 16.x
           - 18.x
+          - 20.x
+          - 22.x
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: actions/checkout@v3
-      - run: npm ci --ignore-scripts
+      - uses: actions/checkout@v4
+      - run: npm ci
       - run: npm run build
       - run: npm test
+
+  spec:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 22.x
+    steps:
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run build
       - run: npm run spec
