@@ -1,4 +1,5 @@
-node_modules
 *.log
-lib/SparqlParser.js
-.rdf-test-suite-cache
+/.rdf-test-suite-cache
+/node_modules
+/lib/SparqlParser.js
+/spec/earl-*.ttl
