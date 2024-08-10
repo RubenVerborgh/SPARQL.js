@@ -1,7 +1,7 @@
-var Parser = require('./lib/SparqlParser').Parser;
-var Generator = require('./lib/SparqlGenerator');
-var Wildcard = require("./lib/Wildcard").Wildcard;
-var { DataFactory } = require('rdf-data-factory');
+const { Parser } = require('./lib/SparqlParser');
+const { Generator } = require('./lib/SparqlGenerator');
+const { Wildcard } = require('./lib/Wildcard');
+const { DataFactory } = require('rdf-data-factory');
 
 /**
  * Creates a SPARQL parser with the given pre-defined prefixes and base IRI
@@ -14,15 +14,23 @@ var { DataFactory } = require('rdf-data-factory');
  *   skipUngroupedVariableCheck?: boolean
  * }
  */
-var _Parser = function ({ prefixes, baseIRI, factory, sparqlStar, skipValidation, skipUngroupedVariableCheck, pathOnly } = {}) {
+function _Parser({
+    prefixes,
+    baseIRI,
+    factory,
+    pathOnly,
+    sparqlStar,
+    skipValidation,
+    skipUngroupedVariableCheck,
+} = {}) {
   // Create a copy of the prefixes
-  var prefixesCopy = {};
-  for (var prefix in prefixes || {})
+  const prefixesCopy = {};
+  for (const prefix in prefixes ?? {})
     prefixesCopy[prefix] = prefixes[prefix];
 
   // Create a new parser with the given prefixes
   // (Workaround for https://github.com/zaach/jison/issues/241)
-  var parser = new Parser();
+  const parser = new Parser();
   parser.parse = function () {
     Parser.base = baseIRI || '';
     Parser.prefixes = Object.create(prefixesCopy);
@@ -39,6 +47,6 @@ var _Parser = function ({ prefixes, baseIRI, factory, sparqlStar, skipValidation
 
 module.exports = {
   Parser: _Parser,
-  Generator: Generator,
-  Wildcard: Wildcard,
+  Generator,
+  Wildcard,
 };
