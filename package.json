@@ -12,13 +12,15 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RubenVerborgh/SPARQL.js.git"
+    "url": "git+https://github.com/RubenVerborgh/SPARQL.js.git"
   },
   "bugs": {
     "url": "https://github.com/RubenVerborgh/SPARQL.js/issues"
   },
   "main": "sparql.js",
-  "bin": "bin/sparql-to-json",
+  "bin": {
+    "sparqljs": "bin/sparql-to-json"
+  },
   "files": [
     "sparql.js",
     "lib/*.js",
