@@ -1482,10 +1482,10 @@ BuiltInCall
     : Aggregate
     | FUNC_ARITY0 NIL -> operation(lowercase($1))
     | FUNC_ARITY1 '(' Expression ')' -> operation(lowercase($1), [$3])
-    | FUNC_ARITY1_SPARQL_STAR '(' Expression ')' -> ensureSparqlStar(operation(lowercase($1), [$3]))
+    | FUNC_ARITY1_SPARQL_STAR '(' Expression ')' -> ensureReifiedTriplesOrSparqlStar(() => operation(lowercase($1), [$3]), () => operation(lowercase($1), [$3]))
     | FUNC_ARITY2 '(' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5])
     | FUNC_ARITY3 '(' Expression ',' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5, $7])
-    | FUNC_ARITY3_SPARQL_STAR '(' Expression ',' Expression ',' Expression ')' -> ensureSparqlStar(operation(lowercase($1), [$3, $5, $7]))
+    | FUNC_ARITY3_SPARQL_STAR '(' Expression ',' Expression ',' Expression ')' -> ensureReifiedTriplesOrSparqlStar(() => operation(lowercase($1), [$3, $5, $7]), () => operation(lowercase($1), [$3, $5, $7]))
     // [122], [123], [124]
     | ( 'CONCAT' | 'COALESCE' | 'SUBSTR' | 'REGEX' | 'REPLACE' ) ExpressionList -> operation(lowercase($1), $2)
     | 'BOUND' '(' VAR ')' -> operation('bound', [toVar($3)])
@@ -1641,8 +1641,7 @@ AnnotationPatternPath
 // [181]
 ExprQuotedTP
     : '<<('  ExprVarOrTerm Verb ExprVarOrTerm ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
-    | '<<'  ExprVarOrTerm Verb ExprVarOrTerm '>>' -> ensureReifiedTriplesOrSparqlStar(() => reifiedTriple($2, $3, $4, undefined), () => nestedTriple($2, $3, $4))
-    | '<<'  ExprVarOrTerm Verb ExprVarOrTerm '~' ReifierOrVar '>>' -> ensureReifiedTriples(reifiedTriple($2, $3, $4, $6))
+    | '<<'  ExprVarOrTerm Verb ExprVarOrTerm '>>' -> ensureSparqlStar(nestedTriple($2, $3, $4))
     ;
 
 // [182]
