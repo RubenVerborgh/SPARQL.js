@@ -42,6 +42,7 @@ describe('A SPARQL parser', function () {
     testQueries('sparql', { reifiedTriples: true });
     testQueries('sparql-1-2', { reifiedTriples: true });
     testQueries('sparql-skip-validation', { reifiedTriples: true, mustError: true });
+    testQueries('sparql-1-2-invalid', { reifiedTriples: true, mustError: true });
   });
 
   describe('in SPARQL-star mode', () => {
