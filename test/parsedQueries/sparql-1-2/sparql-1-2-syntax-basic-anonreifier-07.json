@@ -1,0 +1,216 @@
+{
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "termType": "Quad",
+      "value": "",
+      "subject": {
+        "termType": "BlankNode",
+        "value": "g_0"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+      },
+      "object": {
+        "termType": "Quad",
+        "value": "",
+        "subject": {
+          "termType": "Variable",
+          "value": "s"
+        },
+        "predicate": {
+          "termType": "Variable",
+          "value": "p"
+        },
+        "object": {
+          "termType": "Variable",
+          "value": "o"
+        },
+        "graph": {
+          "termType": "DefaultGraph",
+          "value": ""
+        }
+      },
+      "graph": {
+        "termType": "DefaultGraph",
+        "value": ""
+      }
+    },
+    {
+      "subject": {
+        "termType": "BlankNode",
+        "value": "g_0"
+      },
+      "predicate": {
+        "termType": "Variable",
+        "value": "q"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "z"
+      }
+    },
+    {
+      "termType": "Quad",
+      "value": "",
+      "subject": {
+        "termType": "BlankNode",
+        "value": "g_1"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+      },
+      "object": {
+        "termType": "Quad",
+        "value": "",
+        "subject": {
+          "termType": "Variable",
+          "value": "s"
+        },
+        "predicate": {
+          "termType": "Variable",
+          "value": "p"
+        },
+        "object": {
+          "termType": "Variable",
+          "value": "o"
+        },
+        "graph": {
+          "termType": "DefaultGraph",
+          "value": ""
+        }
+      },
+      "graph": {
+        "termType": "DefaultGraph",
+        "value": ""
+      }
+    },
+    {
+      "subject": {
+        "termType": "Variable",
+        "value": "a"
+      },
+      "predicate": {
+        "termType": "Variable",
+        "value": "b"
+      },
+      "object": {
+        "termType": "BlankNode",
+        "value": "g_1"
+      }
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "termType": "Quad",
+          "value": "",
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+          },
+          "object": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "Variable",
+              "value": "s"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
+          }
+        },
+        {
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "q"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "z"
+          }
+        },
+        {
+          "termType": "Quad",
+          "value": "",
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_1"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+          },
+          "object": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "Variable",
+              "value": "s"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
+          }
+        },
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "a"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "b"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_1"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}
