@@ -453,14 +453,7 @@
       triples.forEach(t => {
         let s = triple(t.subject, t.predicate, t.object);
 
-        if (s.subject.reifyingTriple) {
-          newTriples.push(s.subject.reifyingTriple);
-          delete s.subject.reifyingTriple;
-        }
-        if (s.object.reifyingTriple) {
-          newTriples.push(s.object.reifyingTriple);
-          delete s.object.reifyingTriple;
-        }
+        pushReifyingTriples(s, newTriples);
 
         if (t.annotations) {
           let reifier = reifiedTriple(s.subject, s.predicate, s.object, t.reifier);
@@ -490,6 +483,27 @@
       return newTriples;
     }
     return triples;
+  }
+
+  function pushReifyingTriples(triple, newTriples) {
+    if (triple.subject.reifyingTriple) {
+      const reifyingTriple = triple.subject.reifyingTriple;
+      delete triple.subject.reifyingTriple;
+      newTriples.push(reifyingTriple);
+      pushReifyingTriples(reifyingTriple, newTriples);
+    }
+    if (triple.object.reifyingTriple) {
+      const reifyingTriple = triple.object.reifyingTriple;
+      delete triple.object.reifyingTriple;
+      newTriples.push(reifyingTriple);
+      pushReifyingTriples(reifyingTriple, newTriples);
+    }
+    if (triple.subject.termType === 'Quad') {
+      pushReifyingTriples(triple.subject, newTriples);
+    }
+    if (triple.object.termType === 'Quad') {
+      pushReifyingTriples(triple.object, newTriples);
+    }
   }
 
   function ensureSparqlStarNestedQuads(value) {
