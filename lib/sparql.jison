@@ -485,6 +485,12 @@
     return triples;
   }
 
+  function reifiedTripleDeclaration(reifiedTriple) {
+    const triples = [];
+    pushReifyingTriples(reifiedTriple.reifyingTriple, triples);
+    return triples;
+  }
+
   function pushReifyingTriples(triple, newTriples) {
     if (triple.subject.reifyingTriple) {
       const reifyingTriple = triple.subject.reifyingTriple;
@@ -1241,7 +1247,9 @@ ConstructTriples
 
 // [75]
 TriplesSameSubject
-    : VarOrTermOrReifiedTriplePattern PropertyListNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    : VarOrTerm PropertyListNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    | TripleTermPattern PropertyListNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    | ReifiedTriplePattern PropertyList -> $2 ? applyAnnotations($2.map(t => extend(triple($1), t))) : reifiedTripleDeclaration($1)
     | TriplesNode PropertyList -> applyAnnotations(appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples)) /* the subject is a blank node, possibly with more triples */
     ;
 
@@ -1281,7 +1289,9 @@ Object
 
 // [81]
 TriplesSameSubjectPath
-    : VarOrTermOrReifiedTriplePattern PropertyListPathNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    : VarOrTerm PropertyListPathNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    | TripleTermPattern PropertyListPathNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    | ReifiedTriplePattern PropertyListPath -> $2 ? applyAnnotations($2.map(t => extend(triple($1), t))) : reifiedTripleDeclaration($1)
     | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : applyAnnotations(appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples)) /* the subject is a blank node, possibly with more triples */
     ;
 
@@ -1290,6 +1300,10 @@ TriplesSameSubjectPath
 // [83]
 PropertyListPathNotEmpty
     : O PropertyListPathNotEmptyTail* -> objectListToTriples(...$1, $2)
+    ;
+
+PropertyListPath
+    : PropertyListPathNotEmpty?
     ;
 
 PropertyListPathNotEmptyTail
