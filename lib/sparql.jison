@@ -1195,7 +1195,8 @@ InlineDataFull
 DataBlockValue
     : iri
     | Literal
-    | QuotedTriple
+    | TripleTerm
+    | ReifiedTriple
     | 'UNDEF' -> undefined
     ;
 
@@ -1240,7 +1241,7 @@ ConstructTriples
 
 // [75]
 TriplesSameSubject
-    : VarOrTermOrQuotedTP PropertyListNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    : VarOrTermOrReifiedTriplePattern PropertyListNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
     | TriplesNode PropertyList -> applyAnnotations(appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples)) /* the subject is a blank node, possibly with more triples */
     ;
 
@@ -1280,7 +1281,7 @@ Object
 
 // [81]
 TriplesSameSubjectPath
-    : VarOrTermOrQuotedTP PropertyListPathNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    : VarOrTermOrReifiedTriplePattern PropertyListPathNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
     | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : applyAnnotations(appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples)) /* the subject is a blank node, possibly with more triples */
     ;
 
@@ -1361,18 +1362,18 @@ TriplesNodePath
 
 // [104]
 GraphNode
-    : VarOrTermOrQuotedTPExpr /* for consistency with TriplesNode */
+    : VarOrTermOrReifiedTriplePatternExpr /* for consistency with TriplesNode */
     | TriplesNode
     ;
 
 // [105]
 GraphNodePath
-    : VarOrTermOrQuotedTPExpr /* for consistency with TriplesNodePath */
+    : VarOrTermOrReifiedTriplePatternExpr /* for consistency with TriplesNodePath */
     | TriplesNodePath
     ;
 
-VarOrTermOrQuotedTPExpr
-  : VarOrTermOrQuotedTP -> { entity: $1, triples: [] }
+VarOrTermOrReifiedTriplePatternExpr
+  : VarOrTermOrReifiedTriplePattern -> { entity: $1, triples: [] }
   ;
 
 // [106]
@@ -1469,7 +1470,7 @@ PrimaryExpression
     | FunctionCall
     | Literal
     | Var
-    | ExprQuotedTP
+    | ExprReifiedTriple
     ;
 
 // [120]
@@ -1580,27 +1581,35 @@ BlankNode
 // Note [139] - [173] are grammar terms that are written above
 //
 
-// [174]
-QuotedTP
-    : '<<(' qtSubjectOrObject Verb qtSubjectOrObject ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
-    | '<<' qtSubjectOrObject Verb qtSubjectOrObject '>>' -> ensureReifiedTriplesOrSparqlStar(() => reifiedTriple($2, $3, $4, undefined), () => nestedTriple($2, $3, $4))
-    | '<<' qtSubjectOrObject Verb qtSubjectOrObject '~' ReifierOrVar '>>' -> ensureReifiedTriples(reifiedTriple($2, $3, $4, $6))
+TripleTermPattern
+    : '<<(' ReifiedTriplePatternObject Verb ReifiedTriplePatternObject ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
     ;
 
-// [175]
-QuotedTriple
-    : '<<('  DataValueTerm IriOrA DataValueTerm ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
-    | '<<'  DataValueTerm IriOrA DataValueTerm '>>' -> ensureReifiedTriplesOrSparqlStar(() => reifiedTriple($2, $3, $4, undefined), () => nestedTriple($2, $3, $4))
-    | '<<'  DataValueTerm IriOrA DataValueTerm '~' Reifier '>>' -> ensureReifiedTriples(reifiedTriple($2, $3, $4, $6))
+ReifiedTriplePattern
+    : '<<' ReifiedTriplePatternSubject Verb ReifiedTriplePatternObject '>>' -> ensureReifiedTriplesOrSparqlStar(() => reifiedTriple($2, $3, $4, undefined), () => nestedTriple($2, $3, $4))
+    | '<<' ReifiedTriplePatternSubject Verb ReifiedTriplePatternObject '~' ReifierOrVar '>>' -> ensureReifiedTriples(reifiedTriple($2, $3, $4, $6))
     ;
 
-// [176]
-qtSubjectOrObject
+TripleTerm
+    : '<<('  ReifiedTripleObject IriOrA ReifiedTripleObject ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
+    ;
+
+ReifiedTriple
+    : '<<'  ReifiedTripleSubject IriOrA ReifiedTripleObject '>>' -> ensureReifiedTriplesOrSparqlStar(() => reifiedTriple($2, $3, $4, undefined), () => nestedTriple($2, $3, $4))
+    | '<<'  ReifiedTripleSubject IriOrA ReifiedTripleObject '~' Reifier '>>' -> ensureReifiedTriples(reifiedTriple($2, $3, $4, $6))
+    ;
+
+ReifiedTriplePatternSubject
     : Var
     | iri
     | BlankNode
+    | ReifiedTriplePattern
+    ;
+
+ReifiedTriplePatternObject
+    : ReifiedTriplePatternSubject
     | Literal
-    | QuotedTP
+    | TripleTermPattern
     ;
 
 Reifier
@@ -1613,18 +1622,23 @@ ReifierOrVar
     | Var
     ;
 
-// [177]
-DataValueTerm
+ReifiedTripleSubject
     : iri
+    | ReifiedTriple
+    ;
+
+ReifiedTripleObject
+    : ReifiedTripleSubject
     | Literal
-    | QuotedTP
+    | TripleTerm
     ;
 
 // [178]
-VarOrTermOrQuotedTP
+VarOrTermOrReifiedTriplePattern
     : Var
     | GraphTerm
-    | QuotedTP
+    | TripleTermPattern
+    | ReifiedTriplePattern
     ;
 
 // [179]
@@ -1639,7 +1653,7 @@ AnnotationPatternPath
 
 
 // [181]
-ExprQuotedTP
+ExprReifiedTriple
     : '<<('  ExprVarOrTerm Verb ExprVarOrTerm ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
     | '<<'  ExprVarOrTerm Verb ExprVarOrTerm '>>' -> ensureSparqlStar(nestedTriple($2, $3, $4))
     ;
@@ -1647,7 +1661,7 @@ ExprQuotedTP
 // [182]
 ExprVarOrTerm
   : VarOrIri
-  | ExprQuotedTP
+  | ExprReifiedTriple
   | Literal
   ;
 
