@@ -9,6 +9,20 @@
           "triples": [
             {
               "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#s"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#p"
+              },
+              "object": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#o"
+              }
+            },
+            {
+              "subject": {
                 "termType": "BlankNode",
                 "value": "g_0"
               },

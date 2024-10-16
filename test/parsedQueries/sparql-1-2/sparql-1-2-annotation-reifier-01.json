@@ -12,19 +12,21 @@
       "triples": [
         {
           "subject": {
-            "termType": "NamedNode",
-            "value": "http://example.com/ns#iri"
+            "termType": "Variable",
+            "value": "s"
           },
           "predicate": {
-            "termType": "NamedNode",
-            "value": "http://example.com/ns#r"
+            "termType": "Variable",
+            "value": "p"
           },
           "object": {
             "termType": "Variable",
-            "value": "Z"
+            "value": "o"
           }
         },
         {
+          "termType": "Quad",
+          "value": "",
           "subject": {
             "termType": "NamedNode",
             "value": "http://example.com/ns#iri"
@@ -34,6 +36,8 @@
             "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
           },
           "object": {
+            "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "s"
@@ -54,6 +58,20 @@
           "graph": {
             "termType": "DefaultGraph",
             "value": ""
+          }
+        },
+        {
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#iri"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#r"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "Z"
           }
         }
       ]

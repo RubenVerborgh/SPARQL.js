@@ -46,6 +46,20 @@
             },
             {
               "subject": {
+                "termType": "Variable",
+                "value": "S"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "P"
+              },
+              "object": {
+                "termType": "BlankNode",
+                "value": "g_0"
+              }
+            },
+            {
+              "subject": {
                 "termType": "BlankNode",
                 "value": "g_1"
               },
@@ -135,6 +149,20 @@
               "graph": {
                 "termType": "DefaultGraph",
                 "value": ""
+              }
+            },
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "S"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "P"
+              },
+              "object": {
+                "termType": "BlankNode",
+                "value": "g_2"
               }
             },
             {

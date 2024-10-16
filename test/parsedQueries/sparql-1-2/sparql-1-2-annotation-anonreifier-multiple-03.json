@@ -16,11 +16,25 @@
       }
     },
     {
+      "subject": {
+        "termType": "BlankNode",
+        "value": "g_0"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://example.com/ns#r1"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "Z1"
+      }
+    },
+    {
       "termType": "Quad",
       "value": "",
       "subject": {
         "termType": "BlankNode",
-        "value": "e_bnode"
+        "value": "g_0"
       },
       "predicate": {
         "termType": "NamedNode",
@@ -54,15 +68,15 @@
     {
       "subject": {
         "termType": "BlankNode",
-        "value": "e_bnode"
+        "value": "g_1"
       },
       "predicate": {
         "termType": "NamedNode",
-        "value": "http://example.com/ns#q1"
+        "value": "http://example.com/ns#r2"
       },
       "object": {
         "termType": "Variable",
-        "value": "z"
+        "value": "Z2"
       }
     }
   ],
@@ -85,11 +99,25 @@
           }
         },
         {
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#r1"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "Z1"
+          }
+        },
+        {
           "termType": "Quad",
           "value": "",
           "subject": {
             "termType": "BlankNode",
-            "value": "e_bnode"
+            "value": "g_0"
           },
           "predicate": {
             "termType": "NamedNode",
@@ -123,15 +151,15 @@
         {
           "subject": {
             "termType": "BlankNode",
-            "value": "e_bnode"
+            "value": "g_1"
           },
           "predicate": {
             "termType": "NamedNode",
-            "value": "http://example.com/ns#q1"
+            "value": "http://example.com/ns#r2"
           },
           "object": {
             "termType": "Variable",
-            "value": "z"
+            "value": "Z2"
           }
         }
       ]

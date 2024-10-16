@@ -11,53 +11,17 @@
       "type": "bgp",
       "triples": [
         {
-          "termType": "Quad",
-          "value": "",
           "subject": {
-            "termType": "BlankNode",
-            "value": "g_0"
-          },
-          "predicate": {
-            "termType": "NamedNode",
-            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
-          },
-          "object": {
-            "termType": "Quad",
-            "value": "",
-            "subject": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#a"
-            },
-            "predicate": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#b"
-            },
-            "object": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#c"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
-            }
-          },
-          "graph": {
-            "termType": "DefaultGraph",
-            "value": ""
-          }
-        },
-        {
-          "subject": {
-            "termType": "NamedNode",
-            "value": "http://example.com/ns#s"
+            "termType": "Variable",
+            "value": "s"
           },
           "predicate": {
             "termType": "NamedNode",
             "value": "http://example.com/ns#p"
           },
           "object": {
-            "termType": "BlankNode",
-            "value": "g_0"
+            "termType": "Variable",
+            "value": "o"
           }
         },
         {
@@ -65,7 +29,7 @@
           "value": "",
           "subject": {
             "termType": "NamedNode",
-            "value": "http://example.com/ns#iri"
+            "value": "http://example.com/ns#iri1"
           },
           "predicate": {
             "termType": "NamedNode",
@@ -75,16 +39,16 @@
             "termType": "Quad",
             "value": "",
             "subject": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#s"
+              "termType": "Variable",
+              "value": "s"
             },
             "predicate": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#p"
             },
             "object": {
-              "termType": "BlankNode",
-              "value": "g_0"
+              "termType": "Variable",
+              "value": "o"
             },
             "graph": {
               "termType": "DefaultGraph",
@@ -97,11 +61,25 @@
           }
         },
         {
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#iri1"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#r1"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "Z1"
+          }
+        },
+        {
           "termType": "Quad",
           "value": "",
           "subject": {
-            "termType": "BlankNode",
-            "value": "g_1"
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#iri2"
           },
           "predicate": {
             "termType": "NamedNode",
@@ -111,16 +89,16 @@
             "termType": "Quad",
             "value": "",
             "subject": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#s1"
+              "termType": "Variable",
+              "value": "s"
             },
             "predicate": {
               "termType": "NamedNode",
-              "value": "http://example.com/ns#p1"
+              "value": "http://example.com/ns#p"
             },
             "object": {
               "termType": "Variable",
-              "value": "z"
+              "value": "o"
             },
             "graph": {
               "termType": "DefaultGraph",
@@ -135,15 +113,15 @@
         {
           "subject": {
             "termType": "NamedNode",
-            "value": "http://example.com/ns#iri"
+            "value": "http://example.com/ns#iri2"
           },
           "predicate": {
-            "termType": "Variable",
-            "value": "q"
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#r2"
           },
           "object": {
-            "termType": "BlankNode",
-            "value": "g_1"
+            "termType": "Variable",
+            "value": "Z2"
           }
         }
       ]
@@ -151,7 +129,6 @@
   ],
   "type": "query",
   "prefixes": {
-    "": "http://example.com/ns#",
-    "xsd": "http://www.w3.org/2001/XMLSchema#"
+    "": "http://example.com/ns#"
   }
 }

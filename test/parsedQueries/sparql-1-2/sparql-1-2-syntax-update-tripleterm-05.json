@@ -10,6 +10,36 @@
           "triples": [
             {
               "subject": {
+                "termType": "Variable",
+                "value": "S"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "P"
+              },
+              "object": {
+                "termType": "Quad",
+                "value": "",
+                "subject": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#a"
+                },
+                "predicate": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#b"
+                },
+                "object": {
+                  "termType": "Variable",
+                  "value": "O"
+                },
+                "graph": {
+                  "termType": "DefaultGraph",
+                  "value": ""
+                }
+              }
+            },
+            {
+              "subject": {
                 "termType": "BlankNode",
                 "value": "g_0"
               },
@@ -81,6 +111,36 @@
         {
           "type": "bgp",
           "triples": [
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "S"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "P"
+              },
+              "object": {
+                "termType": "Quad",
+                "value": "",
+                "subject": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#a"
+                },
+                "predicate": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#b"
+                },
+                "object": {
+                  "termType": "Variable",
+                  "value": "O"
+                },
+                "graph": {
+                  "termType": "DefaultGraph",
+                  "value": ""
+                }
+              }
+            },
             {
               "subject": {
                 "termType": "BlankNode",

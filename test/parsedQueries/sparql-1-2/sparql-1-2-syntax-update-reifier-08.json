@@ -10,20 +10,15 @@
             {
               "subject": {
                 "termType": "NamedNode",
-                "value": "http://example.com/ns#iri"
+                "value": "http://example.com/ns#s"
               },
               "predicate": {
                 "termType": "NamedNode",
-                "value": "http://example.com/ns#added"
+                "value": "http://example.com/ns#p"
               },
               "object": {
-                "termType": "Literal",
-                "value": "Test",
-                "language": "",
-                "datatype": {
-                  "termType": "NamedNode",
-                  "value": "http://www.w3.org/2001/XMLSchema#string"
-                }
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#o1"
               }
             },
             {
@@ -61,17 +56,7 @@
                 "termType": "DefaultGraph",
                 "value": ""
               }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "updateType": "insert",
-      "insert": [
-        {
-          "type": "bgp",
-          "triples": [
+            },
             {
               "subject": {
                 "termType": "NamedNode",
@@ -89,6 +74,30 @@
                   "termType": "NamedNode",
                   "value": "http://www.w3.org/2001/XMLSchema#string"
                 }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "updateType": "insert",
+      "insert": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#s"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#p"
+              },
+              "object": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#o2"
               }
             },
             {
@@ -125,6 +134,25 @@
               "graph": {
                 "termType": "DefaultGraph",
                 "value": ""
+              }
+            },
+            {
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#iri"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#added"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "Test",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
               }
             }
           ]

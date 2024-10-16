@@ -11,11 +11,25 @@
       "type": "bgp",
       "triples": [
         {
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o"
+          }
+        },
+        {
           "termType": "Quad",
           "value": "",
           "subject": {
-            "termType": "BlankNode",
-            "value": "g_0"
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#iri1"
           },
           "predicate": {
             "termType": "NamedNode",
@@ -30,57 +44,7 @@
             },
             "predicate": {
               "termType": "NamedNode",
-              "value": "http://example.com/ns#p1"
-            },
-            "object": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#o1"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
-            }
-          },
-          "graph": {
-            "termType": "DefaultGraph",
-            "value": ""
-          }
-        },
-        {
-          "subject": {
-            "termType": "BlankNode",
-            "value": "g_0"
-          },
-          "predicate": {
-            "termType": "Variable",
-            "value": "p"
-          },
-          "object": {
-            "termType": "Variable",
-            "value": "o"
-          }
-        },
-        {
-          "termType": "Quad",
-          "value": "",
-          "subject": {
-            "termType": "NamedNode",
-            "value": "http://example.com/ns#iri"
-          },
-          "predicate": {
-            "termType": "NamedNode",
-            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
-          },
-          "object": {
-            "termType": "Quad",
-            "value": "",
-            "subject": {
-              "termType": "BlankNode",
-              "value": "g_0"
-            },
-            "predicate": {
-              "termType": "Variable",
-              "value": "p"
+              "value": "http://example.com/ns#p"
             },
             "object": {
               "termType": "Variable",
@@ -99,15 +63,51 @@
         {
           "subject": {
             "termType": "NamedNode",
-            "value": "http://example.com/ns#iri"
+            "value": "http://example.com/ns#iri1"
           },
           "predicate": {
             "termType": "NamedNode",
-            "value": "http://example.com/ns#r"
+            "value": "http://example.com/ns#r1"
           },
           "object": {
             "termType": "Variable",
-            "value": "Z"
+            "value": "Z1"
+          }
+        },
+        {
+          "termType": "Quad",
+          "value": "",
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#iri2"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+          },
+          "object": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "Variable",
+              "value": "s"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
           }
         }
       ]
@@ -115,7 +115,6 @@
   ],
   "type": "query",
   "prefixes": {
-    "": "http://example.com/ns#",
-    "xsd": "http://www.w3.org/2001/XMLSchema#"
+    "": "http://example.com/ns#"
   }
 }

@@ -59,35 +59,6 @@
             "termType": "DefaultGraph",
             "value": ""
           }
-        },
-        {
-          "subject": {
-            "termType": "NamedNode",
-            "value": "http://example.com/ns#iri"
-          },
-          "predicate": {
-            "type": "path",
-            "pathType": "/",
-            "items": [
-              {
-                "termType": "NamedNode",
-                "value": "http://example.com/ns#r"
-              },
-              {
-                "termType": "NamedNode",
-                "value": "http://example.com/ns#q"
-              }
-            ]
-          },
-          "object": {
-            "termType": "Literal",
-            "value": "ABC",
-            "language": "",
-            "datatype": {
-              "termType": "NamedNode",
-              "value": "http://www.w3.org/2001/XMLSchema#string"
-            }
-          }
         }
       ]
     }

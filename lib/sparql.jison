@@ -185,11 +185,11 @@
   // Creates a triple with the given subject, predicate, and object
   function triple(subject, predicate, object, annotations, reifier) {
     var triple = {};
-    if (subject     != null) triple.subject     = subject;
-    if (predicate   != null) triple.predicate   = predicate;
-    if (object      != null) triple.object      = object;
-    if (annotations != null) triple.annotations = annotations;
-    if (reifier     != null) triple.reifier     = reifier;
+    if (subject     != null)                       triple.subject     = subject;
+    if (predicate   != null)                       triple.predicate   = predicate;
+    if (object      != null)                       triple.object      = object;
+    if (reifier     != null)                       triple.reifier     = reifier;
+    if (annotations != null && annotations.length) triple.annotations = annotations;
     return triple;
   }
 
@@ -274,15 +274,31 @@
     objectList.forEach(function (l) {
       let annotation = null;
       let reifier = null;
-      if (l.reifier) {
-        reifier = l.reifier;
+      if (l.reifierAnnotations) {
+        let firstAnnotation = true;
+        for (const reifierAnnotation of l.reifierAnnotations) {
+          if (reifierAnnotation.reifier) {
+            ensureReifiedTriples();
+            reifier = reifierAnnotation.reifier;
+            annotation = [];
+          }
+          if (reifierAnnotation.annotation) {
+            annotation = reifierAnnotation.annotation
+          }
+          if (l.object) {
+            l = l.object;
+          }
+          const t = triple(null, predicate, l.entity, annotation, reifier);
+          t.firstAnnotation = firstAnnotation;
+          objects.push(t);
+          appendAllTo(triples, l.triples);
+
+          firstAnnotation = false;
+        }
+      } else {
+        objects.push(triple(null, predicate, l.entity, []));
+        appendAllTo(triples, l.triples);
       }
-      if (l.annotation) {
-        annotation = l.annotation
-        l = l.object;
-      }
-      objects.push(triple(null, predicate, l.entity, annotation, reifier));
-      appendAllTo(triples, l.triples);
     });
     return unionAll(objects, otherTriples || [], triples);
   }
@@ -455,14 +471,19 @@
 
         pushReifyingTriples(s, newTriples);
 
-        if (t.annotations) {
-          let reifier = reifiedTriple(s.subject, s.predicate, s.object, t.reifier);
-          _applyAnnotations(reifier, t.annotations, newTriples);
-          s = reifier.reifyingTriple;
-          delete reifier.reifyingTriple;
-        }
+        if (t.annotations || t.reifier) {
+          if (t.firstAnnotation)
+            newTriples.push(s);
 
-        newTriples.push(s);
+          let reifier = reifiedTriple(s.subject, s.predicate, s.object, t.reifier);
+          if (t.annotations)
+            _applyAnnotations(reifier, t.annotations, newTriples);
+          if (!t.annotations || t.firstAnnotation)
+            newTriples.push(reifier.reifyingTriple);
+          delete reifier.reifyingTriple;
+        } else {
+          newTriples.push(s);
+        }
       });
 
       return newTriples;
@@ -1283,9 +1304,18 @@ ObjectList
 
 // [80]
 Object
-    : GraphNode '~' ReifierOrVar AnnotationPattern -> { reifier: $3, annotation: $4, object: $1 }
-    | GraphNode AnnotationPattern? -> $2 ? { annotation: $2, object: $1 } : $1
+    : GraphNode ReifierAnnotationSequence? -> $2 ? { reifierAnnotations: $2, object: $1 } : $1
     ;
+
+ReifierAnnotationSequence
+    : ReifierAnnotationSequenceElement* ReifierAnnotationSequenceElement -> $1.length ? appendTo($1, $2) : [ $2 ]
+    ;
+
+ReifierAnnotationSequenceElement
+    : '~' ReifierOrVar -> { reifier: $2 }
+    | AnnotationPattern -> { annotation: $1 }
+    ;
+
 
 // [81]
 TriplesSameSubjectPath
@@ -1321,8 +1351,16 @@ ObjectListPath
 
 // [87]
 ObjectPath
-    : GraphNodePath '~' ReifierOrVar AnnotationPatternPath -> { reifier: $3, annotation: $4, object: $1 }
-    | GraphNodePath AnnotationPatternPath? -> $2 ? { object: $1, annotation: $2 } : $1;
+    : GraphNodePath ReifierAnnotationPathSequence? -> $2 ? { reifierAnnotations: $2, object: $1 } : $1
+    ;
+
+ReifierAnnotationPathSequence
+    : ReifierAnnotationPathSequenceElement* ReifierAnnotationPathSequenceElement -> $1.length ? appendTo($1, $2) : [ $2 ]
+    ;
+
+ReifierAnnotationPathSequenceElement
+    : '~' ReifierOrVar -> { reifier: $2 }
+    | AnnotationPatternPath -> { annotation: $1 }
     ;
 
 // [88] Path [89] PathAlternative

@@ -10,21 +10,16 @@
           "triples": [
             {
               "subject": {
-                "termType": "NamedNode",
-                "value": "http://example.com/ns#iri"
+                "termType": "Variable",
+                "value": "s"
               },
               "predicate": {
                 "termType": "NamedNode",
-                "value": "http://example.com/ns#added"
+                "value": "http://example.com/ns#r"
               },
               "object": {
-                "termType": "Literal",
-                "value": "Property :r",
-                "language": "",
-                "datatype": {
-                  "termType": "NamedNode",
-                  "value": "http://www.w3.org/2001/XMLSchema#string"
-                }
+                "termType": "Variable",
+                "value": "o"
               }
             },
             {
@@ -61,6 +56,25 @@
               "graph": {
                 "termType": "DefaultGraph",
                 "value": ""
+              }
+            },
+            {
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#iri"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#added"
+              },
+              "object": {
+                "termType": "Literal",
+                "value": "Property :r",
+                "language": "",
+                "datatype": {
+                  "termType": "NamedNode",
+                  "value": "http://www.w3.org/2001/XMLSchema#string"
+                }
               }
             }
           ]

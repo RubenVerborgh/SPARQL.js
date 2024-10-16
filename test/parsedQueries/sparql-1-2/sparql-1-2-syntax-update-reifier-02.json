@@ -10,15 +10,15 @@
             {
               "subject": {
                 "termType": "NamedNode",
-                "value": "http://example.com/ns#iri"
+                "value": "http://example.com/ns#s"
               },
               "predicate": {
                 "termType": "NamedNode",
-                "value": "http://example.com/ns#y"
+                "value": "http://example.com/ns#p"
               },
               "object": {
                 "termType": "NamedNode",
-                "value": "http://example.com/ns#z"
+                "value": "http://example.com/ns#o"
               }
             },
             {
@@ -55,6 +55,20 @@
               "graph": {
                 "termType": "DefaultGraph",
                 "value": ""
+              }
+            },
+            {
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#iri"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#y"
+              },
+              "object": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#z"
               }
             }
           ]

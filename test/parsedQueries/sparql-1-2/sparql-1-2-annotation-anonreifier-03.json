@@ -11,6 +11,8 @@
       "type": "bgp",
       "triples": [
         {
+          "termType": "Quad",
+          "value": "",
           "subject": {
             "termType": "BlankNode",
             "value": "g_0"
@@ -46,6 +48,20 @@
         },
         {
           "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#s"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#p"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          }
+        },
+        {
+          "subject": {
             "termType": "BlankNode",
             "value": "g_1"
           },
@@ -59,6 +75,8 @@
           }
         },
         {
+          "termType": "Quad",
+          "value": "",
           "subject": {
             "termType": "BlankNode",
             "value": "g_1"
@@ -68,6 +86,8 @@
             "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
           },
           "object": {
+            "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#s"

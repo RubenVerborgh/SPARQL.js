@@ -13,6 +13,56 @@
         {
           "subject": {
             "termType": "NamedNode",
+            "value": "http://example.com/ns#s"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#p"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#o"
+          }
+        },
+        {
+          "termType": "Quad",
+          "value": "",
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#iri"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+          },
+          "object": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#s"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#o"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
+          }
+        },
+        {
+          "subject": {
+            "termType": "NamedNode",
             "value": "http://example.com/ns#iri"
           },
           "predicate": {
@@ -102,38 +152,6 @@
               "termType": "NamedNode",
               "value": "http://www.w3.org/2001/XMLSchema#date"
             }
-          }
-        },
-        {
-          "subject": {
-            "termType": "NamedNode",
-            "value": "http://example.com/ns#iri"
-          },
-          "predicate": {
-            "termType": "NamedNode",
-            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
-          },
-          "object": {
-            "subject": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#s"
-            },
-            "predicate": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#p"
-            },
-            "object": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#o"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
-            }
-          },
-          "graph": {
-            "termType": "DefaultGraph",
-            "value": ""
           }
         }
       ]
