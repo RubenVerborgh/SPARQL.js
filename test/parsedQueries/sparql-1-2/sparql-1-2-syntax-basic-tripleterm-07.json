@@ -3,7 +3,16 @@
   "template": [
     {
       "subject": {
+        "termType": "NamedNode",
+        "value": "http://example.com/ns#s"
+      },
+      "predicate": {
+        "termType": "Variable",
+        "value": "q"
+      },
+      "object": {
         "termType": "Quad",
+        "value": "",
         "subject": {
           "termType": "Variable",
           "value": "s"
@@ -13,21 +22,13 @@
           "value": "p"
         },
         "object": {
-          "termType": "Variable",
-          "value": "o"
+          "termType": "NamedNode",
+          "value": "http://example.com/ns#o"
         },
         "graph": {
           "termType": "DefaultGraph",
           "value": ""
         }
-      },
-      "predicate": {
-        "termType": "Variable",
-        "value": "q"
-      },
-      "object": {
-        "termType": "Variable",
-        "value": "z"
       }
     },
     {
@@ -41,6 +42,7 @@
       },
       "object": {
         "termType": "Quad",
+        "value": "",
         "subject": {
           "termType": "Variable",
           "value": "s"
@@ -66,7 +68,16 @@
       "triples": [
         {
           "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#s"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "q"
+          },
+          "object": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "s"
@@ -76,21 +87,13 @@
               "value": "p"
             },
             "object": {
-              "termType": "Variable",
-              "value": "o"
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#o"
             },
             "graph": {
               "termType": "DefaultGraph",
               "value": ""
             }
-          },
-          "predicate": {
-            "termType": "Variable",
-            "value": "q"
-          },
-          "object": {
-            "termType": "Variable",
-            "value": "z"
           }
         },
         {
@@ -104,6 +107,7 @@
           },
           "object": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "s"

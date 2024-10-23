@@ -1,6 +1,6 @@
 PREFIX : <http://example.com/ns#>
 
 SELECT * {
-  <<(?S :p :o )>> :r :z .
-  <<( <<(?S :p :o )>> :r :z )>> :q 1 .
+  :s :r <<(?S :p :o )>> .
+  :s :q <<( :s1 :r <<(?S :p :o )>> )>> .
 }

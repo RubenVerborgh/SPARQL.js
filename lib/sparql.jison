@@ -1634,7 +1634,7 @@ BlankNode
 //
 
 TripleTermPattern
-    : '<<(' ReifiedTriplePatternObject Verb ReifiedTriplePatternObject ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
+    : '<<(' TripleTermPatternSubject Verb ReifiedTriplePatternObject ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
     ;
 
 ReifiedTriplePattern
@@ -1643,7 +1643,7 @@ ReifiedTriplePattern
     ;
 
 TripleTerm
-    : '<<('  ReifiedTripleObject IriOrA ReifiedTripleObject ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
+    : '<<('  TripleTermSubject IriOrA ReifiedTripleObject ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
     ;
 
 ReifiedTriple
@@ -1662,6 +1662,17 @@ ReifiedTriplePatternObject
     : ReifiedTriplePatternSubject
     | Literal
     | TripleTermPattern
+    ;
+
+TripleTermPatternSubject
+    : Var
+    | iri
+    | BlankNode
+    ;
+
+TripleTermSubject
+    : iri
+    | BlankNode
     ;
 
 Reifier

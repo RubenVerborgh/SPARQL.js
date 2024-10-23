@@ -13,6 +13,7 @@
         {
           "?x": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#s"
@@ -34,8 +35,18 @@
         {
           "?x": {
             "termType": "Quad",
+            "value": "",
             "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#x"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#q"
+            },
+            "object": {
               "termType": "Quad",
+              "value": "",
               "subject": {
                 "termType": "NamedNode",
                 "value": "http://example.com/ns#s"
@@ -53,14 +64,6 @@
                 "value": ""
               }
             },
-            "predicate": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#q"
-            },
-            "object": {
-              "termType": "NamedNode",
-              "value": "http://example.com/ns#z"
-            },
             "graph": {
               "termType": "DefaultGraph",
               "value": ""
@@ -75,6 +78,7 @@
         {
           "?y": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#s"
@@ -114,6 +118,7 @@
           },
           "?z": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#s"

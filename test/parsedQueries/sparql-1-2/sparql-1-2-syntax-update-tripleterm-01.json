@@ -9,7 +9,16 @@
           "triples": [
             {
               "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#s"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#p"
+              },
+              "object": {
                 "termType": "Quad",
+                "value": "",
                 "subject": {
                   "termType": "NamedNode",
                   "value": "http://example.com/ns#a"
@@ -26,14 +35,6 @@
                   "termType": "DefaultGraph",
                   "value": ""
                 }
-              },
-              "predicate": {
-                "termType": "NamedNode",
-                "value": "http://example.com/ns#p"
-              },
-              "object": {
-                "termType": "NamedNode",
-                "value": "http://example.com/ns#o"
               }
             }
           ]

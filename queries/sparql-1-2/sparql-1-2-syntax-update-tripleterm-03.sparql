@@ -1,8 +1,8 @@
 PREFIX : <http://example.com/ns#>
 
 INSERT {
-    <<( :a :b :c )>> ?P :o2  {| ?Y ?Z |}
+    ?S ?P <<( :a :b :c )>>  {| ?Y ?Z |}
 } WHERE {
-   <<( :a :b :c )>> ?P :o1 {| ?Y ?Z |}
+   :s ?P <<( :a :b :c )>> {| ?Y ?Z |}
 }
 

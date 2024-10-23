@@ -10,6 +10,14 @@
           "triples": [
             {
               "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#s"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "P"
+              },
+              "object": {
                 "termType": "Quad",
                 "value": "",
                 "subject": {
@@ -28,14 +36,6 @@
                   "termType": "DefaultGraph",
                   "value": ""
                 }
-              },
-              "predicate": {
-                "termType": "Variable",
-                "value": "P"
-              },
-              "object": {
-                "termType": "NamedNode",
-                "value": "http://example.com/ns#o2"
               }
             },
             {
@@ -83,6 +83,14 @@
                 "termType": "Quad",
                 "value": "",
                 "subject": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#s"
+                },
+                "predicate": {
+                  "termType": "Variable",
+                  "value": "P"
+                },
+                "object": {
                   "termType": "Quad",
                   "value": "",
                   "subject": {
@@ -101,14 +109,6 @@
                     "termType": "DefaultGraph",
                     "value": ""
                   }
-                },
-                "predicate": {
-                  "termType": "Variable",
-                  "value": "P"
-                },
-                "object": {
-                  "termType": "NamedNode",
-                  "value": "http://example.com/ns#o2"
                 },
                 "graph": {
                   "termType": "DefaultGraph",
@@ -129,6 +129,14 @@
           "triples": [
             {
               "subject": {
+                "termType": "Variable",
+                "value": "s"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "P"
+              },
+              "object": {
                 "termType": "Quad",
                 "value": "",
                 "subject": {
@@ -147,14 +155,6 @@
                   "termType": "DefaultGraph",
                   "value": ""
                 }
-              },
-              "predicate": {
-                "termType": "Variable",
-                "value": "P"
-              },
-              "object": {
-                "termType": "NamedNode",
-                "value": "http://example.com/ns#o1"
               }
             },
             {
@@ -202,6 +202,14 @@
                 "termType": "Quad",
                 "value": "",
                 "subject": {
+                  "termType": "Variable",
+                  "value": "s"
+                },
+                "predicate": {
+                  "termType": "Variable",
+                  "value": "P"
+                },
+                "object": {
                   "termType": "Quad",
                   "value": "",
                   "subject": {
@@ -220,14 +228,6 @@
                     "termType": "DefaultGraph",
                     "value": ""
                   }
-                },
-                "predicate": {
-                  "termType": "Variable",
-                  "value": "P"
-                },
-                "object": {
-                  "termType": "NamedNode",
-                  "value": "http://example.com/ns#o1"
                 },
                 "graph": {
                   "termType": "DefaultGraph",

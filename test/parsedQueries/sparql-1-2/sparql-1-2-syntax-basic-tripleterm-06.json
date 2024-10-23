@@ -3,7 +3,16 @@
   "template": [
     {
       "subject": {
+        "termType": "NamedNode",
+        "value": "http://example.com/ns#s"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://example.com/ns#q"
+      },
+      "object": {
         "termType": "Quad",
+        "value": "",
         "subject": {
           "termType": "NamedNode",
           "value": "http://example.com/ns#s"
@@ -20,14 +29,6 @@
           "termType": "DefaultGraph",
           "value": ""
         }
-      },
-      "predicate": {
-        "termType": "NamedNode",
-        "value": "http://example.com/ns#q"
-      },
-      "object": {
-        "termType": "NamedNode",
-        "value": "http://example.com/ns#z"
       }
     }
   ],
