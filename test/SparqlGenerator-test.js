@@ -123,6 +123,17 @@ describe('A SPARQL generator', function () {
       'COPY SILENT DEFAULT TO <http://example.org/named>';
     expect(generatedQuery).toEqual(expectedQuery);
   });
+
+  it('should preserve limits with 0', function () {
+    var parser = new SparqlParser();
+    var parsedQuery = parser.parse('SELECT * WHERE { ?s ?p ?o. } LIMIT 0');
+    var generator = new SparqlGenerator();
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery =
+      'SELECT * WHERE { ?s ?p ?o. }\n' +
+      'LIMIT 0';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
 });
 
 function testQueries(directory, settings) {
