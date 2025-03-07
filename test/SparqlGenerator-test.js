@@ -13,6 +13,20 @@ var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 var unusedPrefixesPath = __dirname + '/../test/unusedPrefixes/';
 
 describe('A SPARQL generator', function () {
+  it('should preserve mentioned prefixes in the query', function () {
+    var parser = new SparqlParser({
+      prefixes: {
+        schema: "https://schema.org/",
+        owl: "http://www.w3.org/2002/07/owl#"
+      }
+    });
+    var parsedQuery = parser.parse('PREFIX db_opt: <https://db.control.param_10> \n SELECT * WHERE {?s a owl:Class}');
+    var generator = new SparqlGenerator({allPrefixes: false, keepQueryPrefixes: true});
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery ='PREFIX db_opt: <https://db.control.param_10>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nSELECT * WHERE { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> owl:Class. }';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
+
   var defaultGenerator = new SparqlGenerator();
 
   describe('in SPARQL mode', () => {
