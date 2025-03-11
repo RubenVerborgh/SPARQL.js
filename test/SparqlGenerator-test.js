@@ -23,7 +23,45 @@ describe('A SPARQL generator', function () {
     var parsedQuery = parser.parse('PREFIX db_opt: <https://db.control.param_10> \n SELECT * WHERE {?s a owl:Class}');
     var generator = new SparqlGenerator({allPrefixes: false, keepQueryPrefixes: true});
     var generatedQuery = generator.stringify(parsedQuery);
-    var expectedQuery ='PREFIX db_opt: <https://db.control.param_10>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nSELECT * WHERE { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> owl:Class. }';
+    var expectedQuery = 'PREFIX db_opt: <https://db.control.param_10>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nSELECT * WHERE { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> owl:Class. }';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
+
+  it('should preserve fixed prefixes provided to the generator', function () {
+    var parser = new SparqlParser({
+      prefixes: {
+        schema: "https://schema.org/",
+        owl: "http://www.w3.org/2002/07/owl#"
+      }
+    });
+
+    var parsedQuery = parser.parse('PREFIX db_opt: <https://db.control.param_10> \n SELECT * WHERE {?s a owl:Class}');
+
+    var generator = new SparqlGenerator({allPrefixes: false, fixedPrefixes: {
+      schema: "https://schema.org/",
+      db_opt: "https://db.control.param_10"
+    }});
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery = 'PREFIX db_opt: <https://db.control.param_10>\nPREFIX schema: <https://schema.org/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nSELECT * WHERE { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> owl:Class. }';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
+
+  it('should preserve fixed prefixes provided to the generator and additional mentioned prefixes', function () {
+    var parser = new SparqlParser({
+      prefixes: {
+        schema: "https://schema.org/",
+        owl: "http://www.w3.org/2002/07/owl#"
+      }
+    });
+
+    var parsedQuery = parser.parse('PREFIX db_opt: <https://db.control.param_10>\nPREFIX db_optimization: <https://db.optimization.param_100>\n SELECT * WHERE {?s a owl:Class}');
+
+    var generator = new SparqlGenerator({allPrefixes: false, keepQueryPrefixes:true, fixedPrefixes: {
+      schema: "https://schema.org/",
+      db_opt: "https://db.control.param_10"
+    }});
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery = 'PREFIX db_opt: <https://db.control.param_10>\nPREFIX db_optimization: <https://db.optimization.param_100>\nPREFIX schema: <https://schema.org/>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nSELECT * WHERE { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> owl:Class. }';
     expect(generatedQuery).toEqual(expectedQuery);
   });
 
