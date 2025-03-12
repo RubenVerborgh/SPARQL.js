@@ -13,6 +13,47 @@ var parsedQueriesPath = __dirname + '/../test/parsedQueries/';
 var unusedPrefixesPath = __dirname + '/../test/unusedPrefixes/';
 
 describe('A SPARQL generator', function () {
+  it('should preserve prefixes specified in the allPrefixes', function () {
+    var parser = new SparqlParser({
+      prefixes: {
+        schema: "https://schema.org/",
+        owl: "http://www.w3.org/2002/07/owl#"
+      }
+    });
+    var allPrefixes={
+      db_opt: 'https://db.control.param_10'
+    }
+    var parsedQuery = parser.parse('PREFIX db_opt: <https://db.control.param_10> \n SELECT * WHERE {?s a owl:Class}');
+    var generator = new SparqlGenerator({allPrefixes});
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery = 'PREFIX db_opt: <https://db.control.param_10>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nSELECT * WHERE { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> owl:Class. }';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
+
+  it('should preserve prefixes specified the query using allPrefixes option', function () {
+    var parser = new SparqlParser({
+      prefixes: {
+        schema: "https://schema.org/",
+        owl: "http://www.w3.org/2002/07/owl#"
+      }
+    });
+
+    var parsedQuery = parser.parse('PREFIX db_opt: <https://db.control.param_10>\nPREFIX db_optimization: <https://db.optimization.param_100>\n SELECT * WHERE {?s a owl:Class}');
+
+    var allPrefixes={}
+    var queryPrefixes=Object.keys(parsedQuery.prefixes);
+    for (var key of queryPrefixes) {
+       allPrefixes[key]=parsedQuery.prefixes[key];
+    }
+
+    var generator = new SparqlGenerator({allPrefixes});
+    var generatedQuery = generator.stringify(parsedQuery);
+    var expectedQuery = 'PREFIX db_opt: <https://db.control.param_10>\nPREFIX db_optimization: <https://db.optimization.param_100>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nSELECT * WHERE { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> owl:Class. }';
+    expect(generatedQuery).toEqual(expectedQuery);
+  });
+
+
+
   var defaultGenerator = new SparqlGenerator();
 
   describe('in SPARQL mode', () => {
