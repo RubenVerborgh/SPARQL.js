@@ -1,0 +1,226 @@
+{
+  "type": "update",
+  "updates": [
+    {
+      "updateType": "insertdelete",
+      "delete": [],
+      "insert": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "termType": "Quad",
+              "value": "",
+              "subject": {
+                "termType": "BlankNode",
+                "value": "g_0"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+              },
+              "object": {
+                "termType": "Quad",
+                "value": "",
+                "subject": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#a"
+                },
+                "predicate": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#b"
+                },
+                "object": {
+                  "termType": "Variable",
+                  "value": "O"
+                },
+                "graph": {
+                  "termType": "DefaultGraph",
+                  "value": ""
+                }
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
+              }
+            },
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "S"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "P"
+              },
+              "object": {
+                "termType": "BlankNode",
+                "value": "g_0"
+              }
+            },
+            {
+              "subject": {
+                "termType": "BlankNode",
+                "value": "g_1"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "Y"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "Z"
+              }
+            },
+            {
+              "termType": "Quad",
+              "value": "",
+              "subject": {
+                "termType": "BlankNode",
+                "value": "g_1"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+              },
+              "object": {
+                "termType": "Quad",
+                "value": "",
+                "subject": {
+                  "termType": "Variable",
+                  "value": "S"
+                },
+                "predicate": {
+                  "termType": "Variable",
+                  "value": "P"
+                },
+                "object": {
+                  "termType": "BlankNode",
+                  "value": "g_0"
+                },
+                "graph": {
+                  "termType": "DefaultGraph",
+                  "value": ""
+                }
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
+              }
+            }
+          ]
+        }
+      ],
+      "where": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "termType": "Quad",
+              "value": "",
+              "subject": {
+                "termType": "BlankNode",
+                "value": "g_2"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+              },
+              "object": {
+                "termType": "Quad",
+                "value": "",
+                "subject": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#a"
+                },
+                "predicate": {
+                  "termType": "NamedNode",
+                  "value": "http://example.com/ns#b"
+                },
+                "object": {
+                  "termType": "Variable",
+                  "value": "O"
+                },
+                "graph": {
+                  "termType": "DefaultGraph",
+                  "value": ""
+                }
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
+              }
+            },
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "S"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "P"
+              },
+              "object": {
+                "termType": "BlankNode",
+                "value": "g_2"
+              }
+            },
+            {
+              "subject": {
+                "termType": "BlankNode",
+                "value": "g_3"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "Y"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "Z"
+              }
+            },
+            {
+              "termType": "Quad",
+              "value": "",
+              "subject": {
+                "termType": "BlankNode",
+                "value": "g_3"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+              },
+              "object": {
+                "termType": "Quad",
+                "value": "",
+                "subject": {
+                  "termType": "Variable",
+                  "value": "S"
+                },
+                "predicate": {
+                  "termType": "Variable",
+                  "value": "P"
+                },
+                "object": {
+                  "termType": "BlankNode",
+                  "value": "g_2"
+                },
+                "graph": {
+                  "termType": "DefaultGraph",
+                  "value": ""
+                }
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "t"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#source"
+          },
+          "object": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#g"
+          }
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "istriple",
+        "args": [
+          {
+            "termType": "Variable",
+            "value": "t"
+          }
+        ]
+      }
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "=",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "subject",
+            "args": [
+              {
+                "termType": "Variable",
+                "value": "t"
+              }
+            ]
+          },
+          {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#s"
+          }
+        ]
+      }
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "=",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "predicate",
+            "args": [
+              {
+                "termType": "Variable",
+                "value": "t"
+              }
+            ]
+          },
+          {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#p"
+          }
+        ]
+      }
+    },
+    {
+      "type": "filter",
+      "expression": {
+        "type": "operation",
+        "operator": "=",
+        "args": [
+          {
+            "type": "operation",
+            "operator": "object",
+            "args": [
+              {
+                "termType": "Variable",
+                "value": "t"
+              }
+            ]
+          },
+          {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#o"
+          }
+        ]
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

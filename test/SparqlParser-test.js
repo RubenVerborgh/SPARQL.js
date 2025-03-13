@@ -21,6 +21,7 @@ describe('A SPARQL parser', function () {
 
   describe('in SPARQL mode', () => {
     testQueries('sparql', {});
+    testQueries('sparql-1-2', { mustError: true });
     testQueries('sparqlstar', { mustError: true });
     testQueries('sparql-skip-validation', { mustError: true });
     testQueries('sparqlstar-spec', { mustError: true });
@@ -28,12 +29,20 @@ describe('A SPARQL parser', function () {
 
   describe('in SPARQL mode with skipValidation', () => {
     testQueries('sparql', { skipValidation: true });
+    testQueries('sparql-1-2', { skipValidation: true, mustError: true });
     testQueries('sparqlstar', { skipValidation: true, mustError: true });
     testQueries('sparqlstar-annotated', { skipValidation: true, mustError: true });
     testQueries('sparqlstar-nested-quads', { skipValidation: true, mustError: true });
     testQueries('sparqlstar-invalid', { skipValidation: true, mustError: true });
     testQueries('sparql-skip-validation', { skipValidation: true });
     testQueries('sparqlstar-spec', { mustError: true });
+  });
+
+  describe('in SPARQL-1.2 mode', () => {
+    testQueries('sparql', { reifiedTriples: true });
+    testQueries('sparql-1-2', { reifiedTriples: true });
+    testQueries('sparql-skip-validation', { reifiedTriples: true, mustError: true });
+    testQueries('sparql-1-2-invalid', { reifiedTriples: true, mustError: true });
   });
 
   describe('in SPARQL-star mode', () => {
@@ -451,6 +460,11 @@ function testQueries(directory, settings) {
   queries.sort();
 
   queries.forEach(function (query) {
+    // Skip hidden files
+    if (query.startsWith('.')) {
+      return;
+    }
+
     var sparql = fs.readFileSync(queriesPath + directory + '/' + query + '.sparql', 'utf8');
 
     var parsedQueryFile = parsedQueriesPath + directory + '/' + query + '.json';

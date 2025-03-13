@@ -1,0 +1,65 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": {
+            "termType": "Variable",
+            "value": "s"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o"
+          }
+        }
+      ]
+    },
+    {
+      "type": "bind",
+      "variable": {
+        "termType": "Variable",
+        "value": "t2"
+      },
+      "expression": {
+        "type": "operation",
+        "operator": "triple",
+        "args": [
+          {
+            "termType": "Variable",
+            "value": "s"
+          },
+          {
+            "termType": "Variable",
+            "value": "p"
+          },
+          {
+            "type": "operation",
+            "operator": "str",
+            "args": [
+              {
+                "termType": "Variable",
+                "value": "o"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}
