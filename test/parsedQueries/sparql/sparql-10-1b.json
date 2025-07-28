@@ -72,7 +72,8 @@
                     "datatype": {
                       "termType": "NamedNode",
                       "value": "http://www.w3.org/2001/XMLSchema#integer"
-                    }
+                    },
+                    "direction": ""
                   },
                   {
                     "termType": "Variable",
@@ -126,7 +127,8 @@
             "datatype": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/2001/XMLSchema#integer"
-            }
+            },
+            "direction": ""
           }
         ]
       }

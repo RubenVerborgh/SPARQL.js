@@ -34,6 +34,7 @@
       },
       "expression": {
         "termType": "Quad",
+        "value": "",
         "subject": {
           "termType": "Variable",
           "value": "s"

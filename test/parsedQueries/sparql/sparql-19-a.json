@@ -8,7 +8,8 @@
     {
       "expression": {
         "expression": {
-          "termType": "Wildcard"
+          "termType": "Wildcard",
+          "value": "*"
         },
         "type": "aggregate",
         "aggregation": "count",

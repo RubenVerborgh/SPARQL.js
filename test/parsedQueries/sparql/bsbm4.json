@@ -1,5 +1,6 @@
 {
   "queryType": "SELECT",
+  "distinct": true,
   "variables": [
     {
       "termType": "Variable",
@@ -14,7 +15,6 @@
       "value": "propertyTextual"
     }
   ],
-  "distinct": true,
   "where": [
     {
       "type": "union",
@@ -128,7 +128,8 @@
                     "datatype": {
                       "termType": "NamedNode",
                       "value": "http://www.w3.org/2001/XMLSchema#integer"
-                    }
+                    },
+                    "direction": ""
                   }
                 ]
               }
@@ -244,7 +245,8 @@
                     "datatype": {
                       "termType": "NamedNode",
                       "value": "http://www.w3.org/2001/XMLSchema#integer"
-                    }
+                    },
+                    "direction": ""
                   }
                 ]
               }

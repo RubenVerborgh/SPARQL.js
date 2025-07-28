@@ -26,7 +26,8 @@
             "datatype": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/2001/XMLSchema#string"
-            }
+            },
+            "direction": ""
           }
         },
         {
@@ -109,10 +110,6 @@
         "args": [
           {
             "type": "functionCall",
-            "function": {
-              "termType": "NamedNode",
-              "value": "http://example.org/geo#distance"
-            },
             "args": [
               {
                 "termType": "Variable",
@@ -131,7 +128,11 @@
                 "value": "byLoc"
               }
             ],
-            "distinct": false
+            "distinct": false,
+            "function": {
+              "termType": "NamedNode",
+              "value": "http://example.org/geo#distance"
+            }
           },
           {
             "termType": "Literal",
@@ -140,7 +141,8 @@
             "datatype": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/2001/XMLSchema#integer"
-            }
+            },
+            "direction": ""
           }
         ]
       }

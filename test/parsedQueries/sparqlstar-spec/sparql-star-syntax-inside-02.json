@@ -26,7 +26,8 @@
             "datatype": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/2001/XMLSchema#integer"
-            }
+            },
+            "direction": ""
           }
         },
         {
@@ -40,6 +41,7 @@
           },
           "object": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "S1"
@@ -83,6 +85,7 @@
           },
           "object": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "S2"

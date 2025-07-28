@@ -2,7 +2,8 @@
   "queryType": "SELECT",
   "variables": [
     {
-      "termType": "Wildcard"
+      "termType": "Wildcard",
+      "value": "*"
     }
   ],
   "where": [
@@ -20,6 +21,7 @@
           },
           "object": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "s2"
@@ -30,6 +32,7 @@
             },
             "object": {
               "termType": "Quad",
+              "value": "",
               "subject": {
                 "termType": "Variable",
                 "value": "s3"

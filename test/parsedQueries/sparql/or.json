@@ -2,7 +2,8 @@
   "queryType": "SELECT",
   "variables": [
     {
-      "termType": "Wildcard"
+      "termType": "Wildcard",
+      "value": "*"
     }
   ],
   "where": [
@@ -54,7 +55,8 @@
                         "datatype": {
                           "termType": "NamedNode",
                           "value": "http://www.w3.org/2001/XMLSchema#integer"
-                        }
+                        },
+                        "direction": ""
                       }
                     ]
                   },
@@ -73,7 +75,8 @@
                         "datatype": {
                           "termType": "NamedNode",
                           "value": "http://www.w3.org/2001/XMLSchema#integer"
-                        }
+                        },
+                        "direction": ""
                       }
                     ]
                   }
@@ -94,7 +97,8 @@
                     "datatype": {
                       "termType": "NamedNode",
                       "value": "http://www.w3.org/2001/XMLSchema#integer"
-                    }
+                    },
+                    "direction": ""
                   }
                 ]
               }
@@ -115,7 +119,8 @@
                 "datatype": {
                   "termType": "NamedNode",
                   "value": "http://www.w3.org/2001/XMLSchema#integer"
-                }
+                },
+                "direction": ""
               }
             ]
           }
@@ -151,7 +156,8 @@
                         "datatype": {
                           "termType": "NamedNode",
                           "value": "http://www.w3.org/2001/XMLSchema#integer"
-                        }
+                        },
+                        "direction": ""
                       }
                     ]
                   },
@@ -170,7 +176,8 @@
                         "datatype": {
                           "termType": "NamedNode",
                           "value": "http://www.w3.org/2001/XMLSchema#integer"
-                        }
+                        },
+                        "direction": ""
                       }
                     ]
                   }
@@ -191,7 +198,8 @@
                     "datatype": {
                       "termType": "NamedNode",
                       "value": "http://www.w3.org/2001/XMLSchema#integer"
-                    }
+                    },
+                    "direction": ""
                   }
                 ]
               }
@@ -212,7 +220,8 @@
                 "datatype": {
                   "termType": "NamedNode",
                   "value": "http://www.w3.org/2001/XMLSchema#integer"
-                }
+                },
+                "direction": ""
               }
             ]
           }
@@ -244,7 +253,8 @@
                     "datatype": {
                       "termType": "NamedNode",
                       "value": "http://www.w3.org/2001/XMLSchema#integer"
-                    }
+                    },
+                    "direction": ""
                   }
                 ]
               },
@@ -263,7 +273,8 @@
                     "datatype": {
                       "termType": "NamedNode",
                       "value": "http://www.w3.org/2001/XMLSchema#integer"
-                    }
+                    },
+                    "direction": ""
                   }
                 ]
               }
@@ -288,7 +299,8 @@
                     "datatype": {
                       "termType": "NamedNode",
                       "value": "http://www.w3.org/2001/XMLSchema#integer"
-                    }
+                    },
+                    "direction": ""
                   }
                 ]
               },
@@ -307,7 +319,8 @@
                     "datatype": {
                       "termType": "NamedNode",
                       "value": "http://www.w3.org/2001/XMLSchema#integer"
-                    }
+                    },
+                    "direction": ""
                   }
                 ]
               }

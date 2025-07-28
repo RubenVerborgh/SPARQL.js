@@ -13,6 +13,7 @@
         {
           "?x": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#s"
@@ -34,8 +35,10 @@
         {
           "?x": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Quad",
+              "value": "",
               "subject": {
                 "termType": "NamedNode",
                 "value": "http://example.com/ns#s"
@@ -75,6 +78,7 @@
         {
           "?y": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#s"
@@ -99,7 +103,8 @@
             "datatype": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/2001/XMLSchema#integer"
-            }
+            },
+            "direction": ""
           }
         },
         {
@@ -110,10 +115,12 @@
             "datatype": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/2001/XMLSchema#integer"
-            }
+            },
+            "direction": ""
           },
           "?z": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#s"

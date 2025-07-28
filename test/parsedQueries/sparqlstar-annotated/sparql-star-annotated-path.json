@@ -1,9 +1,5 @@
 {
-  "prefixes": {
-    "": "http://example.com/"
-  },
   "queryType": "SELECT",
-  "type": "query",
   "variables": [
     {
       "termType": "Wildcard",
@@ -12,56 +8,92 @@
   ],
   "where": [
     {
+      "type": "bgp",
       "triples": [
         {
-          "object": {
+          "subject": {
             "termType": "Variable",
-            "value": "o"
+            "value": "s"
           },
           "predicate": {
             "termType": "Variable",
             "value": "p"
           },
-          "subject": {
+          "object": {
             "termType": "Variable",
-            "value": "s"
+            "value": "o"
           }
         },
         {
-          "object": {
-            "termType": "Variable",
-            "value": "o1"
-          },
-          "predicate": {
-            "termType": "Variable",
-            "value": "p1"
-          },
           "subject": {
-            "object": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
               "termType": "Variable",
-              "value": "o"
+              "value": "s"
             },
             "predicate": {
               "termType": "Variable",
               "value": "p"
             },
-            "subject": {
+            "object": {
               "termType": "Variable",
-              "value": "s"
+              "value": "o"
             },
             "graph": {
               "termType": "DefaultGraph",
               "value": ""
-            },
-            "termType": "Quad"
+            }
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "p1"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "o1"
           }
         },
         {
-          "object": {
-            "termType": "Variable",
-            "value": "o2"
+          "subject": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "Quad",
+              "value": "",
+              "subject": {
+                "termType": "Variable",
+                "value": "s"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "o"
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
+              }
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p1"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o1"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
           },
           "predicate": {
+            "type": "path",
+            "pathType": "/",
             "items": [
               {
                 "termType": "NamedNode",
@@ -71,47 +103,18 @@
                 "termType": "NamedNode",
                 "value": "http://example.com/q"
               }
-            ],
-            "pathType": "/",
-            "type": "path"
+            ]
           },
-          "subject": {
-            "object": {
-              "termType": "Variable",
-              "value": "o1"
-            },
-            "predicate": {
-              "termType": "Variable",
-              "value": "p1"
-            },
-            "subject": {
-              "object": {
-                "termType": "Variable",
-                "value": "o"
-              },
-              "predicate": {
-                "termType": "Variable",
-                "value": "p"
-              },
-              "subject": {
-                "termType": "Variable",
-                "value": "s"
-              },
-              "graph": {
-                "termType": "DefaultGraph",
-                "value": ""
-              },
-              "termType": "Quad"
-            },
-            "graph": {
-              "termType": "DefaultGraph",
-              "value": ""
-            },
-            "termType": "Quad"
+          "object": {
+            "termType": "Variable",
+            "value": "o2"
           }
         }
-      ],
-      "type": "bgp"
+      ]
     }
-  ]
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/"
+  }
 }

@@ -21,6 +21,7 @@
           },
           "object": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "a"

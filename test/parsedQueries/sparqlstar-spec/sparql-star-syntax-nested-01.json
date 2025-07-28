@@ -13,6 +13,7 @@
         {
           "subject": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "S"
@@ -42,8 +43,10 @@
         {
           "subject": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Quad",
+              "value": "",
               "subject": {
                 "termType": "Variable",
                 "value": "S"
@@ -85,7 +88,8 @@
             "datatype": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/2001/XMLSchema#integer"
-            }
+            },
+            "direction": ""
           }
         }
       ]

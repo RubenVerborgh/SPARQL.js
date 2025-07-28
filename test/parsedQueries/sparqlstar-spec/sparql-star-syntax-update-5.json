@@ -19,6 +19,7 @@
               },
               "object": {
                 "termType": "Quad",
+                "value": "",
                 "subject": {
                   "termType": "NamedNode",
                   "value": "http://example.com/ns#a"
@@ -40,6 +41,7 @@
             {
               "subject": {
                 "termType": "Quad",
+                "value": "",
                 "subject": {
                   "termType": "Variable",
                   "value": "S"
@@ -50,6 +52,7 @@
                 },
                 "object": {
                   "termType": "Quad",
+                  "value": "",
                   "subject": {
                     "termType": "NamedNode",
                     "value": "http://example.com/ns#a"
@@ -99,6 +102,7 @@
               },
               "object": {
                 "termType": "Quad",
+                "value": "",
                 "subject": {
                   "termType": "NamedNode",
                   "value": "http://example.com/ns#a"
@@ -120,6 +124,7 @@
             {
               "subject": {
                 "termType": "Quad",
+                "value": "",
                 "subject": {
                   "termType": "Variable",
                   "value": "S"
@@ -130,6 +135,7 @@
                 },
                 "object": {
                   "termType": "Quad",
+                  "value": "",
                   "subject": {
                     "termType": "NamedNode",
                     "value": "http://example.com/ns#a"

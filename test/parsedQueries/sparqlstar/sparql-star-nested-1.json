@@ -2,7 +2,8 @@
   "queryType": "SELECT",
   "variables": [
     {
-      "termType": "Wildcard"
+      "termType": "Wildcard",
+      "value": "*"
     }
   ],
   "where": [
@@ -12,33 +13,35 @@
         {
           "subject": {
             "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "Quad",
+              "value": "",
               "subject": {
-                "termType": "Quad",
-                "subject": {
-                  "termType": "Variable",
-                  "value": "s1"
-                },
-                "predicate": {
-                  "termType": "Variable",
-                  "value": "p1"
-                },
-                "object": {
-                  "termType": "Variable",
-                  "value": "o1"
-                },
-                "graph": {
-                  "termType": "DefaultGraph",
-                  "value": ""
-                }
+                "termType": "Variable",
+                "value": "s1"
               },
               "predicate": {
                 "termType": "Variable",
-                "value": "p2"
+                "value": "p1"
               },
               "object": {
                 "termType": "Variable",
-                "value": "o2"
+                "value": "o1"
               },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
+              }
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p2"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o2"
+            },
             "graph": {
               "termType": "DefaultGraph",
               "value": ""

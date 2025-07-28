@@ -26,7 +26,8 @@
             "datatype": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"
-            }
+            },
+            "direction": ""
           }
         },
         {
@@ -68,7 +69,8 @@
             "datatype": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/2001/XMLSchema#string"
-            }
+            },
+            "direction": ""
           }
         ]
       }

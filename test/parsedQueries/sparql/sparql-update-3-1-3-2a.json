@@ -3,6 +3,7 @@
   "updates": [
     {
       "updateType": "insertdelete",
+      "delete": [],
       "insert": [
         {
           "type": "graph",
@@ -28,7 +29,6 @@
           }
         }
       ],
-      "delete": [],
       "where": [
         {
           "type": "graph",
@@ -69,7 +69,8 @@
                     "datatype": {
                       "termType": "NamedNode",
                       "value": "http://www.w3.org/2001/XMLSchema#dateTime"
-                    }
+                    },
+                    "direction": ""
                   }
                 ]
               }

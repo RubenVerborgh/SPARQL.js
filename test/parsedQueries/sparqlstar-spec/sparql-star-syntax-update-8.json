@@ -24,6 +24,7 @@
             {
               "subject": {
                 "termType": "Quad",
+                "value": "",
                 "subject": {
                   "termType": "NamedNode",
                   "value": "http://example.com/ns#s"
@@ -52,7 +53,8 @@
                 "datatype": {
                   "termType": "NamedNode",
                   "value": "http://www.w3.org/2001/XMLSchema#string"
-                }
+                },
+                "direction": ""
               }
             }
           ]
@@ -82,6 +84,7 @@
             {
               "subject": {
                 "termType": "Quad",
+                "value": "",
                 "subject": {
                   "termType": "NamedNode",
                   "value": "http://example.com/ns#s"
@@ -110,7 +113,8 @@
                 "datatype": {
                   "termType": "NamedNode",
                   "value": "http://www.w3.org/2001/XMLSchema#string"
-                }
+                },
+                "direction": ""
               }
             }
           ]

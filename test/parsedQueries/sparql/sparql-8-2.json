@@ -1,12 +1,12 @@
 {
   "queryType": "SELECT",
+  "distinct": true,
   "variables": [
     {
       "termType": "Variable",
       "value": "s"
     }
   ],
-  "distinct": true,
   "where": [
     {
       "type": "bgp",
@@ -49,7 +49,8 @@
                 "datatype": {
                   "termType": "NamedNode",
                   "value": "http://www.w3.org/2001/XMLSchema#string"
-                }
+                },
+                "direction": ""
               }
             }
           ]

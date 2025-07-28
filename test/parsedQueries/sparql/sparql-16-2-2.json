@@ -86,17 +86,17 @@
         "args": [
           {
             "type": "functionCall",
-            "function": {
-              "termType": "NamedNode",
-              "value": "http://example.org/ns#customDate"
-            },
             "args": [
               {
                 "termType": "Variable",
                 "value": "date"
               }
             ],
-            "distinct": false
+            "distinct": false,
+            "function": {
+              "termType": "NamedNode",
+              "value": "http://example.org/ns#customDate"
+            }
           },
           {
             "termType": "Literal",
@@ -105,7 +105,8 @@
             "datatype": {
               "termType": "NamedNode",
               "value": "http://www.w3.org/2001/XMLSchema#dateTime"
-            }
+            },
+            "direction": ""
           }
         ]
       }

@@ -35,6 +35,7 @@
           },
           "object": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "NamedNode",
               "value": "http://example.com/ns#s"

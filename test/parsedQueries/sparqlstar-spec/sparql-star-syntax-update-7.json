@@ -24,6 +24,7 @@
             {
               "subject": {
                 "termType": "Quad",
+                "value": "",
                 "subject": {
                   "termType": "Variable",
                   "value": "s"
@@ -52,7 +53,8 @@
                 "datatype": {
                   "termType": "NamedNode",
                   "value": "http://www.w3.org/2001/XMLSchema#string"
-                }
+                },
+                "direction": ""
               }
             }
           ]
@@ -80,6 +82,7 @@
             {
               "subject": {
                 "termType": "Quad",
+                "value": "",
                 "subject": {
                   "termType": "Variable",
                   "value": "s"
@@ -114,7 +117,8 @@
                 "datatype": {
                   "termType": "NamedNode",
                   "value": "http://www.w3.org/2001/XMLSchema#string"
-                }
+                },
+                "direction": ""
               }
             }
           ]

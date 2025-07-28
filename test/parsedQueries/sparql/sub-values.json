@@ -18,7 +18,8 @@
           "queryType": "SELECT",
           "variables": [
             {
-              "termType": "Wildcard"
+              "termType": "Wildcard",
+              "value": "*"
             }
           ],
           "where": [

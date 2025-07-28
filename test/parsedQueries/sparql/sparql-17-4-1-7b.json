@@ -52,10 +52,6 @@
           },
           {
             "type": "functionCall",
-            "function": {
-              "termType": "NamedNode",
-              "value": "http://www.w3.org/2001/XMLSchema#dateTime"
-            },
             "args": [
               {
                 "termType": "Literal",
@@ -64,10 +60,15 @@
                 "datatype": {
                   "termType": "NamedNode",
                   "value": "http://www.w3.org/2001/XMLSchema#string"
-                }
+                },
+                "direction": ""
               }
             ],
-            "distinct": false
+            "distinct": false,
+            "function": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#dateTime"
+            }
           }
         ]
       }

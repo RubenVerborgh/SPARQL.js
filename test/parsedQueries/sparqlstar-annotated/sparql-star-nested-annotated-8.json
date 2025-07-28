@@ -27,6 +27,7 @@
         {
           "subject": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Variable",
               "value": "s1"
@@ -56,8 +57,10 @@
         {
           "subject": {
             "termType": "Quad",
+            "value": "",
             "subject": {
               "termType": "Quad",
+              "value": "",
               "subject": {
                 "termType": "Variable",
                 "value": "s1"
