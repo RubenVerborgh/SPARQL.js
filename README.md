@@ -3,6 +3,11 @@
 [![npm version](https://badge.fury.io/js/sparqljs.svg)](https://www.npmjs.com/package/sparqljs)
 [![DOI](https://zenodo.org/badge/22990236.svg)](https://zenodo.org/badge/latestdoi/22990236)
 
+> [!warning]
+> SPARQL.js has been deprecated in favour of the [Traqula](https://github.com/comunica/traqula) modular parser, generator and transformer framework.
+> Traqula supports both parsing and generating SPARQL 1.1 and 1.2.
+> To migrate, follow the [migration guide on Traqula's repository](https://github.com/comunica/traqula/blob/main/docs/sparqlJSMigration.md).
+
 The [SPARQL 1.1 Query Language](http://www.w3.org/TR/sparql11-query/) allows to query datasources of [RDF triples](http://www.w3.org/TR/rdf11-concepts/).
 SPARQL.js translates SPARQL into JSON and back,
 so you can parse and build SPARQL queries in your JavaScript applications.
