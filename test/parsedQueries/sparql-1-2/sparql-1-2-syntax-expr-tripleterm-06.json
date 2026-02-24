@@ -1,0 +1,79 @@
+{
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "subject": {
+        "termType": "Variable",
+        "value": "t"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://example.com/ns#graph"
+      },
+      "object": {
+        "termType": "Variable",
+        "value": "g"
+      }
+    }
+  ],
+  "where": [
+    {
+      "type": "graph",
+      "patterns": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": {
+                "termType": "Variable",
+                "value": "s"
+              },
+              "predicate": {
+                "termType": "Variable",
+                "value": "p"
+              },
+              "object": {
+                "termType": "Variable",
+                "value": "o"
+              }
+            }
+          ]
+        },
+        {
+          "type": "bind",
+          "variable": {
+            "termType": "Variable",
+            "value": "t"
+          },
+          "expression": {
+            "termType": "Quad",
+            "subject": {
+              "termType": "Variable",
+              "value": "s"
+            },
+            "predicate": {
+              "termType": "Variable",
+              "value": "p"
+            },
+            "object": {
+              "termType": "Variable",
+              "value": "o"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          }
+        }
+      ],
+      "name": {
+        "termType": "Variable",
+        "value": "g"
+      }
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

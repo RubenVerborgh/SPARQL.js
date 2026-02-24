@@ -1,0 +1,40 @@
+{
+  "queryType": "CONSTRUCT",
+  "template": [
+    {
+      "subject": {
+        "termType": "NamedNode",
+        "value": "http://example.com/ns#s"
+      },
+      "predicate": {
+        "termType": "NamedNode",
+        "value": "http://example.com/ns#q"
+      },
+      "object": {
+        "termType": "Quad",
+        "value": "",
+        "subject": {
+          "termType": "NamedNode",
+          "value": "http://example.com/ns#s"
+        },
+        "predicate": {
+          "termType": "NamedNode",
+          "value": "http://example.com/ns#p"
+        },
+        "object": {
+          "termType": "NamedNode",
+          "value": "http://example.com/ns#o"
+        },
+        "graph": {
+          "termType": "DefaultGraph",
+          "value": ""
+        }
+      }
+    }
+  ],
+  "where": [],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

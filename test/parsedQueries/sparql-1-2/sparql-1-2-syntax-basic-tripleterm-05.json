@@ -1,0 +1,147 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "values",
+      "values": [
+        {
+          "?x": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#s"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#o"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          }
+        },
+        {
+          "?x": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#x"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#q"
+            },
+            "object": {
+              "termType": "Quad",
+              "value": "",
+              "subject": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#s"
+              },
+              "predicate": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#p"
+              },
+              "object": {
+                "termType": "NamedNode",
+                "value": "http://example.com/ns#o"
+              },
+              "graph": {
+                "termType": "DefaultGraph",
+                "value": ""
+              }
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "values",
+      "values": [
+        {
+          "?y": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#s"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#o"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          },
+          "?z": {
+            "termType": "Literal",
+            "value": "123",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          }
+        },
+        {
+          "?y": {
+            "termType": "Literal",
+            "value": "123",
+            "language": "",
+            "datatype": {
+              "termType": "NamedNode",
+              "value": "http://www.w3.org/2001/XMLSchema#integer"
+            }
+          },
+          "?z": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#s"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#o"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#"
+  }
+}

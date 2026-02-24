@@ -1,0 +1,121 @@
+{
+  "queryType": "SELECT",
+  "variables": [
+    {
+      "termType": "Wildcard",
+      "value": "*"
+    }
+  ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "termType": "Quad",
+          "value": "",
+          "subject": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+          },
+          "object": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#a"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#b"
+            },
+            "object": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#c"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
+          }
+        },
+        {
+          "subject": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#s"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://example.com/ns#p"
+          },
+          "object": {
+            "termType": "BlankNode",
+            "value": "g_0"
+          }
+        },
+        {
+          "termType": "Quad",
+          "value": "",
+          "subject": {
+            "termType": "BlankNode",
+            "value": "e_bnode"
+          },
+          "predicate": {
+            "termType": "NamedNode",
+            "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#reifies"
+          },
+          "object": {
+            "termType": "Quad",
+            "value": "",
+            "subject": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#s"
+            },
+            "predicate": {
+              "termType": "NamedNode",
+              "value": "http://example.com/ns#p"
+            },
+            "object": {
+              "termType": "BlankNode",
+              "value": "g_0"
+            },
+            "graph": {
+              "termType": "DefaultGraph",
+              "value": ""
+            }
+          },
+          "graph": {
+            "termType": "DefaultGraph",
+            "value": ""
+          }
+        },
+        {
+          "subject": {
+            "termType": "BlankNode",
+            "value": "e_bnode"
+          },
+          "predicate": {
+            "termType": "Variable",
+            "value": "q"
+          },
+          "object": {
+            "termType": "Variable",
+            "value": "z"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "query",
+  "prefixes": {
+    "": "http://example.com/ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  }
+}

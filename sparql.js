@@ -20,6 +20,7 @@ function _Parser({
     factory,
     pathOnly,
     sparqlStar,
+    reifiedTriples,
     skipValidation,
     skipUngroupedVariableCheck,
 } = {}) {
@@ -36,6 +37,7 @@ function _Parser({
     Parser.prefixes = Object.create(prefixesCopy);
     Parser.factory = factory || new DataFactory();
     Parser.sparqlStar = Boolean(sparqlStar);
+    Parser.reifiedTriples = Boolean(reifiedTriples);
     Parser.pathOnly = Boolean(pathOnly);
     // We keep skipUngroupedVariableCheck for compatibility reasons.
     Parser.skipValidation = Boolean(skipValidation) || Boolean(skipUngroupedVariableCheck)

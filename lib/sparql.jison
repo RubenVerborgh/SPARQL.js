@@ -11,6 +11,7 @@
       RDF_FIRST = RDF + 'first',
       RDF_REST  = RDF + 'rest',
       RDF_NIL   = RDF + 'nil',
+      RDF_REIFIES  = RDF + 'reifies',
       XSD = 'http://www.w3.org/2001/XMLSchema#',
       XSD_INTEGER  = XSD + 'integer',
       XSD_DECIMAL  = XSD + 'decimal',
@@ -164,13 +165,31 @@
     return Parser.factory.quad(subject, predicate, object);
   }
 
+  function reifiedTriple(subject, predicate, object, reifier) {
+
+    // TODO: Remove this when it is caught by the grammar
+    if (!('termType' in predicate)) {
+      throw new Error('Reified triples cannot contain paths');
+    }
+
+    if (!reifier) {
+      reifier = blank();
+    }
+
+    const tripleTerm = Parser.factory.quad(subject, predicate, object);
+    reifier.reifyingTriple = Parser.factory.quad(reifier, Parser.factory.namedNode(RDF_REIFIES), tripleTerm);
+
+    return reifier;
+  }
+
   // Creates a triple with the given subject, predicate, and object
-  function triple(subject, predicate, object, annotations) {
+  function triple(subject, predicate, object, annotations, reifier) {
     var triple = {};
-    if (subject     != null) triple.subject     = subject;
-    if (predicate   != null) triple.predicate   = predicate;
-    if (object      != null) triple.object      = object;
-    if (annotations != null) triple.annotations = annotations;
+    if (subject     != null)                       triple.subject     = subject;
+    if (predicate   != null)                       triple.predicate   = predicate;
+    if (object      != null)                       triple.object      = object;
+    if (reifier     != null)                       triple.reifier     = reifier;
+    if (annotations != null && annotations.length) triple.annotations = annotations;
     return triple;
   }
 
@@ -254,12 +273,32 @@
     var objects = [], triples = [];
     objectList.forEach(function (l) {
       let annotation = null;
-      if (l.annotation) {
-        annotation = l.annotation
-        l = l.object;
+      let reifier = null;
+      if (l.reifierAnnotations) {
+        let firstAnnotation = true;
+        for (const reifierAnnotation of l.reifierAnnotations) {
+          if (reifierAnnotation.reifier) {
+            ensureReifiedTriples();
+            reifier = reifierAnnotation.reifier;
+            annotation = [];
+          }
+          if (reifierAnnotation.annotation) {
+            annotation = reifierAnnotation.annotation
+          }
+          if (l.object) {
+            l = l.object;
+          }
+          const t = triple(null, predicate, l.entity, annotation, reifier);
+          t.firstAnnotation = firstAnnotation;
+          objects.push(t);
+          appendAllTo(triples, l.triples);
+
+          firstAnnotation = false;
+        }
+      } else {
+        objects.push(triple(null, predicate, l.entity, []));
+        appendAllTo(triples, l.triples);
       }
-      objects.push(triple(null, predicate, l.entity, annotation));
-      appendAllTo(triples, l.triples);
     });
     return unionAll(objects, otherTriples || [], triples);
   }
@@ -381,8 +420,27 @@
     return value;
   }
 
+  function ensureReifiedTriples(value) {
+    if (!Parser.reifiedTriples) {
+      throw new Error('Reified triples support is not enabled');
+    }
+    return value;
+  }
+
+  function ensureReifiedTriplesOrSparqlStar(valueReifiedTriples, valueSparqlStar) {
+    if (!Parser.reifiedTriples && !Parser.sparqlStar) {
+      throw new Error('Reified triples support or SPARQL-star support is not enabled');
+    }
+    return Parser.reifiedTriples ? valueReifiedTriples() : valueSparqlStar();
+  }
+
   function _applyAnnotations(subject, annotations, arr) {
     for (const annotation of annotations) {
+      if (annotation.object.reifyingTriple) {
+        arr.push(annotation.object.reifyingTriple);
+        delete annotation.object.reifyingTriple;
+      }
+
       const t = triple(
         // If the annotation already has a subject then just push the
         // annotation to the upper scope as it is a blank node introduced
@@ -405,7 +463,32 @@
   }
 
   function applyAnnotations(triples) {
-    if (Parser.sparqlStar) {
+    if (Parser.reifiedTriples) {
+      const newTriples = [];
+
+      triples.forEach(t => {
+        let s = triple(t.subject, t.predicate, t.object);
+
+        pushReifyingTriples(s, newTriples);
+
+        if (t.annotations || t.reifier) {
+          if (t.firstAnnotation)
+            newTriples.push(s);
+
+          let reifier = reifiedTriple(s.subject, s.predicate, s.object, t.reifier);
+          if (t.annotations)
+            _applyAnnotations(reifier, t.annotations, newTriples);
+          if (!t.annotations || t.firstAnnotation)
+            newTriples.push(reifier.reifyingTriple);
+          delete reifier.reifyingTriple;
+        } else {
+          newTriples.push(s);
+        }
+      });
+
+      return newTriples;
+    }
+    else if (Parser.sparqlStar) {
       const newTriples = [];
 
       triples.forEach(t => {
@@ -421,6 +504,33 @@
       return newTriples;
     }
     return triples;
+  }
+
+  function reifiedTripleDeclaration(reifiedTriple) {
+    const triples = [];
+    pushReifyingTriples(reifiedTriple.reifyingTriple, triples);
+    return triples;
+  }
+
+  function pushReifyingTriples(triple, newTriples) {
+    if (triple.subject.reifyingTriple) {
+      const reifyingTriple = triple.subject.reifyingTriple;
+      delete triple.subject.reifyingTriple;
+      newTriples.push(reifyingTriple);
+      pushReifyingTriples(reifyingTriple, newTriples);
+    }
+    if (triple.object.reifyingTriple) {
+      const reifyingTriple = triple.object.reifyingTriple;
+      delete triple.object.reifyingTriple;
+      newTriples.push(reifyingTriple);
+      pushReifyingTriples(reifyingTriple, newTriples);
+    }
+    if (triple.subject.termType === 'Quad') {
+      pushReifyingTriples(triple.subject, newTriples);
+    }
+    if (triple.object.termType === 'Quad') {
+      pushReifyingTriples(triple.object, newTriples);
+    }
   }
 
   function ensureSparqlStarNestedQuads(value) {
@@ -597,8 +707,11 @@ SPACES_COMMENTS       (\s+|{COMMENT}\n\r?)+
 "MINUS"                  return 'MINUS'
 "UNION"                  return 'UNION'
 "FILTER"                 return 'FILTER'
+"<<("                    return '<<('
+")>>"                    return ')>>'
 "<<"                     return '<<'
 ">>"                     return '>>'
+"~"                      return '~'
 "{|"                     return '{|'
 "|}"                     return '|}'
 ","                      return ','
@@ -1109,8 +1222,8 @@ InlineDataFull
 DataBlockValue
     : iri
     | Literal
-    // @see https://w3c.github.io/rdf-star/cg-spec/editors_draft.html#sparql-star-grammar
-    | QuotedTriple -> ensureSparqlStar($1)
+    | TripleTerm
+    | ReifiedTriple
     | 'UNDEF' -> undefined
     ;
 
@@ -1155,7 +1268,9 @@ ConstructTriples
 
 // [75]
 TriplesSameSubject
-    : VarOrTermOrQuotedTP PropertyListNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    : VarOrTerm PropertyListNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    | TripleTermPattern PropertyListNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    | ReifiedTriplePattern PropertyList -> $2 ? applyAnnotations($2.map(t => extend(triple($1), t))) : reifiedTripleDeclaration($1)
     | TriplesNode PropertyList -> applyAnnotations(appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples)) /* the subject is a blank node, possibly with more triples */
     ;
 
@@ -1189,12 +1304,24 @@ ObjectList
 
 // [80]
 Object
-    : GraphNode AnnotationPattern? -> $2 ? { annotation: $2, object: $1 } : $1
+    : GraphNode ReifierAnnotationSequence? -> $2 ? { reifierAnnotations: $2, object: $1 } : $1
     ;
+
+ReifierAnnotationSequence
+    : ReifierAnnotationSequenceElement* ReifierAnnotationSequenceElement -> $1.length ? appendTo($1, $2) : [ $2 ]
+    ;
+
+ReifierAnnotationSequenceElement
+    : '~' ReifierOrVar -> { reifier: $2 }
+    | AnnotationPattern -> { annotation: $1 }
+    ;
+
 
 // [81]
 TriplesSameSubjectPath
-    : VarOrTermOrQuotedTP PropertyListPathNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    : VarOrTerm PropertyListPathNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    | TripleTermPattern PropertyListPathNotEmpty -> applyAnnotations($2.map(t => extend(triple($1), t)))
+    | ReifiedTriplePattern PropertyListPath -> $2 ? applyAnnotations($2.map(t => extend(triple($1), t))) : reifiedTripleDeclaration($1)
     | TriplesNodePath PropertyListPathNotEmpty? -> !$2 ? $1.triples : applyAnnotations(appendAllTo($2.map(t => extend(triple($1.entity), t)), $1.triples)) /* the subject is a blank node, possibly with more triples */
     ;
 
@@ -1203,6 +1330,10 @@ TriplesSameSubjectPath
 // [83]
 PropertyListPathNotEmpty
     : O PropertyListPathNotEmptyTail* -> objectListToTriples(...$1, $2)
+    ;
+
+PropertyListPath
+    : PropertyListPathNotEmpty?
     ;
 
 PropertyListPathNotEmptyTail
@@ -1220,7 +1351,16 @@ ObjectListPath
 
 // [87]
 ObjectPath
-    : GraphNodePath AnnotationPatternPath? -> $2 ? { object: $1, annotation: $2 } : $1;
+    : GraphNodePath ReifierAnnotationPathSequence? -> $2 ? { reifierAnnotations: $2, object: $1 } : $1
+    ;
+
+ReifierAnnotationPathSequence
+    : ReifierAnnotationPathSequenceElement* ReifierAnnotationPathSequenceElement -> $1.length ? appendTo($1, $2) : [ $2 ]
+    ;
+
+ReifierAnnotationPathSequenceElement
+    : '~' ReifierOrVar -> { reifier: $2 }
+    | AnnotationPatternPath -> { annotation: $1 }
     ;
 
 // [88] Path [89] PathAlternative
@@ -1274,18 +1414,18 @@ TriplesNodePath
 
 // [104]
 GraphNode
-    : VarOrTermOrQuotedTPExpr /* for consistency with TriplesNode */
+    : VarOrTermOrReifiedTriplePatternExpr /* for consistency with TriplesNode */
     | TriplesNode
     ;
 
 // [105]
 GraphNodePath
-    : VarOrTermOrQuotedTPExpr /* for consistency with TriplesNodePath */
+    : VarOrTermOrReifiedTriplePatternExpr /* for consistency with TriplesNodePath */
     | TriplesNodePath
     ;
 
-VarOrTermOrQuotedTPExpr
-  : VarOrTermOrQuotedTP -> { entity: $1, triples: [] }
+VarOrTermOrReifiedTriplePatternExpr
+  : VarOrTermOrReifiedTriplePattern -> { entity: $1, triples: [] }
   ;
 
 // [106]
@@ -1382,7 +1522,7 @@ PrimaryExpression
     | FunctionCall
     | Literal
     | Var
-    | ExprQuotedTP
+    | ExprReifiedTriple
     ;
 
 // [120]
@@ -1395,10 +1535,10 @@ BuiltInCall
     : Aggregate
     | FUNC_ARITY0 NIL -> operation(lowercase($1))
     | FUNC_ARITY1 '(' Expression ')' -> operation(lowercase($1), [$3])
-    | FUNC_ARITY1_SPARQL_STAR '(' Expression ')' -> ensureSparqlStar(operation(lowercase($1), [$3]))
+    | FUNC_ARITY1_SPARQL_STAR '(' Expression ')' -> ensureReifiedTriplesOrSparqlStar(() => operation(lowercase($1), [$3]), () => operation(lowercase($1), [$3]))
     | FUNC_ARITY2 '(' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5])
     | FUNC_ARITY3 '(' Expression ',' Expression ',' Expression ')' -> operation(lowercase($1), [$3, $5, $7])
-    | FUNC_ARITY3_SPARQL_STAR '(' Expression ',' Expression ',' Expression ')' -> ensureSparqlStar(operation(lowercase($1), [$3, $5, $7]))
+    | FUNC_ARITY3_SPARQL_STAR '(' Expression ',' Expression ',' Expression ')' -> ensureReifiedTriplesOrSparqlStar(() => operation(lowercase($1), [$3, $5, $7]), () => operation(lowercase($1), [$3, $5, $7]))
     // [122], [123], [124]
     | ( 'CONCAT' | 'COALESCE' | 'SUBSTR' | 'REGEX' | 'REPLACE' ) ExpressionList -> operation(lowercase($1), $2)
     | 'BOUND' '(' VAR ')' -> operation('bound', [toVar($3)])
@@ -1493,60 +1633,98 @@ BlankNode
 // Note [139] - [173] are grammar terms that are written above
 //
 
-// [174]
-QuotedTP
-    : '<<' qtSubjectOrObject Verb qtSubjectOrObject '>>' -> ensureSparqlStar(nestedTriple($2, $3, $4))
+TripleTermPattern
+    : '<<(' TripleTermPatternSubject Verb ReifiedTriplePatternObject ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
     ;
 
-// [175]
-QuotedTriple
-    : '<<'  DataValueTerm IriOrA DataValueTerm '>>' -> ensureSparqlStar(nestedTriple($2, $3, $4))
+ReifiedTriplePattern
+    : '<<' ReifiedTriplePatternSubject Verb ReifiedTriplePatternObject '>>' -> ensureReifiedTriplesOrSparqlStar(() => reifiedTriple($2, $3, $4, undefined), () => nestedTriple($2, $3, $4))
+    | '<<' ReifiedTriplePatternSubject Verb ReifiedTriplePatternObject '~' ReifierOrVar '>>' -> ensureReifiedTriples(reifiedTriple($2, $3, $4, $6))
     ;
 
-// [176]
-qtSubjectOrObject
+TripleTerm
+    : '<<('  TripleTermSubject IriOrA ReifiedTripleObject ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
+    ;
+
+ReifiedTriple
+    : '<<'  ReifiedTripleSubject IriOrA ReifiedTripleObject '>>' -> ensureReifiedTriplesOrSparqlStar(() => reifiedTriple($2, $3, $4, undefined), () => nestedTriple($2, $3, $4))
+    | '<<'  ReifiedTripleSubject IriOrA ReifiedTripleObject '~' Reifier '>>' -> ensureReifiedTriples(reifiedTriple($2, $3, $4, $6))
+    ;
+
+ReifiedTriplePatternSubject
     : Var
     | iri
     | BlankNode
-    | Literal
-    | QuotedTP
+    | ReifiedTriplePattern
     ;
 
-
-// [177]
-DataValueTerm
-    : iri
+ReifiedTriplePatternObject
+    : ReifiedTriplePatternSubject
     | Literal
-    | QuotedTP
+    | TripleTermPattern
+    ;
+
+TripleTermPatternSubject
+    : Var
+    | iri
+    | BlankNode
+    ;
+
+TripleTermSubject
+    : iri
+    | BlankNode
+    ;
+
+Reifier
+    : iri
+    | BlankNode
+    ;
+
+ReifierOrVar
+    : Reifier
+    | Var
+    ;
+
+ReifiedTripleSubject
+    : iri
+    | ReifiedTriple
+    ;
+
+ReifiedTripleObject
+    : ReifiedTripleSubject
+    | Literal
+    | TripleTerm
     ;
 
 // [178]
-VarOrTermOrQuotedTP
+VarOrTermOrReifiedTriplePattern
     : Var
     | GraphTerm
-    | QuotedTP
+    | TripleTermPattern
+    | ReifiedTriplePattern
     ;
 
 // [179]
 AnnotationPattern
-    : '{|' PropertyListNotEmpty '|}' -> ensureSparqlStar($2)
+    : '{|' PropertyListNotEmpty '|}' -> ensureReifiedTriplesOrSparqlStar(() => $2, () => $2)
     ;
 
 // [180]
 AnnotationPatternPath
-    : '{|' PropertyListPathNotEmpty '|}' -> ensureSparqlStar($2)
+    : '{|' PropertyListPathNotEmpty '|}' -> ensureReifiedTriplesOrSparqlStar(() => $2, () => $2)
     ;
 
 
 // [181]
-ExprQuotedTP
-    : '<<'  ExprVarOrTerm Verb ExprVarOrTerm '>>' -> ensureSparqlStar(nestedTriple($2, $3, $4))
+ExprReifiedTriple
+    : '<<('  ExprVarOrTerm Verb ExprVarOrTerm ')>>' -> ensureReifiedTriples(nestedTriple($2, $3, $4))
+    | '<<'  ExprVarOrTerm Verb ExprVarOrTerm '>>' -> ensureSparqlStar(nestedTriple($2, $3, $4))
     ;
 
 // [182]
 ExprVarOrTerm
   : VarOrIri
-  | ExprQuotedTP
+  | ExprReifiedTriple
   | Literal
   ;
 
